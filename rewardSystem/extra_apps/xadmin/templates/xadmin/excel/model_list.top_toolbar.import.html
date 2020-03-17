@@ -1,0 +1,46 @@
+{% load i18n %}
+<div class="btn-group export">
+  <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#">
+    <i class="fa fa-upload"></i> 导入excel <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+      <li><a data-toggle="modal" data-target="#export-modal-import-excel"><i class="fa fa-upload"></i> 导入 Excel</a></li>
+  </ul>
+</div>
+{# 模态框 #}
+<div id="export-modal-import-excel" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="post" action="" enctype="multipart/form-data">
+              {% csrf_token %}
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">导入 Excel</h4>
+          </div>
+          <div class="modal-body">
+            <div class="modal-body">
+                 <input type="file" name="excel" accept=".xls, .xlsx" id="submit_upload">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button class="btn btn-success" type="submit" id="submit_upload_b"><i class="icon-share"></i> 导入</button>
+
+          </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dalog -->
+    </div><!-- /.modal -->
+<script>
+    $('#submit_upload_b').click(function () {
+        var file = $('#submit_upload').val();
+        if(file != ''){
+            var theForm = $("form:first").get(0);
+            theForm.submit()
+        }else {
+            console.log(1)
+            return false;
+        }
+
+    })
+</script>

@@ -1,0 +1,61 @@
+{% extends "xadmin/base_site.html" %}
+{% load static %}
+{# 导入 样式#}
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+{% endblock %}
+{% block content-nav %}
+{% endblock %}
+
+{% block content %}
+    <div class="top">
+        <div style="float: left">
+            <a href="{% url 'xadmin:downloadStudent' %}">
+                <input type="buttom" id="download" readonly value="下载模板" class="btn btn-primary">
+            </a>
+        </div>
+        <div style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %}">
+            <form action="" method="post" style="width: 50%" enctype="multipart/form-data" >
+                {% csrf_token %}
+                <div class="form-group" style="">
+    {#            <div class="col-sm-4 control-label">选择文件</div>#}
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <input type="hidden"  name="pk" value="{{ meeting_id }}" readonly>
+                        <input id='location' class="form-control" placeholder="导入不符合资格学生" required onclick="$('#i-file').click();">
+                        <label class="input-group-btn">
+                            <input type="submit" id="i-check" value="导入文件" class="btn btn-primary">
+                        </label>
+                    </div>
+                </div>
+                <input type="file"  name="file" id='i-file'  accept=".xls, .xlsx"  onchange="$('#location').val($('#i-file').val());" style="display: none">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="content" style="margin-top: 100px;">
+        <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+              <th>学生姓名</th>
+              <th>学生学号</th>
+              <th>原因</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for student in meeting_for_student %}
+            <tr >
+                <td>{{ student.sname }}</td>
+                <td>{{ student.sno }}</td>
+                <td>{{ student.text |truncatechars:50 }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+              <td></td>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+<script>
+</script>
+{% endblock %}

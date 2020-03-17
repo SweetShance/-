@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="808e35bf-c4a6-4972-becb-7259c915367b" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="db.sqlite3" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="db.sqlite3" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="db.sqlite3" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="main: schema" type="981a47c2:SqliteImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="db.sqlite3" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="main: schema" type="981a47c2:SqliteImplModel$Schema" />
+        <item name="sqlite_master: table" type="3d80ac25:SqliteImplModel$Table" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1XprW8YPI6ChZ0XgI3Trg6rFNgS" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="sqlite" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/media/studentMuBan" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/media/studentMuBan" />
+      <recent name="$PROJECT_DIR$/static/image" />
+      <recent name="$PROJECT_DIR$/templates" />
+      <recent name="$PROJECT_DIR$/extra_apps" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/extra_apps/xadmin/templates/xadmin" />
+      <recent name="$PROJECT_DIR$/static" />
+      <recent name="$PROJECT_DIR$/templates" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/templates/xadmin" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Django server.rewardSystem">
+    <configuration name="Test: extra_apps.xadmin.templates.xadmin.excel" type="DjangoTestsConfigurationType" temporary="true">
+      <module name="rewardSystem" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="TARGET" value="extra_apps.xadmin.templates.xadmin.excel" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="rewardSystem" type="Python.DjangoServer" factoryName="Django server">
+      <module name="rewardSystem" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="rewardSystem.settings" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Django tests.Test: extra_apps.xadmin.templates.xadmin.excel" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="808e35bf-c4a6-4972-becb-7259c915367b" name="Default Changelist" comment="" />
+      <created>1581753905750</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1581753905750</updated>
+      <workItem from="1581753909920" duration="4801000" />
+      <workItem from="1581931392073" duration="600000" />
+      <workItem from="1582209796657" duration="11121000" />
+      <workItem from="1582285304420" duration="13000" />
+      <workItem from="1582294524991" duration="93000" />
+      <workItem from="1582294635202" duration="4123000" />
+      <workItem from="1582423388683" duration="4169000" />
+      <workItem from="1582432815766" duration="12587000" />
+      <workItem from="1582544765328" duration="8983000" />
+      <workItem from="1582638530437" duration="341000" />
+      <workItem from="1582638895065" duration="361000" />
+      <workItem from="1582639271496" duration="10070000" />
+      <workItem from="1582763626780" duration="29318000" />
+      <workItem from="1582877545387" duration="6470000" />
+      <workItem from="1583029726248" duration="8540000" />
+      <workItem from="1583041379470" duration="609000" />
+      <workItem from="1583042057581" duration="1231000" />
+      <workItem from="1584087166175" duration="6602000" />
+      <workItem from="1584094101076" duration="3204000" />
+      <workItem from="1584448382503" duration="7497000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="319" y="189" width="931" height="685" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582794107319">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="319" y="189" width="931" height="685" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1582794107319" />
+    <state x="627" y="348" width="655" height="426" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1582547681469">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="627" y="348" width="655" height="426" key="#com.intellij.fileTypes.FileTypeChooser/0.27.1920.1053@0.27.1920.1053" timestamp="1582547681469" />
+    <state x="683" y="383" width="544" height="349" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog" timestamp="1581753997409">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="683" y="383" width="544" height="349" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1581753997409" />
+    <state x="693" y="299" width="524" height="516" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1584454467519">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="693" y="299" width="524" height="516" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1584454467519" />
+    <state x="681" y="290" width="424" height="492" key="FileChooserDialogImpl" timestamp="1582788241493">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="681" y="290" width="424" height="492" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1582788241493" />
+    <state width="1864" height="199" key="GridCell.Tab.0.bottom" timestamp="1584454493891">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1864" height="199" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1584454493891" />
+    <state width="1864" height="199" key="GridCell.Tab.0.center" timestamp="1584454493889">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1864" height="199" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1584454493889" />
+    <state width="1864" height="199" key="GridCell.Tab.0.left" timestamp="1584454493887">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1864" height="199" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1584454493887" />
+    <state width="1864" height="199" key="GridCell.Tab.0.right" timestamp="1584454493890">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1864" height="199" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1584454493890" />
+    <state width="1864" height="334" key="GridCell.Tab.1.bottom" timestamp="1582944931113">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1864" height="334" key="GridCell.Tab.1.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1582944931113" />
+    <state width="1864" height="334" key="GridCell.Tab.1.center" timestamp="1582944931113">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1864" height="334" key="GridCell.Tab.1.center/0.27.1920.1053@0.27.1920.1053" timestamp="1582944931113" />
+    <state width="1864" height="334" key="GridCell.Tab.1.left" timestamp="1582944931113">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1864" height="334" key="GridCell.Tab.1.left/0.27.1920.1053@0.27.1920.1053" timestamp="1582944931113" />
+    <state width="1864" height="334" key="GridCell.Tab.1.right" timestamp="1582944931113">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1864" height="334" key="GridCell.Tab.1.right/0.27.1920.1053@0.27.1920.1053" timestamp="1582944931113" />
+    <state width="290" height="628" key="HiddenNamespacesPopup" timestamp="1582788205575">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="290" height="628" key="HiddenNamespacesPopup/0.27.1920.1053@0.27.1920.1053" timestamp="1582788205575" />
+    <state x="434" y="188" width="1052" height="738" key="SettingsEditor" timestamp="1581754165022">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="434" y="188" width="1052" height="738" key="SettingsEditor/0.27.1920.1053@0.27.1920.1053" timestamp="1581754165022" />
+    <state x="679" y="114" width="552" height="887" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1582436362113">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="679" y="114" width="552" height="887" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1582436362113" />
+    <state x="597" y="380" key="com.intellij.ide.util.TipDialog" timestamp="1584448440080">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="597" y="380" key="com.intellij.ide.util.TipDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1584448440080" />
+    <state x="630" y="390" width="672" height="678" key="search.everywhere.popup" timestamp="1584451294226">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="630" y="390" width="672" height="678" key="search.everywhere.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1584451294226" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/rewardSystem$Test__extra_apps_xadmin_templates_xadmin_excel.coverage" NAME="Test: extra_apps.xadmin.templates.xadmin.excel Coverage Results" MODIFIED="1582880386313" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+  </component>
+</project>

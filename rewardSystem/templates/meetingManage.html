@@ -1,0 +1,67 @@
+{% extends "xadmin/base_site.html" %}
+{% load static %}
+{# 导入 样式#}
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+{% endblock %}
+{% block content-nav %}
+{% endblock %}
+
+{% block content %}
+   <table class="table table-hover table-bordered">
+       <thead>
+        <tr>
+          <th>会议名称</th>
+          <th>结束时间</th>
+          <th>评分状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for meeting in page_of_meetings %}
+            <tr >
+                <td>{{ meeting.title }}</td>
+                <td>{{ meeting.endTime }}</td>
+                <td style="color: {% if meeting.gradeStatus == '未开始' %}#4F94CD {% elif meeting.gradeStatus == '已开始' %} #2E8B57{% else %}#CD3700 {% endif %}" >{{ meeting.gradeStatus }}</td>
+                <td>
+                    <a href="{% url 'xadmin:importStudent' %}?id={{ meeting.id }}" title="导入不符合资格学生" class="import-student"><img style="width: 20px;" src="{% static 'image/导入.png' %}" alt=""></a>
+                    <a href="" title="导入学生成绩" class="import-student">&ensp;&ensp;<img style="width: 20px;" src="{% static 'image/导入 (1).png' %}" alt=""></a>
+                    <a href="" title="会议统计" class="import-student">&ensp;&ensp;<img style="width: 20px;" src="{% static 'image/统计.png' %}" alt=""></a>
+                </td>
+            </tr>
+        {% empty %}
+        {% endfor %}
+      </tbody>
+   </table>
+   <div aria-label="Page navigation">
+   <div class="pag">
+      <ul class="pagination">
+        <li>
+            {% if page_of_meetings.has_previous %}
+                <a href="?page={{ page_of_meetings.prevoius_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            {% else %}
+
+            {% endif %}
+        </li>
+            {% for page_num  in page_of_meetings.paginator.page_range %}
+               {% if page_num == page_of_meetings.number %}
+                    <li  class="active" class=""><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+               {% else %}
+                    <li><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+               {% endif %}
+            {% endfor %}
+        <li>
+            {% if page_of_meetings.has_next %}
+                <a href="?page={{ page_of_meetings.next_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            {% else %}
+            {% endif %}
+        </li>
+      </ul>
+   </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,77 @@
+{% extends "xadmin/base_site.html" %}
+{% load static %}
+{# 导入 样式#}
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+{% endblock %}
+{% block content-nav %}
+{% endblock %}
+
+{% block content %}
+   <form action="" method="post">
+        {% csrf_token %}
+       <div class="top">
+            <div class="student">
+                <div class="one">
+                    <label for="exampleInputmeeting"> 会议名称 </label>
+                    <select name="meeting" class="form-control meeting" required id="exampleInputmeeting">
+                        <option>请选择会议</option>
+                        {% for meeting in meeting_list %}
+                            <option value="{{ meeting.id }}"> {{ meeting.title }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group two">
+                    <label for="exampleInputname">姓名(可为空)</label>
+                    <input type="text" name="studentsname" class="form-control sname" id="exampleInputname" placeholder="姓名">
+                </div>
+                <div class="form-group tree">
+                    <label for="exampleInputsno">学号(可为空)</label>
+                    <input type="text" name="studentsno" class="form-control sno" id="exampleInputsno" placeholder="学号">
+                </div>
+            </div>
+
+            <div class="futable" style="clear: both; width: 30%" >
+                <label for="exampleInputfuTable"> 赋分表名称 </label>
+                <select name="futable" class="form-control" id="exampleInputfuTable">
+                    <option>请选择申请表</option>
+                    {% for fuTable in fuTable_list %}
+                        <option value="{{ fuTable.id }}">{{ fuTable.title }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" class="btn btn-primary" value="分配">
+            </div>
+       </div>
+    </form>
+   <div class="content">
+
+   </div>
+<script>
+    $('.meeting').change(function () {
+        $('.sname').val("");
+        $('.sno').val("");
+        $('.content').load("{% url 'meetingStudents' %}", {'pk': $('.meeting').val(), csrfmiddlewaretoken:'{{ csrf_token }}' })
+    })
+    $(".sname").bind("change", function() {
+        var meetingid = $('.meeting').val()
+        if(meetingid == "请选择会议"){
+            alert("请选择会议")
+            $('.sname').val("")
+            $(".sno").val("")
+        }else {
+            $('.content').load("{% url 'meetingStudents' %}", {'pk': $('.meeting').val(), 'studentname': $('.sname').val(), csrfmiddlewaretoken:'{{ csrf_token }}' })
+        }
+    });
+    $(".sno").bind("change", function () {
+         var meetingid = $('.meeting').val()
+        if(meetingid == "请选择会议"){
+            alert("请选择会议")
+            $('.sname').val("")
+            $(".sno").val("")
+        }else {
+            $('.content').load("{% url 'meetingStudents' %}", {'pk': $('.meeting').val(), 'studentname': $('.sname').val(), 'studentsno': $('.sno').val(),csrfmiddlewaretoken:'{{ csrf_token }}' })
+        }
+    })
+</script>
+{% endblock %}
+

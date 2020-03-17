@@ -85,6 +85,8 @@ class MeetingAdmin:
     list_filter = ['endTime', 'title']
     search_fields = ['title', 'student']
     list_editable = ["gradeStatus"]
+    fields = ('title', 'jury', 'endTime', 'gradeStatus')
+
 
 
 xadmin.site.register(Meeting, MeetingAdmin)

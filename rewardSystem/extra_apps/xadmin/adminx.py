@@ -47,11 +47,13 @@ class GlobalSetting(object):
         ]
 
 
-from rewardSystem.adminViews import MeetingManage, ImportStudent, Download_student_xls, AssignTables
+from rewardSystem.adminViews import MeetingManage, ImportStudent, Download_student_xls, AssignTables, MeetingSeting
 # 注册自定义分配赋分表页面
 xadmin.site.register_view('meetingManage', MeetingManage, name='meetingManage')
 # 分配赋分表
 xadmin.site.register_view("assignTables", AssignTables, name='assignTables')
+# 会议设置页面
+xadmin.site.register_view('meetingSetting', MeetingSeting, name="meetingSetting")
 
 xadmin.site.register_view('importStudent', ImportStudent, name="importStudent")
 xadmin.site.register_view('downloadStudent', Download_student_xls, name="downloadStudent")

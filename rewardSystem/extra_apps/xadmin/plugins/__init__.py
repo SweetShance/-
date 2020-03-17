@@ -30,7 +30,8 @@ PLUGINS = (
     'sortablelist',
     'importexport',
     'excel',
-    'downtemplates'
+    'downtemplates',
+
 )
 
 

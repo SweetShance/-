@@ -18,11 +18,12 @@ from django.urls import path, include
 from django.conf.urls.static import static   # 新加入
 from django.conf import settings             # 新加入
 import xadmin
-from .adminViews import MeetingManage, ImportStudent, Download_student_xls, AssignTables
+from .adminViews import MeetingManage, ImportStudent, Download_student_xls, AssignTables, MeetingSeting
 from .views import MeetingStudent
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
+    path('xadmin/meetingSetting/', MeetingSeting.as_view()),
     path('xadmin/meetingManage/', MeetingManage.as_view()),
     path('xadmin/assignTables/', AssignTables.as_view()),
     path('xadmin/importStudent/', ImportStudent.as_view()),

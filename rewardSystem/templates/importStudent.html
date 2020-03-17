@@ -22,7 +22,7 @@
                 <div class="col-sm-6">
                     <div class="input-group">
                         <input type="hidden"  name="pk" value="{{ meeting_id }}" readonly>
-                        <input id='location' class="form-control" placeholder="导入不符合资格学生" required onclick="$('#i-file').click();">
+                        <input id='location' class="form-control" style="margin-top: 20px" placeholder="导入不符合资格学生" required onclick="$('#i-file').click();">
                         <label class="input-group-btn">
                             <input type="submit" id="i-check" value="导入文件" class="btn btn-primary">
                         </label>
@@ -51,7 +51,10 @@
             </tr>
         {% empty %}
             <tr>
-              <td></td>
+                <td>暂无内容</td>
+                <td>暂无内容</td>
+                <td>暂无内容</td>
+            </tr>
         {% endfor %}
         </tbody>
         </table>

@@ -2,10 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="808e35bf-c4a6-4972-becb-7259c915367b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/meetingSetting.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/adminx.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/adminx.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/assignTables.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/assignTables.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extra_apps/xadmin/adminx.py" beforeDir="false" afterPath="$PROJECT_DIR$/extra_apps/xadmin/adminx.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extra_apps/xadmin/plugins/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/extra_apps/xadmin/plugins/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rewardSystem/adminViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/rewardSystem/adminViews.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rewardSystem/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/rewardSystem/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/importStudent.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/importStudent.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/meetingManage.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/meetingManage.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,23 +83,23 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/media/studentMuBan" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/static/image" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/media/studentMuBan" />
-      <recent name="$PROJECT_DIR$/static/image" />
-      <recent name="$PROJECT_DIR$/templates" />
-      <recent name="$PROJECT_DIR$/extra_apps" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/extra_apps/xadmin/templates/xadmin" />
       <recent name="$PROJECT_DIR$/static" />
       <recent name="$PROJECT_DIR$/templates" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/templates/xadmin" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/static/image" />
+      <recent name="$PROJECT_DIR$/media/studentMuBan" />
+      <recent name="$PROJECT_DIR$/templates" />
+      <recent name="$PROJECT_DIR$/extra_apps" />
     </key>
   </component>
   <component name="RunManager" selected="Django server.rewardSystem">
@@ -176,7 +182,7 @@
       <workItem from="1583042057581" duration="1231000" />
       <workItem from="1584087166175" duration="6602000" />
       <workItem from="1584094101076" duration="3204000" />
-      <workItem from="1584448382503" duration="8406000" />
+      <workItem from="1584448382503" duration="11743000" />
     </task>
     <servers />
   </component>
@@ -196,30 +202,30 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="683" y="383" width="544" height="349" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1581753997409" />
-    <state x="693" y="299" width="524" height="516" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1584454467519">
+    <state x="693" y="299" width="524" height="516" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1584458403904">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="693" y="299" width="524" height="516" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1584454467519" />
+    <state x="693" y="299" width="524" height="516" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1584458403904" />
     <state x="681" y="290" width="424" height="492" key="FileChooserDialogImpl" timestamp="1582788241493">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="681" y="290" width="424" height="492" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1582788241493" />
-    <state width="1864" height="199" key="GridCell.Tab.0.bottom" timestamp="1584454493891">
+    <state width="1864" height="199" key="GridCell.Tab.0.bottom" timestamp="1584460122462">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="199" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1584454493891" />
-    <state width="1864" height="199" key="GridCell.Tab.0.center" timestamp="1584454493889">
+    <state width="1864" height="199" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1584460122462" />
+    <state width="1864" height="199" key="GridCell.Tab.0.center" timestamp="1584460122460">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="199" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1584454493889" />
-    <state width="1864" height="199" key="GridCell.Tab.0.left" timestamp="1584454493887">
+    <state width="1864" height="199" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1584460122460" />
+    <state width="1864" height="199" key="GridCell.Tab.0.left" timestamp="1584460122458">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="199" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1584454493887" />
-    <state width="1864" height="199" key="GridCell.Tab.0.right" timestamp="1584454493890">
+    <state width="1864" height="199" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1584460122458" />
+    <state width="1864" height="199" key="GridCell.Tab.0.right" timestamp="1584460122461">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="199" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1584454493890" />
+    <state width="1864" height="199" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1584460122461" />
     <state width="1864" height="334" key="GridCell.Tab.1.bottom" timestamp="1582944931113">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>

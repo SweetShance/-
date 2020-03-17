@@ -32,6 +32,17 @@ class MeetingManage(CommAdminView):
     #     push = "rtmp://" + app_name + "alipush.v.myalicdn.com/" + app_name + "/" + stream_name + "?auth_key=" + keytime + "-0-0-" + mm
     #     return push
 
+class MeetingSeting(CommAdminView):
+    def get(self, request):
+        context = super().get_context()  # 这一步是关键，必须super一下继承CommAdminView里面的context，不然侧栏没有对应数据，我在这里卡了好久
+        title = "会议设置"  # 定义面包屑变量
+        context["breadcrumbs"].append({'url': '/cwyadmin/', 'title': title})  # 把面包屑变量添加到context里面
+        context["title"] = title  # 把面包屑变量添加到context里面
+        # 下面你可以接着写你自己的东西了，写完记得添加到context里面就可以
+        # return render(request, 'test.html', context)  # 最后指定自定义的template模板，并返回context
+        return render(request, template_name="meetingSetting.html", context=context)
+
+
 
 class ImportStudent(CommAdminView):
     def get(self, request):

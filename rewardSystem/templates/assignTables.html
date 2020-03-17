@@ -33,13 +33,13 @@
 
             <div class="futable" style="clear: both; width: 30%" >
                 <label for="exampleInputfuTable"> 赋分表名称 </label>
-                <select name="futable" class="form-control" id="exampleInputfuTable">
+                <select name="futable" class="form-control fu" id="exampleInputfuTable">
                     <option>请选择申请表</option>
                     {% for fuTable in fuTable_list %}
                         <option value="{{ fuTable.id }}">{{ fuTable.title }}</option>
                     {% endfor %}
                 </select>
-                <input type="submit" class="btn btn-primary" value="分配">
+                <button type="submit" class="btn btn-primary" id="btn_b">分配</button>
             </div>
        </div>
     </form>
@@ -70,6 +70,24 @@
             $(".sno").val("")
         }else {
             $('.content').load("{% url 'meetingStudents' %}", {'pk': $('.meeting').val(), 'studentname': $('.sname').val(), 'studentsno': $('.sno').val(),csrfmiddlewaretoken:'{{ csrf_token }}' })
+        }
+    })
+
+{#    提交  #}
+    $('#btn_b').click(function () {
+        var meeting = $('.meeting').val()
+        var futable = $('.fu').val()
+        if(meeting != "请选择会议" && futable != "请选择申请表"){
+            var theForm = $("form:first").get(0);
+            theForm.submit();
+        }else {
+            if(futable == "请选择申请表"){
+                alert("请选择申请表!");
+                return false;
+            }else {
+                alert("请至少选择会议!")
+                return false;
+            }
         }
     })
 </script>

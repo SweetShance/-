@@ -1,0 +1,35 @@
+<div class="content" style="margin-top: 100px;">
+        <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+              <th><input type="checkbox"  class="addCheckboxAll"></th>
+              <th>学生姓名</th>
+              <th>学生学号</th>
+              <th>入学年份</th>
+              <th>导师</th>
+              <th>是否在会议中</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for student in student_list %}
+            <tr >
+                <td><input class="checkbox" type="checkbox" name="student-list" value="{{ student.0.id }}"></td>
+                <td>{{ student.0.sname }}</td>
+                <td>{{ student.0.sno }}</td>
+                <td>{{ student.0.startDate }}</td>
+                <td>{{ student.0.tutor }}</td>
+                <td><span>{{ student.1 }}</span></td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td>暂无内容</td>
+                <td>暂无内容</td>
+                <td>暂无内容</td>
+                <td>暂无内容</td>
+                <td>暂无内容</td>
+                <td>暂无内容</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>

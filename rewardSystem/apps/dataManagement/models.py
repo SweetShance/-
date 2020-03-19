@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from django.dispatch import receiver
+from django.db.models.signals import  post_save
 from django.forms import fields
 # Create your models here.
 
@@ -217,6 +219,19 @@ class Meeting(models.Model):
     def __str__(self):
         return '%s'%self.title
 
+
+@receiver(post_save, sender = Meeting)
+def addStudent(sender, instance, created, **kwargs ):
+    if created:
+        # 获取当前时间前三年包括当前时间的学生, 例如: 2020 年那我就需要 2020 2019 2018 2017 的学生
+        import time
+        year = time.localtime().tm_year - 3
+        students = Student.objects.filter(startDate__gte="%s-8-1"%year)
+        for student in students:
+            instance.student.add(student)
+
+    else:
+        print("yew")
 
 # 奖助等级
 class GrantLevel(models.Model):

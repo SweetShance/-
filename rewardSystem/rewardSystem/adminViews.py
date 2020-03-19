@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 from dataManagement.models import Meeting, File1, Qualification, FuTable
+from django.db.models import Q
 import time, hashlib, os, struct, xlrd
 
 
@@ -12,12 +13,19 @@ class MeetingManage(CommAdminView):
         title = "会议设置"
         context["breadcrumbs"].append({'url': '/cwyadmin/', 'title': title})  # 把面包屑变量添加到context里面
         context["title"] = title  # 把面包屑变量添加到context里面
+        meeting_title = request.GET.get('_q_')
+        # 查询
+        if meeting_title:
+            meeting_list = Meeting.objects.filter(title__contains=meeting_title)
+            context["q"] = 'yes'
+        else:
         # 获取会议列表
-        meeting_list = Meeting.objects.all().order_by('id')
+            meeting_list = Meeting.objects.all().order_by('id')
         paginator = Paginator(meeting_list, 30)
         page_num = request.GET.get('page', 1)
         page_of_meetings = paginator.get_page(page_num)
         context["page_of_meetings"] = page_of_meetings
+
 
         return render(request, 'meetingManage.html', context)
 
@@ -32,7 +40,8 @@ class MeetingManage(CommAdminView):
     #     push = "rtmp://" + app_name + "alipush.v.myalicdn.com/" + app_name + "/" + stream_name + "?auth_key=" + keytime + "-0-0-" + mm
     #     return push
 
-class MeetingSeting(CommAdminView):
+
+class MeetingSetting(CommAdminView):
     def get(self, request):
         context = super().get_context()  # 这一步是关键，必须super一下继承CommAdminView里面的context，不然侧栏没有对应数据，我在这里卡了好久
         title = "会议设置"  # 定义面包屑变量
@@ -40,6 +49,28 @@ class MeetingSeting(CommAdminView):
         context["title"] = title  # 把面包屑变量添加到context里面
         # 下面你可以接着写你自己的东西了，写完记得添加到context里面就可以
         # return render(request, 'test.html', context)  # 最后指定自定义的template模板，并返回context
+        meeting_id = request.GET.get('id')
+        # id 来进行导入不符合资格学生是绑定会议
+        context["meeting_id"] = meeting_id
+        #
+        meeting_studentinfo_applicationform = []
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        # get 如果搜索
+        _q_ = request.GET.get('_q_')
+        if _q_:
+            meeting_for_students = meeting_obj.student.filter(Q(sname__contains=_q_) | Q(sno__contains=_q_)).order_by("startDate")
+            context["q"] = "q"
+        else:
+            # 获取参与学生
+            meeting_for_students = meeting_obj.student.all().order_by("startDate")
+        # 为了会议展示学生是否提交申请表
+        for meeting_for_student in meeting_for_students:
+            meeting_student_applicationform =  meeting_for_student.student_applicationform.filter(meeting=meeting_obj)
+            if meeting_studentinfo_applicationform:
+                meeting_studentinfo_applicationform.append([meeting_for_student, "已提交"])
+            else:
+                meeting_studentinfo_applicationform.append([meeting_for_student, "未提交"])
+        context["meeting_students"] = meeting_studentinfo_applicationform
         return render(request, template_name="meetingSetting.html", context=context)
 
 

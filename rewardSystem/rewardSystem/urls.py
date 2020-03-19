@@ -18,16 +18,17 @@ from django.urls import path, include
 from django.conf.urls.static import static   # 新加入
 from django.conf import settings             # 新加入
 import xadmin
-from .adminViews import MeetingManage, ImportStudent, Download_student_xls, AssignTables, MeetingSeting
+from .adminViews import MeetingManage, ImportStudent, Download_student_xls, AssignTables, MeetingSetting
 from .views import MeetingStudent
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
-    path('xadmin/meetingSetting/', MeetingSeting.as_view()),
+    path('xadmin/meetingSetting/', MeetingSetting.as_view()),
     path('xadmin/meetingManage/', MeetingManage.as_view()),
     path('xadmin/assignTables/', AssignTables.as_view()),
     path('xadmin/importStudent/', ImportStudent.as_view()),
     path('xadmin/downloadStudentXls/', Download_student_xls.as_view()),
-    path('meetingStudents/', MeetingStudent.as_view(), name="meetingStudents")
+    path('meetingStudents/', MeetingStudent.as_view(), name="meetingStudents"),
+    path('xadminData/', include("xadminData.urls"))
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

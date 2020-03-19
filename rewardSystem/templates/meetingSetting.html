@@ -9,7 +9,209 @@
 {% endblock %}
 
 {% block content %}
+{#    导航栏 start #}
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav nav-tabs nav-justified">
+        <li class="active"><a href="#">参与学生 <span class="sr-only">(current)</span></a></li>
+        <li><a href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}">不符合资格学生</a></li>
+{#          //href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}"#}
+        <li><a href="javascript:;">导入学生成绩</a></li>
+        <li><a href="javascript:;">分配评委</a></li>
+        <li><a href="javascript:;">会议统计</a></li>
+      </ul>
 
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+    {#    导航栏 end #}
+<div class="content-bottom">
+    <!-- 操作 -->
+    <div class="content-bottom-top">
+        <div class="center-div">
+            <ul style="display: inline; list-style-type: none;">
+                <li><button class="btn btn-primary btn_setting add" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button></li>
+                <li><button class="btn btn-primary btn_setting delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp; 删除</button></li>
+                <li>
+                    <form class="navbar-form navbar-left" action="{% url "xadmin:meetingSetting" %}" method="get">
+                        <div class="input-group search-group" style="top:25px;">
+                        {% if q %}<span class="input-group-btn"><a class="btn btn-default" href="?id={{ meeting_id }}">x</a></span>{% endif %}
+                         <input  type="text" name="id" value="{{ meeting_id }}" hidden>
+
+                         <input id="searchbar" class="form-control" type="text" name="_q_" value="" placeholder="搜索 姓名或学号">
+                        <span class="input-group-btn"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button></span>
+                        </div>
+
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div class="count">
+            <span> 共有学生: <span style="color: #1b9dec; top:30px;">{{ meeting_students | length }}</span>  </span>
+        </div>
+    </div>
+    <!-- 学生列表 -->
+    <div class="content" style="margin-top: 100px;">
+        <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+              <th><input type="checkbox"  class="checkboxAll"></th>
+              <th>学生姓名</th>
+              <th>学生学号</th>
+              <th>入学年份</th>
+              <th>导师</th>
+              <th>是否提交申请表</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for student in meeting_students %}
+            <tr >
+                <td><input class="checkbox" type="checkbox" name="item" value="{{ student.0.id }}"></td>
+                <td>{{ student.0.sname }}</td>
+                <td>{{ student.0.sno }}</td>
+                <td>{{ student.0.startDate }}</td>
+                <td>{{ student.0.tutor }}</td>
+                <td><span {% if student.1 == "已提交" %} style="color:#2E8B57 " {% elif student.1 == "未提交" %}style="color:#CD3700 "{% endif %}>{{ student.1 }}</span></td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td>暂无内容</td>
+                <td>暂无内容</td>
+                <td>暂无内容</td>
+                <td>暂无内容</td>
+                <td>暂无内容</td>
+                <td>暂无内容</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+<!-- 添加 模态框 start -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">添加</h4>
+      </div>
+      <div class="modal-body" style="padding-top: 0px;">
+        <div class="top">
+            <ul style="display: inline; list-style-type: none; margin-top: -10px;">
+                <li style="display: inline-block"><button class="btn btn-primary btn_setting add-student"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button></li>
+                <li style="display: inline-block">
+{#                    <form class="navbar-form navbar-left" action="{% url "xadmin:meetingSetting" %}" method="get">#}
+                        <div class="input-group search-group" style="top:19px;">
+                         <span class="input-group-btn" style="display: none"><a class="btn btn-default" href="javascript:;">x</a></span>
+                         <input  type="text" name="id" class="meeting_id" value="{{ meeting_id }}" hidden>
+                         <input id="searchbar" class="form-control addsearch-text" type="text" name="q" value="" placeholder="搜索 姓名或学号">
+                        <span class="input-group-btn"><button class="btn btn-primary add-search" type="submit"><i class="fa fa-search"></i></button></span>
+                        </div>
+{#                    </form>#}
+                </li>
+            </ul>
+        </div>
+        <div class="student-list">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="addStudent" style="display: none">
+
+    <div class="add-content">
+
+    </div>
+
+</div>
+<!-- 添加 模态框 end -->
 <script>
+
+</script>
+<script>
+window.changehousts = "{% url "xadminData:meetingAddStudent" %}"
+csrf_token = "{{ csrf_token }}"
+{#    复选框全选#}
+$('.checkboxAll').click(function () {
+
+    {#if($(".checkboxAll").attr("checked")){#}
+
+        // 进行全选
+        $("[name=item]:checkbox").prop("checked", this.checked)
+
+
+})
+// 删除 start
+$('.delete').click(function () {
+    var checkedVal = [];
+    var count = $("input:checkbox:checked").length
+    if(count>0){
+        $("[name=item]:checkbox:checked").each(function () {
+            if($(this).val() != "on"){
+                checkedVal.push($(this).val());
+            }
+        })
+        var randint = "";
+        for(var i = 0; i < 4; i++){
+            randint += Math.floor(Math.random()*10);
+        }
+        var con=prompt("请输入随机验证码:" + randint );
+        if(con == randint){
+            $.ajax(
+                {
+                    url: "{% url 'xadminData:meetingDeleteStudent' %}",
+                    type: "post",
+                    cache: false,
+                    data: {"student_id": JSON.stringify(checkedVal),"meeting_id": {{ meeting_id }} ,csrfmiddlewaretoken:'{{ csrf_token }}'},
+                    success: function (data) {
+                        if(data.status == "成功"){
+                            alert("删除成功")
+                            window.location.reload();
+                        }else {
+                            alert("删除失败")
+                        }
+                    },
+                    error: function (xhr) {
+                        console.log("出现问题")
+
+                    }
+                }
+            )
+        }else {
+            alert("验证码错误")
+        }
+    }else {
+        alert("请至少选择一个")
+    }
+})
+// 删除 end
+// 添加 start
+$('.add-search').click(function () {
+    var q = $(".addsearch-text").val();
+    $(".student-list").load(
+        "{% url 'xadminData:meetingAddStudentList' %}",
+        {"meeting_id": {{meeting_id}}, "q": q, csrfmiddlewaretoken: '{{ csrf_token }}'},
+        function () {
+             var sc =  document.createElement("script");
+               sc.src= "{% static 'add.js' %}";
+               $("body").append(sc);
+        }
+    )
+
+});
+
+
+
+// 添加 end
+$(function () { $('#myModal').on('hide.bs.modal', function () {
+      window.location.reload();
+    })
+   });
 </script>
 {% endblock %}

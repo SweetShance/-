@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'reversion',
     'apps.MyUser',
     'apps.dataManagement',
+    "xadminData",
 
 ]
 

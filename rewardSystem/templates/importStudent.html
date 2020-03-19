@@ -8,21 +8,38 @@
 {% endblock %}
 
 {% block content %}
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav nav-tabs nav-justified">
+            <li><a href="{% url 'xadmin:meetingSetting' %}?id={{ meeting_id }}">参与学生 <span class="sr-only">(current)</span></a></li>
+            <li class="active"><a href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}">不符合资格学生</a></li>
+    {#          //href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}"#}
+            <li><a href="javascript:;">导入学生成绩</a></li>
+            <li><a href="javascript:;">分配评委</a></li>
+            <li><a href="javascript:;">会议统计</a></li>
+          </ul>
+
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
     <div class="top">
-        <div style="float: left">
+        <div style="float: left; margin-bottom: 30px; margin-top: 30px;">
             <a href="{% url 'xadmin:downloadStudent' %}">
                 <input type="buttom" id="download" readonly value="下载模板" class="btn btn-primary">
             </a>
         </div>
-        <div style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %}">
+        <div style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};">
             <form action="" method="post" style="width: 50%" enctype="multipart/form-data" >
                 {% csrf_token %}
                 <div class="form-group" style="">
     {#            <div class="col-sm-4 control-label">选择文件</div>#}
                 <div class="col-sm-6">
-                    <div class="input-group">
+                    <div class="input-group" style=" margin-top: 30px;">
                         <input type="hidden"  name="pk" value="{{ meeting_id }}" readonly>
-                        <input id='location' class="form-control" style="margin-top: 20px" placeholder="导入不符合资格学生" required onclick="$('#i-file').click();">
+                        <input id='location' class="form-control" placeholder="导入不符合资格学生" required onclick="$('#i-file').click();">
                         <label class="input-group-btn">
                             <input type="submit" id="i-check" value="导入文件" class="btn btn-primary">
                         </label>
@@ -37,6 +54,7 @@
         <table class="table table-hover table-bordered">
         <thead>
             <tr>
+              <th><input type="checkbox" class="first-checkbox"></th>
               <th>学生姓名</th>
               <th>学生学号</th>
               <th>原因</th>
@@ -45,6 +63,7 @@
         <tbody>
         {% for student in meeting_for_student %}
             <tr >
+                <td><input type="checkbox"></td>
                 <td>{{ student.sname }}</td>
                 <td>{{ student.sno }}</td>
                 <td>{{ student.text |truncatechars:50 }}</td>

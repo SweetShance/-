@@ -33,7 +33,7 @@ a:hover{
 /*.top{*/
 /*    border-bottom: 1px solid #8DB6CD;*/
 /*}*/
-.btn{
+#btn_b{
     margin-top: 20px;
     position: relative;
     left: 50%;
@@ -43,3 +43,29 @@ a:hover{
 /*    margin-bottom: 10px;*/
 /*    height: 30px;*/
 /*}*/
+
+/* meeting Setting.css */
+.center-div{
+    float: left;
+    margin-bottom: 10px;
+}
+.content{
+    margin-top: 5px!important;
+}
+.count{
+    float: right;
+    text-align: center;
+    margin-top: 40px;
+    margin-right: 30px;
+}
+.center-div ul{
+    display: inline;
+    list-style-type: none;
+}
+.center-div ul li{
+    display: inline-block;
+}
+.btn_setting{
+    width: 100px!important;
+}
+/* 添加 */

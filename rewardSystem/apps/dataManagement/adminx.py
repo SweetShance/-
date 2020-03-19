@@ -81,12 +81,11 @@ xadmin.site.register(Teacher, TeacherAdmin)
 
 # 会议
 class MeetingAdmin:
-    list_display = ['id', 'title', 'endTime', 'gradeStatus']
+    list_display = ['title', 'endTime', 'gradeStatus']
     list_filter = ['endTime', 'title']
-    search_fields = ['title', 'student']
-    list_editable = ["gradeStatus"]
-    fields = ('title', 'jury', 'endTime', 'gradeStatus')
-
+    search_fields = ['title']
+    list_editable = ["endTime", "gradeStatus"]
+    fields = ('title', 'student' ,'jury', 'endTime', 'gradeStatus')
 
 
 xadmin.site.register(Meeting, MeetingAdmin)

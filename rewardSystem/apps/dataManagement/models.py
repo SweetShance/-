@@ -83,7 +83,7 @@ class ApplicationForm(models.Model):
     sno = models.CharField(max_length=11, verbose_name="学生学号")
     sname = models.CharField(max_length=20, verbose_name="学生姓名")
     presentation = models.TextField(max_length=500, verbose_name="学生简介")
-    baseGrade = models.SmallIntegerField(verbose_name="基本分", default=10)
+    # baseGrade = models.SmallIntegerField(verbose_name="基本分", default=10)
     ETC_CHOICe = [
         ('四级', '四级'),
         ('六级', '六级')
@@ -91,27 +91,27 @@ class ApplicationForm(models.Model):
 
     englishChoice = models.CharField(max_length=2, verbose_name="四级/六级", choices=ETC_CHOICe, default="四级")
     etcImage = models.ImageField(verbose_name="四级/六级图片", upload_to='ETCImage', blank=True)
-    englishGrade = models.IntegerField(verbose_name="四级/六级分数")
+    # englishGrade = models.IntegerField(verbose_name="四级/六级分数")
     # 学术活动
     academicActivityText = models.CharField(verbose_name="参与学术活动介绍", max_length=500)
-    academicActivityGrade = models.SmallIntegerField(verbose_name="学术活动分数", null=True, blank=True)
+    # academicActivityGrade = models.SmallIntegerField(verbose_name="学术活动分数", null=True, blank=True)
     # 发表论文
     publicationsText = models.CharField(verbose_name="发表论文介绍", max_length=500)
-    publicationsGrade = models.SmallIntegerField(verbose_name="发表论文分数", null=True, blank=True)
+    # publicationsGrade = models.SmallIntegerField(verbose_name="发表论文分数", null=True, blank=True)
     # 参与项目
     participateItemsText = models.CharField(verbose_name="参与项目介绍", max_length=500)
-    participateItemsGrade = models.SmallIntegerField(verbose_name="参与项目分数", null=True, blank=True)
+    # participateItemsGrade = models.SmallIntegerField(verbose_name="参与项目分数", null=True, blank=True)
     # 科研项目
     researchProjectsText = models.CharField(verbose_name="科研项目介绍", max_length=500)
-    researchProjectsGrade = models.SmallIntegerField(verbose_name="科研项目分数", null=True, blank=True)
+    # researchProjectsGrade = models.SmallIntegerField(verbose_name="科研项目分数", null=True, blank=True)
     # 研究生创新项目
     innovationProjectsText = models.CharField(verbose_name="研究生创新项目介绍", max_length=500)
-    innovationProjectsGrade = models.SmallIntegerField(verbose_name="研究生创新项目分数", null=True, blank=True)
+    # innovationProjectsGrade = models.SmallIntegerField(verbose_name="研究生创新项目分数", null=True, blank=True)
     # 社会服务
     socialWorkText = models.CharField(verbose_name="社会服务介绍", max_length=500)
-    socialWorkGrade = models.SmallIntegerField(verbose_name="社会服务分数", null=True, blank=True)
-    mentorGrade = models.SmallIntegerField(verbose_name="导师评分", null=True, blank=True)
-    otherGrade = models.SmallIntegerField(verbose_name="学生评分", null=True, blank=True)
+    # socialWorkGrade = models.SmallIntegerField(verbose_name="社会服务分数", null=True, blank=True)
+    # mentorGrade = models.SmallIntegerField(verbose_name="导师评分", null=True, blank=True)
+    # otherGrade = models.SmallIntegerField(verbose_name="学生评分", null=True, blank=True)
     otherstatus = models.BooleanField(verbose_name="学生互评状态")
     judgesGrade = models.SmallIntegerField(verbose_name="评委赋分", null=True, blank=True)
     upload_time = models.DateTimeField(verbose_name="提交时间", auto_now_add=True)
@@ -119,7 +119,7 @@ class ApplicationForm(models.Model):
     # 等级
     grant = models.ForeignKey('GrantLevel', verbose_name="等级", on_delete=models.CASCADE, null=True)
     activity = models.BooleanField(verbose_name="是否通过审核", default=False)
-    jury = models.ForeignKey(Teacher, verbose_name="评委", on_delete=models.DO_NOTHING, null=True, blank=True)
+    jury = models.ForeignKey(Teacher, verbose_name="主审评委", on_delete=models.DO_NOTHING, null=True, blank=True)
     # 会议
     meeting = models.ForeignKey('Meeting', verbose_name="所属会议", on_delete=models.CASCADE, related_name="meeting_for_applicationform")
     # 赋分表
@@ -275,4 +275,55 @@ class StudentGrade(models.Model):
     sno = models.CharField(verbose_name="学号", max_length=11)
 
 
+# 申请成绩表
+class Grade(models.Model):
+    teacher = models.ForeignKey(Teacher, verbose_name="评委老师", on_delete=models.DO_NOTHING)
+    applicationForm = models.ForeignKey(ApplicationForm, verbose_name="申请表", on_delete=models.CASCADE, related_name="applicationForm_grade")
+    meeting = models.ForeignKey(Meeting, verbose_name="会议", on_delete=models.CASCADE)
+    # 在这里输入四六级成绩就行,在计算时进行运算
+    englishGrade = models.IntegerField(verbose_name="四级/六级分数", null=True, blank=True)
+    baseGrade = models.SmallIntegerField(verbose_name="基本分", default=10)
+    #    学术活动分数
+    academicActivityGrade = models.SmallIntegerField(verbose_name="学术活动分数", null=True, blank=True)
+    #    发表论文
+    publicationsGrade = models.SmallIntegerField(verbose_name="发表论文分数", null=True, blank=True)
+    #    参与项目
+    participateItemsGrade = models.SmallIntegerField(verbose_name="参与项目分数", null=True, blank=True)
+    #    科研项目分数
+    researchProjectsGrade = models.SmallIntegerField(verbose_name="科研项目分数", null=True, blank=True)
+    # 研究生创新项目分数
+    innovationProjectsGrade = models.SmallIntegerField(verbose_name="研究生创新项目分数", null=True, blank=True)
+    # 社会服务分数
+    socialWorkGrade = models.SmallIntegerField(verbose_name="社会服务分数", null=True, blank=True)
 
+    class Meta:
+        verbose_name = "成绩表"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return "学生:%s, 评委:%s"%(self.applicationForm.sname, self.teacher.tname)
+
+
+# 导师评分
+class MentorGrade(models.Model):
+    applicationForm = models.ForeignKey(ApplicationForm, verbose_name="申请表", on_delete=models.CASCADE)
+    meeting = models.ForeignKey(Meeting, verbose_name="会议", on_delete=models.CASCADE)
+    mentorGrade = models.SmallIntegerField(verbose_name="导师评分", null=True, blank=True)
+
+    # def __str__(self):
+    #     return "学生: %s"
+    class Meta:
+        verbose_name = "导师评分"
+        verbose_name_plural = verbose_name
+
+
+# 学生互评
+class OtherStudentGrade(models.Model):
+    applicationForm = models.ForeignKey(ApplicationForm, verbose_name="申请表", on_delete=models.CASCADE)
+    otherGrade = models.SmallIntegerField(verbose_name="学生评分", null=True, blank=True)
+    student = models.ForeignKey(Student, verbose_name="评分学生", on_delete=models.DO_NOTHING)
+    meeting = models.ForeignKey(Meeting, verbose_name="会议", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "学生互评"
+        verbose_name_plural = verbose_name

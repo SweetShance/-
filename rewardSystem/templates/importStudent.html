@@ -18,7 +18,7 @@
             <li class="active"><a href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}">不符合资格学生</a></li>
     {#          //href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}"#}
             <li><a href="javascript:;">导入学生成绩</a></li>
-            <li><a href="javascript:;">分配评委</a></li>
+            <li><a href="{% url 'xadmin:allotJury' %}?meeting_id={{ meeting_id }}">分配评委</a></li>
             <li><a href="javascript:;">会议统计</a></li>
           </ul>
 
@@ -26,7 +26,7 @@
       </div><!-- /.container-fluid -->
     </nav>
     <div class="top">
-        <div style="float: left; margin-bottom: 30px; margin-top: 30px;">
+        <div style="float: left; margin-bottom: 30px; margin-top: 30px; margin-right: 5px;">
             <a href="{% url 'xadmin:downloadStudent' %}">
                 <input type="buttom" id="download" readonly value="下载模板" class="btn btn-primary">
             </a>
@@ -49,24 +49,35 @@
                 </div>
             </form>
         </div>
+        <div>
+            <button class="btn btn-primary btn_setting add" data-toggle="modal" data-target="#myModal" style="margin-bottom: 30px; margin-top: 30px;{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button>
+            <button class="btn btn-primary btn_setting delete" style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp; 删除</button>
+            <span style="float: right; text-align: center; margin-top: 50px; margin-right: 30px;">共有学生: <span style="color: #1b9dec;">{{ meeting_for_student.count }}</span></span>
+        </div>
+        <div>
+
+        </div>
     </div>
     <div class="content" style="margin-top: 100px;">
         <table class="table table-hover table-bordered">
         <thead>
             <tr>
-              <th><input type="checkbox" class="first-checkbox"></th>
+              <th style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><input type="checkbox" class="first-checkbox checkboxAll" ></th>
               <th>学生姓名</th>
               <th>学生学号</th>
               <th>原因</th>
+              <th>操作</th>
             </tr>
         </thead>
         <tbody>
         {% for student in meeting_for_student %}
             <tr >
-                <td><input type="checkbox"></td>
+                <td style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><input type="checkbox" name="item" value="{{ student.id }}" style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"></td>
                 <td>{{ student.sname }}</td>
                 <td>{{ student.sno }}</td>
-                <td>{{ student.text |truncatechars:50 }}</td>
+                <td>{% if student.text|length == 0  %} 暂无内容 {% else %}{{ student.text |truncatechars:50 }}{% endif %}</td>
+{#                <th><a href="javascript:;" class="change" style="text-decoration-line: none"><span style="color: #4F94CD">修改</span></a></th>#}
+                <th><button type="button" class="btn btn-primary btn-sm change" data-toggle="modal" data-target="#change-model" value="{{ student.sno }}">修改</button></th>
             </tr>
         {% empty %}
             <tr>
@@ -78,6 +89,145 @@
         </tbody>
         </table>
     </div>
+    <!-- 添加 模态框 start -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">添加</h4>
+      </div>
+      <div class="modal-body">
+            <div class="form-group">
+                <label for="sname">姓名:</label>
+                <input type="text" class="form-control" id="sname">
+            </div>
+            <div class="form-group">
+                <label for="sno">学号:</label>
+                <input type="text" class="form-control" id="sno">
+            </div>
+            <div class="form-group">
+                <label for="text">原因:</label>
+                <textarea class="form-control" id="text"></textarea>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default add-close" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary save">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+{#  修改模态框  #}
+<div class="modal fade change-model" id="change-model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">修改</h4>
+      </div>
+      <div class="modal-body change-model-content">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary save-change">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
+window.changehousts = '{% url "xadminData:meetingImportChangeSave" %}'
+$('.checkboxAll').click(function () {
+    {#if($(".checkboxAll").attr("checked")){#}
+        // 进行全选
+        $("[name=item]:checkbox").prop("checked", this.checked);
+})
+
+$('.save').click(function () {
+    var name = $("#sname").val();
+    var sno = $("#sno").val();
+    var text = $("#text").val();
+    if(name ==""){
+        alert("姓名必填")
+    }else if(sno == ""){
+        alert("学号必填")
+    }else if(text == ""){
+        alert("原因必填")
+    }else {
+        $.ajax({
+            url: "{% url 'xadminData:meetingimportAddStudent' %}",
+            type: 'post',
+            data: {"name": name, "sno": sno, "text": text, "meeting_id": '{{ meeting_id }}', csrfmiddlewaretoken: '{{ csrf_token }}' },
+            cache: false,
+            success: function (data) {
+                alert(data.status);
+                $("#sname").val("");
+                $("#sno").val("");
+                $("#text").val("");
+            },
+            error: function (xhr) {
+                pass;
+            },
+        })
+    }
+});
+
+$(".add-close").click(function () {
+    $("#sname").val("");
+    $("#sno").val("");
+    $("#text").val("");
+    window.location.reload();
+
+});
+$(".close").click(function () {
+    $("#sname").val("");
+    $("#sno").val("");
+    $("#text").val("");
+    window.location.reload();
+});
+
+$(".delete").click(function () {
+    var checkedArr = []
+    var count = $("input:checkbox:checked").length;
+    if(count > 0){
+        $("[name=item]:checkbox:checked").each(function () {
+            checkedArr.push($(this).val())
+        })
+        alert(checkedArr)
+        $.post("{% url 'xadminData:meetingImportDeleteStudent' %}", {"checkedArr": JSON.stringify(checkedArr), "meeting_id": '{{ meeting_id }}', csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
+            alert(data.status);
+            window.location.reload();
+        })
+
+    }else {
+        alert("请至少选择一个");
+    }
+})
+
+// 修改
+$(".change").click(function () {
+    var sno = $(this).val();
+    {#$("change-model").show;#}
+    $(".change-model-content").load("{% url 'xadminData:meetingImportChangeStudent' %}", {"meeting_id":'{{ meeting_id }}', "sno": sno, csrfmiddlewaretoken: '{{ csrf_token }}'}, function () {
+        var sc =  document.createElement("script");
+            sc.src= "{% static 'add.js' %}";
+            $("body").append(sc);
+    } )
+})
+
+// 修改保存 在add.js中
+$(".save-change").click(function () {
+    var student_id = $("#change-id").val();
+    var sname = $("#change-sname").val();
+    var sno = $("#change-sno").val();
+    var text = $("#change-text").val();
+    console.log(student_id, sname, sno, text)
+    $.post("{% url 'xadminData:meetingImportChangeSave' %}", {"meeting_id": '{{ meeting_id }}', "student_id": student_id, "sname": sname, "sno": sno, "text": text, csrfmiddlewaretoken: '{{ csrf_token }}'}, function(){
+        alert("修改成功");
+        window.location.reload();
+        })
+
+})
 </script>
 {% endblock %}

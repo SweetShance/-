@@ -20,7 +20,7 @@
         <li><a href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}">不符合资格学生</a></li>
 {#          //href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}"#}
         <li><a href="javascript:;">导入学生成绩</a></li>
-        <li><a href="javascript:;">分配评委</a></li>
+        <li><a href="{% url 'xadmin:allotJury' %}?meeting_id={{ meeting_id }}">分配评委</a></li>
         <li><a href="javascript:;">会议统计</a></li>
       </ul>
 
@@ -31,10 +31,10 @@
 <div class="content-bottom">
     <!-- 操作 -->
     <div class="content-bottom-top">
-        <div class="center-div">
+        <div class="center-div" style="margin-bottom: 30px;">
             <ul style="display: inline; list-style-type: none;">
-                <li><button class="btn btn-primary btn_setting add" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button></li>
-                <li><button class="btn btn-primary btn_setting delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp; 删除</button></li>
+                <li style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><button class="btn btn-primary btn_setting add" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button></li>
+                <li style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><button class="btn btn-primary btn_setting delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp; 删除</button></li>
                 <li>
                     <form class="navbar-form navbar-left" action="{% url "xadmin:meetingSetting" %}" method="get">
                         <div class="input-group search-group" style="top:25px;">
@@ -54,11 +54,11 @@
         </div>
     </div>
     <!-- 学生列表 -->
-    <div class="content" style="margin-top: 100px;">
-        <table class="table table-hover table-bordered">
+    <div class="content">
+        <table class="table table-hover table-bordered" >
         <thead>
             <tr>
-              <th><input type="checkbox"  class="checkboxAll"></th>
+              <th style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><input type="checkbox"  class="checkboxAll"></th>
               <th>学生姓名</th>
               <th>学生学号</th>
               <th>入学年份</th>
@@ -69,7 +69,7 @@
         <tbody>
         {% for student in meeting_students %}
             <tr >
-                <td><input class="checkbox" type="checkbox" name="item" value="{{ student.0.id }}"></td>
+                <td style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><input class="checkbox" type="checkbox" name="item" value="{{ student.0.id }}"></td>
                 <td>{{ student.0.sname }}</td>
                 <td>{{ student.0.sno }}</td>
                 <td>{{ student.0.startDate }}</td>
@@ -78,7 +78,7 @@
             </tr>
         {% empty %}
             <tr>
-                <td>暂无内容</td>
+                <td style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};">暂无内容</td>
                 <td>暂无内容</td>
                 <td>暂无内容</td>
                 <td>暂无内容</td>
@@ -118,7 +118,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
       </div>
     </div>
   </div>
@@ -198,9 +198,9 @@ $('.add-search').click(function () {
         "{% url 'xadminData:meetingAddStudentList' %}",
         {"meeting_id": {{meeting_id}}, "q": q, csrfmiddlewaretoken: '{{ csrf_token }}'},
         function () {
-             var sc =  document.createElement("script");
-               sc.src= "{% static 'add.js' %}";
-               $("body").append(sc);
+            var sc =  document.createElement("script");
+            sc.src= "{% static 'add.js' %}";
+            $("body").append(sc);
         }
     )
 

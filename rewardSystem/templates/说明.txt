@@ -1,0 +1,7 @@
+文件说明
+1. assignTables.html  分配赋分表
+2. importStudent.html 导入不符合资格学生
+3. meeting_for_student.html 用于分配赋分表时学生筛选用的
+4. meetingManage.html 会议管理(会议列表页面)
+5. meetingSetting.html 进入会议的设置
+6. AllotJury.html 分配主审评委

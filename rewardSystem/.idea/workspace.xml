@@ -2,27 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="808e35bf-c4a6-4972-becb-7259c915367b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/xadminData/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/xadminData/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/xadminData/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/xadminData/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/xadminData/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/xadminData/templates/addStudentList.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/xadminData/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/xadminData/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/xadminData/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/add.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/AllotJury.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/说明.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/adminx.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/adminx.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/xadminData/templates/addStudentList.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/xadminData/templates/xadminData/addStudentList.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/xadminData/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/xadminData/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/xadminData/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/xadminData/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/extra_apps/xadmin/adminx.py" beforeDir="false" afterPath="$PROJECT_DIR$/extra_apps/xadmin/adminx.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rewardSystem/adminViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/rewardSystem/adminViews.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rewardSystem/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/rewardSystem/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rewardSystem/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/rewardSystem/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/add.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/add.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/importStudent.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/importStudent.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/meetingManage.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/meetingManage.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/meetingSetting.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/meetingSetting.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,13 +62,16 @@
   <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
+  <component name="FavoritesManager">
+    <favorites_list name="rewardSystem" />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
+        <option value="JavaScript File" />
         <option value="Python Script" />
         <option value="HTML File" />
-        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -101,18 +96,18 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/templates" />
+      <recent name="$PROJECT_DIR$/apps/xadminData/templates/xadminData" />
+      <recent name="$PROJECT_DIR$/apps" />
+      <recent name="$PROJECT_DIR$/extra_apps/xadmin/templates/xadmin" />
+      <recent name="$PROJECT_DIR$/static" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/static/image" />
       <recent name="$PROJECT_DIR$/media/studentMuBan" />
       <recent name="$PROJECT_DIR$/templates" />
       <recent name="$PROJECT_DIR$/extra_apps" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/apps" />
-      <recent name="$PROJECT_DIR$/extra_apps/xadmin/templates/xadmin" />
-      <recent name="$PROJECT_DIR$/static" />
-      <recent name="$PROJECT_DIR$/templates" />
-      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunManager" selected="Django server.rewardSystem">
@@ -200,7 +195,9 @@
       <workItem from="1584514365227" duration="296000" />
       <workItem from="1584533156954" duration="1214000" />
       <workItem from="1584602456584" duration="15553000" />
-      <workItem from="1584636447309" duration="3485000" />
+      <workItem from="1584636447309" duration="3581000" />
+      <workItem from="1584664494007" duration="1428000" />
+      <workItem from="1584709442193" duration="18983000" />
     </task>
     <servers />
   </component>
@@ -228,22 +225,22 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="681" y="290" width="424" height="492" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1582788241493" />
-    <state width="1864" height="199" key="GridCell.Tab.0.bottom" timestamp="1584639572541">
+    <state width="1864" height="199" key="GridCell.Tab.0.bottom" timestamp="1584808328328">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="199" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1584639572541" />
-    <state width="1864" height="199" key="GridCell.Tab.0.center" timestamp="1584639572538">
+    <state width="1864" height="199" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1584808328328" />
+    <state width="1864" height="199" key="GridCell.Tab.0.center" timestamp="1584808328327">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="199" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1584639572538" />
-    <state width="1864" height="199" key="GridCell.Tab.0.left" timestamp="1584639572536">
+    <state width="1864" height="199" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1584808328327" />
+    <state width="1864" height="199" key="GridCell.Tab.0.left" timestamp="1584808328326">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="199" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1584639572536" />
-    <state width="1864" height="199" key="GridCell.Tab.0.right" timestamp="1584639572539">
+    <state width="1864" height="199" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1584808328326" />
+    <state width="1864" height="199" key="GridCell.Tab.0.right" timestamp="1584808328328">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="199" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1584639572539" />
+    <state width="1864" height="199" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1584808328328" />
     <state width="1864" height="334" key="GridCell.Tab.1.bottom" timestamp="1582944931113">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
@@ -272,14 +269,14 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="679" y="114" width="552" height="887" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1582436362113" />
-    <state x="597" y="380" key="com.intellij.ide.util.TipDialog" timestamp="1584636448080">
+    <state x="597" y="380" key="com.intellij.ide.util.TipDialog" timestamp="1584709444559">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="597" y="380" key="com.intellij.ide.util.TipDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1584636448080" />
-    <state x="630" y="390" width="672" height="678" key="search.everywhere.popup" timestamp="1584636912033">
+    <state x="597" y="380" key="com.intellij.ide.util.TipDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1584709444559" />
+    <state x="630" y="390" width="672" height="678" key="search.everywhere.popup" timestamp="1584807953045">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="630" y="390" width="672" height="678" key="search.everywhere.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1584636912033" />
+    <state x="630" y="390" width="672" height="678" key="search.everywhere.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1584807953045" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/rewardSystem$Test__extra_apps_xadmin_templates_xadmin_excel.coverage" NAME="Test: extra_apps.xadmin.templates.xadmin.excel Coverage Results" MODIFIED="1582880386313" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />

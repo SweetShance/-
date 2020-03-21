@@ -55,6 +55,7 @@ class MeetingSetting(CommAdminView):
         #
         meeting_studentinfo_applicationform = []
         meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        context["meeting"] = meeting_obj
         # get 如果搜索
         _q_ = request.GET.get('_q_')
         if _q_:
@@ -65,14 +66,14 @@ class MeetingSetting(CommAdminView):
             meeting_for_students = meeting_obj.student.all().order_by("startDate")
         # 为了会议展示学生是否提交申请表
         for meeting_for_student in meeting_for_students:
-            meeting_student_applicationform =  meeting_for_student.student_applicationform.filter(meeting=meeting_obj)
-            if meeting_studentinfo_applicationform:
+            meeting_student_applicationform = meeting_for_student.student_applicationform.filter(meeting=meeting_obj)
+            if meeting_student_applicationform:
                 meeting_studentinfo_applicationform.append([meeting_for_student, "已提交"])
+                # print(meeting_studentinfo_applicationform)
             else:
                 meeting_studentinfo_applicationform.append([meeting_for_student, "未提交"])
         context["meeting_students"] = meeting_studentinfo_applicationform
         return render(request, template_name="meetingSetting.html", context=context)
-
 
 
 class ImportStudent(CommAdminView):
@@ -176,3 +177,38 @@ class AssignTables(CommAdminView):
                     applicationForm_obj.save()
 
         return redirect(form_url)
+
+
+# 分配主审评委
+class AllotJury(CommAdminView):
+
+    def get(self, request):
+        """
+        获取当前会议所有赋分表
+        获取当前会议所有评委
+        :param request:
+        :return:
+        """
+        context = super().get_context()
+        title = "分配主审品味"
+        context["breadcrumbs"].append({'url': '/cwyadmin/', 'title': title})  # 把面包屑变量添加到context里面
+        context["title"] = title  # 把面包屑变量添加到context里面
+        # 赋分表和主审老师 applicationform_list_jury = ["赋分表", "主审"]
+        applicationform_list_jury = []
+        meeting_id = request.GET.get("meeting_id")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        # 所有赋分表
+        applicationform_list = meeting_obj.meeting_for_applicationform.all()
+        # 所有评委
+        jury_list = meeting_obj.jury.all()
+        # 获取主审
+        for applicationform in applicationform_list:
+            applicationform_list_jury.append([applicationform, applicationform.jury])
+
+            context["applicationform_list"]: applicationform_list_jury
+        context["jury_list"]: jury_list
+        context["meeting_id"] = meeting_id
+        return render(request, template_name="AllotJury.html", context=context)
+
+    def post(self, request):
+        pass

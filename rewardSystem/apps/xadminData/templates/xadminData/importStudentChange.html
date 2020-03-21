@@ -1,0 +1,13 @@
+<div class="form-group">
+    <input type="text" value="{{ qualification_student_obj.id }}" hidden id="change-id">
+    <label for="change-sname">姓名:</label>
+    <input type="text" class="form-control" id="change-sname" value="{{ qualification_student_obj.sname }}">
+</div>
+<div class="form-group">
+    <label for="change-sno">学号:</label>
+    <input type="text" class="form-control" id="change-sno", value="{{ qualification_student_obj.sno }}">
+</div>
+<div class="form-group">
+    <label for="change-text">原因:</label>
+    <textarea class="form-control" id="change-text">{{ qualification_student_obj.text }}</textarea>
+</div>

@@ -32,5 +32,8 @@ urlpatterns = [
     path('xadminData/', include("xadminData.urls")),
     # 分配评委
     path("xadmin/allotJury/", AllotJury.as_view(), name="allotJury"),
+    # 登录
+    path("user/", include("MyUser.urls")),
+    path("dataManagement/", include("dataManagement.urls")),
 
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

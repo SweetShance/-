@@ -5,7 +5,7 @@ from django.views import View
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 import json
-from dataManagement.models import Student, Meeting, Qualification
+from dataManagement.models import Student, Meeting, Qualification, ApplicationForm, Teacher
 
 
 # Create your views here.
@@ -142,3 +142,22 @@ class MeetingImportChangeStudentSave(View):
 
     def get(self, request):
         return HttpResponse("hello")
+
+
+class AllotJurySave(View):
+    def post(self, request):
+        # ["申请表id:评委id"]
+        applicationform_list_jury = request.POST.get("applicationform_list_jury")
+        try:
+            for applicationform_jury in json.loads(applicationform_list_jury):
+                applicationform_id = applicationform_jury.split(":")[0]
+                jury_id = applicationform_jury.split(":")[1]
+                applicationform_obj = get_object_or_404(ApplicationForm, pk=applicationform_id)
+                jury_obj = get_object_or_404(Teacher, pk=jury_id)
+                applicationform_obj.jury = jury_obj
+                applicationform_obj.save()
+        except Exception:
+            return JsonResponse({"status": "失败"})
+
+
+        return JsonResponse({"status": "成功"})

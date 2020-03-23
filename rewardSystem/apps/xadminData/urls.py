@@ -1,6 +1,6 @@
 from django.urls import path
 from xadminData.views import MeetingDeleteStudent, MeetingAddStudentList, MeetingAddStudent, MeetingImportAddStudent,\
-    MeetingImportDeleteStudent, MeetingImportChangeStudent, MeetingImportChangeStudentSave
+    MeetingImportDeleteStudent, MeetingImportChangeStudent, MeetingImportChangeStudentSave, AllotJurySave
 
 app_name = "xadminData"
 urlpatterns = [
@@ -13,7 +13,8 @@ urlpatterns = [
     path("meetingimportAddStudent/", MeetingImportAddStudent.as_view(), name="meetingimportAddStudent"),
     path("meetingImportDeleteStudent/", MeetingImportDeleteStudent.as_view(), name="meetingImportDeleteStudent"),
     path("meetingImportChangeStudent/", MeetingImportChangeStudent.as_view(), name="meetingImportChangeStudent"),
-    path("meetingImportChangeSave/", MeetingImportChangeStudentSave.as_view(), name="meetingImportChangeSave")
+    path("meetingImportChangeSave/", MeetingImportChangeStudentSave.as_view(), name="meetingImportChangeSave"),
+    path("allotJurySave/", AllotJurySave.as_view(), name="allotJurySave")
 
 
 ]

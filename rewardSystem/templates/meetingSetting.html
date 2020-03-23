@@ -31,13 +31,18 @@
 <div class="content-bottom">
     <!-- 操作 -->
     <div class="content-bottom-top">
-        <div class="center-div" style="margin-bottom: 30px;">
-            <ul style="display: inline; list-style-type: none;">
-                <li style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><button class="btn btn-primary btn_setting add" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button></li>
-                <li style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><button class="btn btn-primary btn_setting delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp; 删除</button></li>
-                <li>
+        <div class="center-div" style="margin-bottom: 0px; width: 100%;">
+
+            <div style="margin-top: 20px;">
+                <div style="float: left; margin-right: 10px; margin-bottom: 30px; margin-top: 8px; {% if meeting.gradeStatus == "已结束" %} display:none {% endif %}" >
+                    <button class="btn btn-primary btn_setting add" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button>
+                </div>
+                <div class="del" style="float: left; margin-bottom: 30px; margin-top: 8px; {% if meeting.gradeStatus == "已结束" %} display:none {% endif %}">
+                    <button class="btn btn-primary btn_setting delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp; 删除</button>
+                </div>
+                <div style="display: inline-block;">
                     <form class="navbar-form navbar-left" action="{% url "xadmin:meetingSetting" %}" method="get">
-                        <div class="input-group search-group" style="top:25px;">
+                        <div class="input-group search-group" style="margin-top: 1px;">
                         {% if q %}<span class="input-group-btn"><a class="btn btn-default" href="?id={{ meeting_id }}">x</a></span>{% endif %}
                          <input  type="text" name="id" value="{{ meeting_id }}" hidden>
 
@@ -46,11 +51,12 @@
                         </div>
 
                     </form>
-                </li>
-            </ul>
-        </div>
-        <div class="count">
-            <span> 共有学生: <span style="color: #1b9dec; top:30px;">{{ meeting_students | length }}</span>  </span>
+                </div>
+                <div class="count" style="margin-top: 20px;">
+                    <span> 共有学生: <span style="color: #1b9dec; margin-right: 20px;">{{ meeting_students | length }}</span>  </span>
+                </div>
+            </div>
+
         </div>
     </div>
     <!-- 学生列表 -->
@@ -104,7 +110,7 @@
                 <li style="display: inline-block"><button class="btn btn-primary btn_setting add-student"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button></li>
                 <li style="display: inline-block">
 {#                    <form class="navbar-form navbar-left" action="{% url "xadmin:meetingSetting" %}" method="get">#}
-                        <div class="input-group search-group" style="top:19px;">
+                        <div class="input-group search-group" style="top:16px;">
                          <span class="input-group-btn" style="display: none"><a class="btn btn-default" href="javascript:;">x</a></span>
                          <input  type="text" name="id" class="meeting_id" value="{{ meeting_id }}" hidden>
                          <input id="searchbar" class="form-control addsearch-text" type="text" name="q" value="" placeholder="搜索 姓名或学号">

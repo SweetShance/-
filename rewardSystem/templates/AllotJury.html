@@ -25,51 +25,62 @@
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
-    <div class="top">
-        <div style="float: left; margin-bottom: 30px; margin-top: 30px;">
-            <a href="{% url 'xadmin:downloadStudent' %}">
-                <input type="buttom" id="download" readonly value="下载模板" class="btn btn-primary">
+    <div class="top" style="margin-top: 40px;">
+        <div style="float: left; text-align: center; margin-bottom: 30px; margin-top: 8px;">
+            <a href="javascript:;">
+                <input type="buttom" id="submit-jury" {% if meeting_status == "已结束" %} style="display: none" {% endif %}readonly value="提交" class="btn btn-primary btn_setting">
             </a>
         </div>
-        <div style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};">
-            <form action="" method="post" style="width: 50%" enctype="multipart/form-data" >
-                {% csrf_token %}
-                <div class="form-group" style="">
-    {#            <div class="col-sm-4 control-label">选择文件</div>#}
-                <div class="col-sm-6">
-                    <div class="input-group" style=" margin-top: 30px;">
-                        <input type="hidden"  name="pk" value="{{ meeting_id }}" readonly>
-                        <input id='location' class="form-control" placeholder="导入不符合资格学生" required onclick="$('#i-file').click();">
-                        <label class="input-group-btn">
-                            <input type="submit" id="i-check" value="导入文件" class="btn btn-primary">
-                        </label>
-                    </div>
-                </div>
-                <input type="file"  name="file" id='i-file'  accept=".xls, .xlsx"  onchange="$('#location').val($('#i-file').val());" style="display: none">
+        <div style="display: inline-block; margin-top: 1px;">
+            <form class="navbar-form navbar-left" method="post">
+                    {% csrf_token %}
+                <div class="input-group search-group" >
+                    {% if q %}<span class="input-group-btn"><a class="btn btn-default" href="?meeting_id={{ meeting_id }}">x</a></span>{% endif %}
+                     <input  type="text" name="meeting_id" value="{{ meeting_id }}" hidden>
+                     <input id="searchbar" class="form-control" type="text" name="_q_" value="" placeholder="搜索 姓名或学号">
+                    <span class="input-group-btn"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button></span>
                 </div>
             </form>
         </div>
+        <div class="count" style="margin-top: 20px;">
+            <span> 共有学生: <span style="color: #1b9dec; margin-right: 20px;">{{ applicationform_list_jury | length }} 人</span>  </span>
+        </div>
     </div>
-    <div class="content" style="margin-top: 100px;">
+    <div class="content " >
         <table class="table table-hover table-bordered">
         <thead>
             <tr>
-              <th><input type="checkbox" class="first-checkbox"></th>
-              <th>学生姓名</th>
-              <th>学生学号</th>
-              <th>原因</th>
+{#              <th><input type="checkbox" class="first-checkbox"></th>#}
+              <th width="10%">学生姓名</th>
+              <th width="15%">学生学号</th>
+              <th width="15%">导师</th>
+              <th width="10%">入学年份</th>
+              <th width="30%">评委老师</th>
             </tr>
         </thead>
         <tbody>
-        {% for student in meeting_for_student %}
+        {% for applicationform_jury in applicationform_list_jury %}
             <tr >
-                <td><input type="checkbox"></td>
-                <td>{{ student.sname }}</td>
-                <td>{{ student.sno }}</td>
-                <td>{{ student.text |truncatechars:50 }}</td>
+{#                <td><input type="checkbox"></td>#}
+                <td>{{ applicationform_jury.0.sname }}</td>
+                <td>{{ applicationform_jury.0.sno }}</td>
+                <td>{{ applicationform_jury.0.student.tutor }}</td>
+                <td>{{ applicationform_jury.0.student.startDate | date:"Y/m" }}</td>
+                <td>
+                    {% for jury in jury_list %}
+                            <label>
+                                 <input type="radio" {% if meeting_status == "已结束" %} disabled {% endif %}name="{{ applicationform_jury.0.id }}" id="optionsRadios1" value="{{ applicationform_jury.0.id }}:{{ jury.id }}" {% if applicationform_jury.1.tno == jury.tno %} checked {% endif %}>
+                                    {{ jury }}
+                            </label>
+                    {% empty %}
+                        暂无内容
+                    {% endfor %}
+                </td>
             </tr>
         {% empty %}
             <tr>
+                <td>暂无内容</td>
+                <td>暂无内容</td>
                 <td>暂无内容</td>
                 <td>暂无内容</td>
                 <td>暂无内容</td>
@@ -79,5 +90,43 @@
         </table>
     </div>
 <script>
+    // 提交
+    $("#submit-jury").click(function () {
+        // 获取所有
+        var count = $("input:radio:checked").length
+        if(count < {{ applicationform_list_jury | length }}){
+            alert("请全部分配")
+        }else{
+            // 格式["申请表id:评委id", ]
+            var applicationform_list_jury = []
+            $("input:radio:checked").each(function () {
+                applicationform_list_jury.push($(this).val())
+            })
+            var randint = "";
+            for(var i = 0; i < 4; i++){
+                randint += Math.floor(Math.random()*10);
+            }
+            var con=prompt("你一共选择了 "+count+" 人,"+"请输入随机验证码提交:" + randint );
+            if(con == randint){
+                // ajax 提交
+                $.ajax({
+                    url: "{% url 'xadminData:allotJurySave' %}",
+                    type: 'post',
+                    data: {"applicationform_list_jury": JSON.stringify(applicationform_list_jury), csrfmiddlewaretoken: '{{ csrf_token }}'},
+                    cache: false,
+                    success: function (data) {
+                        alert(data.status);
+                    },
+                    error: function (xhr) {
+                        alert("出现错误");
+                    }
+                })
+            }else {
+                alert("验证码错误")
+            }
+
+
+        }
+    });
 </script>
 {% endblock %}

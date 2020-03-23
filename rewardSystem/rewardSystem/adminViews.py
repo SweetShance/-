@@ -190,7 +190,7 @@ class AllotJury(CommAdminView):
         :return:
         """
         context = super().get_context()
-        title = "分配主审品味"
+        title = "分配主评委"
         context["breadcrumbs"].append({'url': '/cwyadmin/', 'title': title})  # 把面包屑变量添加到context里面
         context["title"] = title  # 把面包屑变量添加到context里面
         # 赋分表和主审老师 applicationform_list_jury = ["赋分表", "主审"]
@@ -204,11 +204,30 @@ class AllotJury(CommAdminView):
         # 获取主审
         for applicationform in applicationform_list:
             applicationform_list_jury.append([applicationform, applicationform.jury])
-
-            context["applicationform_list"]: applicationform_list_jury
-        context["jury_list"]: jury_list
+        context["applicationform_list_jury"] = applicationform_list_jury
+        context["jury_list"] = jury_list
         context["meeting_id"] = meeting_id
+        context["meeting_status"] = meeting_obj.gradeStatus
         return render(request, template_name="AllotJury.html", context=context)
 
     def post(self, request):
-        pass
+        context = super().get_context()
+        title = "分配主评委"
+        context["breadcrumbs"].append({'url': '/cwyadmin/', 'title': title})  # 把面包屑变量添加到context里面
+        context["title"] = title  # 把面包屑变量添加到context里面
+        meeting_id = request.POST.get("meeting_id")
+        _q_ = request.POST.get("_q_")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        applicationform_list = meeting_obj.meeting_for_applicationform.filter(Q(sname__contains=_q_) | Q(sno__contains =_q_))
+        print(applicationform_list)
+        applicationform_list_jury = []
+        # 获取所有评委
+        jury_list = meeting_obj.jury.all()
+        for applicationform in applicationform_list:
+            applicationform_list_jury.append([applicationform, applicationform.jury])
+        context["applicationform_list_jury"] = applicationform_list_jury
+        context["jury_list"] = jury_list
+        context["meeting_id"] = meeting_id
+        context["meeting_status"] = meeting_obj.gradeStatus
+        context["q"] = "q"
+        return render(request, template_name="AllotJury.html", context=context)

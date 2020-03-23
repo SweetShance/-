@@ -233,6 +233,7 @@ def addStudent(sender, instance, created, **kwargs ):
     else:
         print("yew")
 
+
 # 奖助等级
 class GrantLevel(models.Model):
     title = models.CharField(verbose_name="名称", max_length=50)

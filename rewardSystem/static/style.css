@@ -69,3 +69,10 @@ a:hover{
     width: 100px!important;
 }
 /* 添加 */
+/* 登录 start */
+.center-sign a:hover{
+    text-decoration-line: none;
+}
+.center-sign a:focus{
+    text-decoration: none;
+}

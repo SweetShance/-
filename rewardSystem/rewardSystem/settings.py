@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/F
 """
 
-import os,sys
+import os, sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'dataManagement.middleware.RequestBlockingMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -71,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media'
             ],
         },
     },
@@ -107,6 +109,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# # 邮箱设置
+# EMAIL_USE_SSL = True
+# EMAIL_HOST = "smtp.qq.com"
+# EMAIL_PORT = 465
+# EMAIL_HOST_USER = environ.get("742378264@qq.com")
+# EMAIL_SUBJECT_PREFIX = '[奖助学金登录系统]'
+#
+# EMAIL_HOST_PASSWORD = environ.get("ckhepzegevmgbcdb")
+#
+# # 默认邮件
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -120,7 +133,7 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
+SESSION_EXPIRE_AT_BROWSER_CLOSE=True
 AUTH_USER_MODEL = 'MyUser.MyUser'
 LOGIN_URL = '/user/login/'
 # Static files (CSS, JavaScript, Images)

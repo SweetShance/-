@@ -112,7 +112,7 @@ class ApplicationForm(models.Model):
     # socialWorkGrade = models.SmallIntegerField(verbose_name="社会服务分数", null=True, blank=True)
     # mentorGrade = models.SmallIntegerField(verbose_name="导师评分", null=True, blank=True)
     # otherGrade = models.SmallIntegerField(verbose_name="学生评分", null=True, blank=True)
-    otherstatus = models.BooleanField(verbose_name="学生互评状态")
+    otherstatus = models.BooleanField(verbose_name="学生互评状态", default=False)
     judgesGrade = models.SmallIntegerField(verbose_name="评委赋分", null=True, blank=True)
     upload_time = models.DateTimeField(verbose_name="提交时间", auto_now_add=True)
     evaluate = models.TextField(verbose_name="说明", max_length=200)
@@ -202,7 +202,7 @@ class SocialWork(models.Model):
 # 奖助评审会议
 class Meeting(models.Model):
     title = models.CharField(verbose_name="申请会议名称", max_length=20, unique=True)
-    student = models.ManyToManyField(Student, verbose_name="参与学生", blank=True)
+    student = models.ManyToManyField(Student, verbose_name="参与学生", blank=True, related_name="meeting_student")
     jury = models.ManyToManyField(Teacher, verbose_name="评委老师", blank=True)
     endTime = models.DateTimeField(verbose_name="申请结束时间")
     STATUS_CHOICE = [

@@ -1,25 +1,29 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}登录{% endblock %}
-{% block link %}
-
+{% block css %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
 {% endblock %}
 {% block content %}
+<body>
+  <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
   <div id="login-page">
     <div class="container">
-      <form class="form-login" action="index.html">
-        <h2 class="form-login-heading">sign in now</h2>
+      <div class="form-login">
+        <h2 class="form-login-heading">登 &nbsp;&nbsp; 录</h2>
         <div class="login-wrap">
-          <input type="text" class="form-control" placeholder="User ID" autofocus>
+          <input type="text" class="form-control username" placeholder="用户名" autofocus>
           <br>
-          <input type="password" class="form-control" placeholder="Password">
+          <input type="password" class="form-control password" placeholder="密码">
           <label class="checkbox">
-            <input type="checkbox" value="remember-me"> Remember me
+            <input type="checkbox" class="remember-me" value="remember-me"> 记住我
             <span class="pull-right">
-            <a data-toggle="modal" href="login.html#myModal"> Forgot Password?</a>
+            <a data-toggle="modal" href="login.html#myModal"> 忘记密码 </a>
             </span>
             </label>
-          <button class="btn btn-theme btn-block" href="index.html" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
+          <button class="btn btn-theme btn-block login"><i class="fa fa-lock"></i> 登&nbsp;录 </button>
           <hr>
           <div class="login-social-link centered">
             <p>or you can sign in via your social network</p>
@@ -27,9 +31,9 @@
             <button class="btn btn-twitter" type="submit"><i class="fa fa-twitter"></i> Twitter</button>
           </div>
           <div class="registration">
-            Don't have an account yet?<br/>
-            <a class="" href="#">
-              Create an account
+            还没有账号?<br/>
+            <a class="" href="{% url 'MyUser:register' %}">
+              注册
               </a>
           </div>
         </div>
@@ -39,37 +43,58 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Forgot Password ?</h4>
+                <h4 class="modal-title">忘记密码?</h4>
               </div>
               <div class="modal-body">
-                <p>Enter your e-mail address below to reset your password.</p>
+                <p>输入你的邮箱去重置密码.</p>
                 <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
               </div>
               <div class="modal-footer">
-                <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
-                <button class="btn btn-theme" type="button">Submit</button>
+                <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+                <button class="btn btn-theme" type="button">提交</button>
               </div>
             </div>
           </div>
         </div>
         <!-- modal -->
-      </form>
+      </div>
     </div>
   </div>
 {% endblock %}
-  <!-- js placed at the end of the document so the pages load faster -->
-<!--  <script src="lib/jquery/jquery.min.js"></script>-->
-<!--  <script src="lib/bootstrap/js/bootstrap.min.js"></script>-->
-<!--  &lt;!&ndash;BACKSTRETCH&ndash;&gt;-->
-<!--  &lt;!&ndash; You can use an image of whatever size. This script will stretch to fit in any screen size.&ndash;&gt;-->
-<!--  <script type="text/javascript" src="lib/jquery.backstretch.min.js"></script>-->
 {% block scriptlink %}
+  <!-- js placed at the end of the document so the pages load faster -->
+  <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+  <!--BACKSTRETCH-->
+  <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
   <script type="text/javascript" src="{% static 'lib/jquery.backstretch.min.js' %}"></script>
 {% endblock %}
 {% block script %}
   <script>
-    $.backstretch("img/login-bg.jpg", {
+    $.backstretch("{% static 'img/login-bg.jpg' %}", {
       speed: 500
     });
+	$(".login").click(function () {
+		var username = $(".username").val();
+		var password = $(".password").val();
+		if($.trim(username) == ""){
+			alert("用户名不能为空");
+		}else if($.trim(password) == ""){
+			alert("密码不能为空");
+		}else {
+			$.post("{% url 'MyUser:login' %}", {"username": username, "password": password, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
+				// window.location.href("{% url 'dataManagement:index' %}");
+				if(data.status == "成功"){
+					window.location.href = "{% url 'dataManagement:index' %}"
+				}else {
+					alert(data.status);
+				}
+			})
+		}
+
+	})
   </script>
 {% endblock %}
+</body>
+
+</html>

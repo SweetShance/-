@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}登录{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+{% endblock %}
+{% block content %}
+<body>
+  <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+  <div id="login-page">
+    <div class="container">
+      <div class="form-login">
+        <h2 class="form-login-heading">注 &nbsp;&nbsp; 册</h2>
+        <div class="login-wrap">
+          <input type="text" class="form-control username" placeholder="用户名 最少6位" autofocus>
+          <br>
+          <input type="password" class="form-control password" placeholder="密码 最少6位">
+          <br>
+          <input type="password" class="form-control password-again" placeholder="确认密码 最少6位">
+          <br>
+          <input type="email" class="form-control email" placeholder="邮箱">
+          <br>
+          <span class="error" style="color: #FF6347"></span>
+          <button class="btn btn-theme btn-block register"><i class="fa fa-lock"></i> 注&nbsp;册 </button>
+          <hr>
+          <div class="login-social-link centered">
+            <p>or you can sign in via your social network</p>
+            <button class="btn btn-facebook" type="submit"><i class="fa fa-facebook"></i> Facebook</button>
+            <button class="btn btn-twitter" type="submit"><i class="fa fa-twitter"></i> Twitter</button>
+          </div>
+          <div class="registration">
+            已有账号<br/>
+            <a class="" href="{% url 'MyUser:login' %}">
+              登录
+              </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block scriptlink %}
+  <!-- js placed at the end of the document so the pages load faster -->
+  <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+  <!--BACKSTRETCH-->
+  <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
+  <script type="text/javascript" src="{% static 'lib/jquery.backstretch.min.js' %}"></script>
+{% endblock %}
+{% block script %}
+  <script>
+    $.backstretch("{% static 'img/login-bg.jpg' %}", {
+      speed: 500
+    });
+	$(".register").click(function () {
+		var username = $(".username").val();
+		var password = $(".password").val();
+		var password_again = $(".password-again").val();
+		var email = $(".email").val()
+		if($.trim(username) == ""){
+			$(".error").text("用户名不能为空!");
+		}else if($.trim(password) == ""){
+			$(".error").text("密码不能为空!");
+		}else if($.trim(password_again) == ""){
+		    $(".error").text("请确认密码!");
+        }else if($.trim(email) == ""){
+		    $(".error").text("邮箱不能为空!");
+        } else if($.trim(password) != $.trim(password_again)){
+		    $(".error").text("两次密码不一致!");
+        } else {
+			$.post("{% url 'MyUser:register' %}", {"username": username, "password": password,"email": email, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
+				// window.location.href("{% url 'dataManagement:index' %}");
+				if(data.status == "成功"){
+					window.location.href = "{% url 'dataManagement:index' %}"
+				}else {
+					$(".error").text(data.status);
+					$(".password").val("");
+					$(".password-again").val("")
+				}
+			})
+		}
+
+	})
+  //    对用户名长度判断
+  $(".username").bind("change",function () {
+      var username = $(".username").val();
+      if($.trim(username).length < 6){
+          $(".error").text("用户名至少6位!");
+      }
+  });
+  // 对密码长度判断
+  $(".password").bind("change", function () {
+    var password = $(".password").val();
+    if($.trim(password).length < 6){
+        $(".error").text("密码最短6位!");
+    }
+  })
+  // 邮箱格式验证
+  $(".email").bind("change", function () {
+    var email = $(".email").val();
+    var reg1 = /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)/;
+    if(reg1.test($.trim(email)) == false){
+      $(".error").text("请输入正确邮箱格式!");
+    }
+  })
+  </script>
+{% endblock %}
+</body>
+
+</html>

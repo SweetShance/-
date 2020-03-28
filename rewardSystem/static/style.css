@@ -70,9 +70,14 @@ a:hover{
 }
 /* 添加 */
 /* 登录 start */
-.center-sign a:hover{
-    text-decoration-line: none;
+.checkbox{
+    margin-left: 20px !important;
 }
-.center-sign a:focus{
-    text-decoration: none;
+.login-wrap .register{
+    margin-top: 13px;
+}
+/* 我的申请表 */
+.files-form{
+    padding-left: 10px;
+    padding-right: 10px;
 }

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="Dashboard">
+  <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+  <title>Dashio - Bootstrap Admin Template</title>
+
+  <!-- Favicons -->
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <!--external css-->
+  <link href="{% static 'lib/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
+
+
+</head>
+
+<body>
+  <!-- **********************************************************************************************************************************************************
+      MAIN CONTENT
+      *********************************************************************************************************************************************************** -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 col-lg-offset-3 p404 centered">
+        <img src="img/404.png" alt="">
+        <h1>提交结果</h1>
+        <h3 class="status">{{ status }}</h3>
+        <br>
+        <h4> <span class="timer" style="color: #b92c28">5</span>秒后跳转到 <a href="{% url 'dataManagement:peerAssessment' %}?meeting_id={{ meeting_id }}">学生互评页面</a> </h4>
+      </div>
+    </div>
+  </div>
+  <!-- js placed at the end of the document so the pages load faster -->
+  <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+  <script>
+        var num = 5;
+        var timer = null;
+        var this_status = $(".status").text()
+        clearInterval(timer);
+        timer = setInterval(function(){
+            num--;
+            $(".timer").text(num)
+            if(num < 1) {
+                clearInterval(timer);
+                if( this_status == "提交成功"){
+                  window.location.href = "{% url 'dataManagement:peerAssessment' %}?meeting_id={{ meeting_id }}"
+                }else {
+                  window.location.href = "{% url 'dataManagement:index' %}"
+                }
+
+            }
+        },1000);
+  </script>
+</body>
+
+</html>

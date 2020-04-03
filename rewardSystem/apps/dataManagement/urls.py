@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
 from .views import Index, MyInfo, SetPassword, RequestLog, RequestLogShow, ApplicationFormUpload,\
-    DeleteAll, DeleteOne
+        DeleteOne, PeerAssessment
 
 
 app_name = "dataManagement"
@@ -13,5 +13,5 @@ urlpatterns = [
     path("requestLogShow/", login_required(RequestLogShow.as_view()), name="requestLogShow"),
     path("applicationFormUpload/", login_required(ApplicationFormUpload.as_view()), name="applicationFormUpload"),
     path("deleteOne/", login_required(DeleteOne.as_view()), name="deleteOne"),
-    path("dedleteAll/", login_required(DeleteAll.as_view()), name="deleteAll")
+    path("peerAssessment/", login_required(PeerAssessment.as_view()), name="peerAssessment")
 ]

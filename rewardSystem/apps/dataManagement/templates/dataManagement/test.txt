@@ -1,0 +1,7 @@
+1. applicationFormShow.html 用来展示、提交和修改该学生在该会议中的申请表包含
+2. index.html  首页
+3. myinfo.html 修改个人信息的
+4. requestLog.html 该学生参与的会议
+5. setPassword.html 需改密码
+6. transfer.html 提交成功后显示页面, 还有跳转到学生互评页面
+7. peerAssessment.html 学生互评页面,

@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="Dashboard">
+  <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+  <title>学生互评</title>
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <!--external css-->
+  <link href="{% static 'lib/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
+  <style>
+    .zhezhao {
+    width: 100%;
+    height: 100%;
+    background-color: #333333;
+    opacity: 0.3;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: none;
+}
+  </style>
+
+
+</head>
+
+<body>
+  <section id="container">
+    <!-- **********************************************************************************************************************************************************
+        TOP BAR CONTENT & NOTIFICATIONS
+        *********************************************************************************************************************************************************** -->
+    <!--header start-->
+    <header class="header black-bg">
+      <div class="sidebar-toggle-box">
+        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+      </div>
+      <!--logo start-->
+      <a href="index.html" class="logo"><b>奖助学金评定<span>系统</span></b></a>
+      <!--logo end-->
+      <div class="nav notify-row" id="top_menu">
+        <!--  notification start -->
+        <ul class="nav top-menu">
+          <!-- settings start -->
+          <li class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+              <i class="fa fa-tasks"></i>
+              <span class="badge bg-theme">4</span>
+              </a>
+            <ul class="dropdown-menu extended tasks-bar">
+              <div class="notify-arrow notify-arrow-green"></div>
+              <li>
+                <p class="green">You have 4 pending tasks</p>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <div class="task-info">
+                    <div class="desc">Dashio Admin Panel</div>
+                    <div class="percent">40%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                      <span class="sr-only">40% Complete (success)</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <div class="task-info">
+                    <div class="desc">Database Update</div>
+                    <div class="percent">60%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                      <span class="sr-only">60% Complete (warning)</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <div class="task-info">
+                    <div class="desc">Product Development</div>
+                    <div class="percent">80%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                      <span class="sr-only">80% Complete</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <div class="task-info">
+                    <div class="desc">Payments Sent</div>
+                    <div class="percent">70%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
+                      <span class="sr-only">70% Complete (Important)</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li class="external">
+                <a href="#">See All Tasks</a>
+              </li>
+            </ul>
+          </li>
+          <!-- settings end -->
+          <!-- inbox dropdown start-->
+          <li id="header_inbox_bar" class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+              <i class="fa fa-envelope-o"></i>
+              <span class="badge bg-theme">5</span>
+              </a>
+            <ul class="dropdown-menu extended inbox">
+              <div class="notify-arrow notify-arrow-green"></div>
+              <li>
+                <p class="green">You have 5 new messages</p>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="photo"><img alt="avatar" src="img/ui-zac.jpg"></span>
+                  <span class="subject">
+                  <span class="from">Zac Snider</span>
+                  <span class="time">Just now</span>
+                  </span>
+                  <span class="message">
+                  Hi mate, how is everything?
+                  </span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="photo"><img alt="avatar" src="img/ui-divya.jpg"></span>
+                  <span class="subject">
+                  <span class="from">Divya Manian</span>
+                  <span class="time">40 mins.</span>
+                  </span>
+                  <span class="message">
+                  Hi, I need your help with this.
+                  </span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="photo"><img alt="avatar" src="img/ui-danro.jpg"></span>
+                  <span class="subject">
+                  <span class="from">Dan Rogers</span>
+                  <span class="time">2 hrs.</span>
+                  </span>
+                  <span class="message">
+                  Love your new Dashboard.
+                  </span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="photo"><img alt="avatar" src="img/ui-sherman.jpg"></span>
+                  <span class="subject">
+                  <span class="from">Dj Sherman</span>
+                  <span class="time">4 hrs.</span>
+                  </span>
+                  <span class="message">
+                  Please, answer asap.
+                  </span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">See all messages</a>
+              </li>
+            </ul>
+          </li>
+          <!-- inbox dropdown end -->
+          <!-- notification dropdown start-->
+          <li id="header_notification_bar" class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+              <i class="fa fa-bell-o"></i>
+              <span class="badge bg-warning">7</span>
+              </a>
+            <ul class="dropdown-menu extended notification">
+              <div class="notify-arrow notify-arrow-yellow"></div>
+              <li>
+                <p class="yellow">You have 7 new notifications</p>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="label label-danger"><i class="fa fa-bolt"></i></span>
+                  Server Overloaded.
+                  <span class="small italic">4 mins.</span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="label label-warning"><i class="fa fa-bell"></i></span>
+                  Memory #2 Not Responding.
+                  <span class="small italic">30 mins.</span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="label label-danger"><i class="fa fa-bolt"></i></span>
+                  Disk Space Reached 85%.
+                  <span class="small italic">2 hrs.</span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="label label-success"><i class="fa fa-plus"></i></span>
+                  New User Registered.
+                  <span class="small italic">3 hrs.</span>
+                  </a>
+              </li>
+              <li>
+                <a href="index.html#">See all notifications</a>
+              </li>
+            </ul>
+          </li>
+          <!-- notification dropdown end -->
+        </ul>
+        <!--  notification end -->
+      </div>
+      <div class="top-menu">
+        <ul class="nav pull-right top-menu">
+          <li><a class="logout" href="{% url 'MyUser:logout' %}">Logout</a></li>
+        </ul>
+      </div>
+    </header>
+    <!--header end-->
+    <!-- **********************************************************************************************************************************************************
+        MAIN SIDEBAR MENU
+        *********************************************************************************************************************************************************** -->
+    <!--sidebar start-->
+    <aside>
+      <div id="sidebar" class="nav-collapse ">
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu" id="nav-accordion">
+          <h5 class="centered">{% if request.user.name %}你好!&nbsp; {{ request.user.name }}{% else %} 请完善个人信息! {% endif %}</h5>
+          <li class="mt">
+            <a href="{% url 'dataManagement:index' %}">
+              <i class="fa fa-dashboard"></i>
+              <span>首页</span>
+              </a>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-desktop"></i>
+              <span>设置</span>
+              </a>
+            <ul class="sub">
+              <li><a href="{% url 'dataManagement:myinfo' %}">我的信息</a></li>
+              <li><a href="{% url 'dataManagement:setPassword' %}">修改密码</a></li>
+              <li><a href="requestLog.html">Panels</a></li>
+              <li><a href="font_awesome.html">Font Awesome</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a  class="active" href="javascript:;">
+              <i class="fa fa-cogs"></i>
+              <span>评审信息</span>
+              </a>
+            <ul class="sub">
+              <li class="active"><a href="{% url 'dataManagement:requestLog' %}">申请记录</a></li>
+              <li><a href="calendar.html">提交申请</a></li>
+              <li><a href="gallery.html">学生互评</a></li>
+              <li><a href="todo_list.html">Todo List</a></li>
+              <li><a href="dropzone.html">Dropzone File Upload</a></li>
+              <li><a href="inline_editor.html">Inline Editor</a></li>
+              <li><a href="file_upload.html">Multiple File Upload</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-book"></i>
+              <span>问题反馈</span>
+              </a>
+            <ul class="sub">
+              <li><a href="blank.html">Blank Page</a></li>
+              <li><a href="login.html">Login</a></li>
+              <li><a href="lock_screen.html">Lock Screen</a></li>
+              <li><a href="profile.html">Profile</a></li>
+              <li><a href="invoice.html">Invoice</a></li>
+              <li><a href="pricing_table.html">Pricing Table</a></li>
+              <li><a href="faq.html">FAQ</a></li>
+              <li><a href="404.html">404 Error</a></li>
+              <li><a href="500.html">500 Error</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-tasks"></i>
+              <span>Forms</span>
+              </a>
+            <ul class="sub">
+              <li><a href="form_component.html">Form Components</a></li>
+              <li><a href="advanced_form_components.html">Advanced Components</a></li>
+              <li><a href="form_validation.html">Form Validation</a></li>
+              <li><a href="contactform.html">Contact Form</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-th"></i>
+              <span>Data Tables</span>
+              </a>
+            <ul class="sub">
+              <li><a href="basic_table.html">Basic Table</a></li>
+              <li><a href="responsive_table.html">Responsive Table</a></li>
+              <li><a href="advanced_table.html">Advanced Table</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="inbox.html">
+              <i class="fa fa-envelope"></i>
+              <span>Mail </span>
+              <span class="label label-theme pull-right mail-info">2</span>
+              </a>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:;">
+              <i class=" fa fa-bar-chart-o"></i>
+              <span>Charts</span>
+              </a>
+            <ul class="sub">
+              <li><a href="morris.html">Morris</a></li>
+              <li><a href="chartjs.html">Chartjs</a></li>
+              <li><a href="flot_chart.html">Flot Charts</a></li>
+              <li><a href="xchart.html">xChart</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-comments-o"></i>
+              <span>Chat Room</span>
+              </a>
+            <ul class="sub">
+              <li><a href="lobby.html">Lobby</a></li>
+              <li><a href="chat_room.html"> Chat Room</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="google_maps.html">
+              <i class="fa fa-map-marker"></i>
+              <span>Google Maps </span>
+              </a>
+          </li>
+        </ul>
+        <!-- sidebar menu end-->
+      </div>
+    </aside>
+    <!--sidebar end-->
+    <!-- **********************************************************************************************************************************************************
+        MAIN CONTENT
+        *********************************************************************************************************************************************************** -->
+    <!--main content start-->
+<!--    -->
+    <section id="main-content">
+      <section class="wrapper site-min-height">
+        <h3><i class="fa fa-angle-right"></i> {{ meeting_obj.title }} &nbsp;&nbsp;<span style="font-size: 15px;">结束时间:<span class="endTime">{{ meeting_obj.endTime }}</span></span></h3>
+        <!-- /row -->
+        <input type="text" class="applicatinFormId" value="{{ application_form_student.id }}" hidden>
+        <input type="text" class="meeting_id" value="{{ meeting_obj.id }}" hidden>
+        {% if this_status %}
+          <div style="text-align: center; margin-top: 20%">
+            <h1>{{this_status}}</h1>
+          </div>
+
+        {% else %}
+        <div class="row content-panel">
+
+          <div class="col-md-10 col-md-offset-1 mt mb">
+            <h2 class="centered">学生互评</h2>
+            <div class="accordion" id="accordion2">
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapseOne">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>学生简介
+                    </a>
+                </div>
+                <div id="collapseOne" class="accordion-body collapse in">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {{ application_form_student.presentation }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapseTwo">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>学术活动简介
+                    </a>
+                </div>
+                <div id="collapseTwo" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {{ application_form_student.presentation }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapseThree">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>学术活动文件
+                    </a>
+                </div>
+                <div id="collapseThree" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {% for student_academicActivityImage in student_academicActivityImages %}
+                            <div class="panel panel-default col-lg-4 col-md-4 col-sm-4 col-xs-12 desc" style="width: 200px; height: 200px; margin-right: 20px; padding: 0px">
+                              <div class="panel-heading img-title">{{ student_academicActivityImage.name }}</div>
+                              <div class="panel-body" style="padding: 0px;">
+                                <img style="width: 200px;" src="/media/{{ student_academicActivityImage.academicActivityImage }}" onclick="showimage('/media/{{ student_academicActivityImage.academicActivityImage }}')" alt="">
+                              </div>
+                            </div>
+                        {% empty %}
+                              暂无数据
+                        {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+<!--              发表论文-->
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapseFour">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>发表论文简介
+                    </a>
+                </div>
+                <div id="collapseFour" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {{ application_form_student.publicationsText }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapsefive">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>发表论文文件
+                    </a>
+                </div>
+                <div id="collapsefive" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {% for student_publicationsImage in student_publicationsImages %}
+                            <div class="panel panel-default col-lg-4 col-md-4 col-sm-4 col-xs-12 desc" style="width: 200px; height: 200px; margin-right: 20px; padding: 0px">
+                              <div class="panel-heading img-title">{{ student_publicationsImage.name }}</div>
+                              <div class="panel-body" style="padding: 0px;">
+                                <img style="width: 200px;" src="/media/{{ student_publicationsImage.publicationsImage }}" onclick="showimage('/media/{{ student_publicationsImage.publicationsImage }}')" alt="">
+                              </div>
+                            </div>
+                        {% empty %}
+                              暂无数据
+                        {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+<!--              end-->
+<!--              参与项目-->
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapse6">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>参与项目简介
+                    </a>
+                </div>
+                <div id="collapse6" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {{ application_form_student.participateItemsText }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapse7">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>参与项目文件
+                    </a>
+                </div>
+                <div id="collapse7" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {% for student_participateItemsImage in student_participateItemsImages %}
+                            <div class="panel panel-default col-lg-4 col-md-4 col-sm-4 col-xs-12 desc" style="width: 200px; height: 200px; margin-right: 20px; padding: 0px">
+                              <div class="panel-heading img-title">{{ student_participateItemsImage.name }}</div>
+                              <div class="panel-body" style="padding: 0px;">
+                                <img style="width: 200px;" src="/media/{{ student_participateItemsImage.participateItemsImage }}" onclick="showimage('/media/{{ student_participateItemsImage.participateItemsImage }}')" alt="">
+                              </div>
+                            </div>
+                        {% empty %}
+                              暂无数据
+                        {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+<!--              end-->
+<!--              科研项目-->
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapse8">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>科研项目简介
+                    </a>
+                </div>
+                <div id="collapse8" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {{ application_form_student.researchProjectsText }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapse9">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>科研项目文件
+                    </a>
+                </div>
+                <div id="collapse9" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {% for student_researchProjectsImage in student_researchProjectsImages %}
+                            <div class="panel panel-default col-lg-4 col-md-4 col-sm-4 col-xs-12 desc" style="width: 200px; height: 200px; margin-right: 20px; padding: 0px">
+                              <div class="panel-heading img-title">{{ student_researchProjectsImage.name }}</div>
+                              <div class="panel-body" style="padding: 0px;">
+                                <img style="width: 200px;" src="/media/{{ student_researchProjectsImage.researchProjectsImage }}" onclick="showimage('/media/{{ student_researchProjectsImage.researchProjectsImage }}')" alt="">
+                              </div>
+                            </div>
+                        {% empty %}
+                              暂无数据
+                        {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+<!-- 研究生创新项目 -->
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapse10">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>研究生创新项目简介
+                    </a>
+                </div>
+                <div id="collapse10" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {{ application_form_student.innovationProjectsText }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapse11">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>研究生创新项目文件
+                    </a>
+                </div>
+                <div id="collapse11" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {% for student_innovationProjectsImage in student_innovationProjectsImages %}
+                            <div class="panel panel-default col-lg-4 col-md-4 col-sm-4 col-xs-12 desc" style="width: 200px; height: 200px; margin-right: 20px; padding: 0px">
+                              <div class="panel-heading img-title">{{ student_innovationProjectsImage.name }}</div>
+                              <div class="panel-body" style="padding: 0px;">
+                                <img style="width: 200px;" src="/media/{{ student_innovationProjectsImage.innovationProjectsImage }}" onclick="showimage('/media/{{ student_innovationProjectsImage.innovationProjectsImage }}')" alt="">
+                              </div>
+                            </div>
+                        {% empty %}
+                              暂无数据
+                        {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+<!--              社会服务-->
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapse12">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>社会服务简介
+                    </a>
+                </div>
+                <div id="collapse12" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {{ application_form_student.socialWorkText }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapse13">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>社会服务文件
+                    </a>
+                </div>
+                <div id="collapse13" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {% for student_socialWorkImage in student_socialWorkImages %}
+                            <div class="panel panel-default col-lg-4 col-md-4 col-sm-4 col-xs-12 desc" style="width: 200px; height: 200px; margin-right: 20px; padding: 0px">
+                              <div class="panel-heading img-title">{{ student_socialWorkImage.name }}</div>
+                              <div class="panel-body" style="padding: 0px;">
+                                <img style="width: 200px;" src="/media/{{ student_socialWorkImage.socialWorkImage }}" onclick="showimage('/media/{{ student_socialWorkImage.socialWorkImage }}')" alt="">
+                              </div>
+                            </div>
+                        {% empty %}
+                              暂无数据
+                        {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </br>
+              <div style="width: 600px;">
+                <span><span style="font-size: 20px;">学生互评(满分10分):</span> <input style="width: 300px; float: right" type="number" min="0" max="10" class="form-control" id="grade" placeholder="填写分数" {% if student_otherGrade %}readonly{% endif %} value="{{ student_otherGrade }}"> <button type="button" class="btn btn-primary submit-grade"  style="float: right; {% if student_otherGrade %}display: none; {% endif %}" >提交</button></span>
+                <br>
+              </div>
+            </div>
+            <!-- end accordion -->
+          </div>
+        {% endif %}
+          <!-- col-md-10 -->
+        </div>
+        <!--  /row -->
+      </section>
+      <!-- /wrapper -->
+    </section>
+    <!-- /MAIN CONTENT -->
+    <!--main content end-->
+  </section>
+
+<!--  模态框 -->
+  <div class="zhezhao"></div>
+  ﻿<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="overflow-y:scroll" aria-hidden="true">
+        <div class="modal_cotent" style="text-align: center;">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">模态框（Modal）标题</h4>
+          </div>
+          <img class="model_img" alt="">
+        </div>
+  </div>
+  <!-- js placed at the end of the document so the pages load faster -->
+  <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+  <script class="include" type="text/javascript" src="{% static 'lib/jquery.dcjqaccordion.2.7.js' %}"></script>
+  <script src="{% static 'lib/jquery.scrollTo.min.js' %}"></script>
+  <script src="{% static 'lib/jquery.nicescroll.js' %}" type="text/javascript"></script>
+  <!--common script for all pages-->
+  <script src="{% static 'lib/common-scripts.js' %}"></script>
+  <script>
+    function showimage(source){
+      var ww = $(window).width();//当前浏览器可视宽度
+      $(".model_img").attr('src', source);
+      $(".model_img").css({"width": ww, 'left': "0px"})
+      $(document.body).css({
+        "overflow-y":"hidden"
+      })
+      $(".modal-title").text(source.split("/")[3])
+      // $(".modal-header").css()
+      $("#myModal").show();
+      $("#myModal").attr("class", "modal fade in")
+      $(".zhezhao").show();
+    }
+    $(".close").click(function () {
+      $(".zhezhao").hide();
+      $("#myModal").hide();
+    })
+    $(".close").click(function () {
+      $(document.body).css({
+        "overflow-y":"auto"
+      })
+    })
+    // $(document).ready(function () {
+    //
+    // })
+    $(".submit-grade").click(function () {
+      var number = $("#grade").val();
+      if(number > 10 || number < 0 || number == ""){
+        alert("请输入正确的分数")
+      }else {
+        var applicationFormId = $(".applicatinFormId").val();
+        var meeting_id = $(".meeting_id").val();
+        $.ajax({
+          url: "{% url 'dataManagement:peerAssessment' %}",
+          type: 'post',
+          cache: false,
+          data: {"applicationFormId": applicationFormId, "meeting_id": meeting_id, "number": number, csrfmiddlewaretoken: '{{ csrf_token }}'},
+          success:function (data) {
+            if(data.status == "成功"){
+              $("#grade").attr("readOnly","true");
+              $(".submit-grade").hide();
+            }
+            alert(data.status)
+          }
+        })
+      }
+    })
+  </script>
+</body>
+
+</html>

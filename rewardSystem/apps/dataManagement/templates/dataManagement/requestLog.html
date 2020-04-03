@@ -385,7 +385,8 @@
                           <td>{{ meeting.endTime }}</td>
                           <td><span class="label {% if meeting.gradeStatus == '未开始' %} label-info {% elif meeting.gradeStatus == '已开始' %}label-success {% else %}label-warning {% endif %} label-mini">{{ meeting.gradeStatus }}</span></td>
                           <td>
-                            <button class="btn btn-primary btn-xs show-content" value="{{ meeting.id }}"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-primary btn-xs show-content" value="{{ meeting.id }}" title="修改/提交申请"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-primary btn-xs student-grade" value="{{ meeting.id }}" title="学生互评"><i class="fa fa-pencil-square-o"></i></button>
                           </td>
                         </tr>
                         {% empty %}
@@ -399,6 +400,8 @@
                         </tbody>
                     </table>
                   </div>
+                    <br>
+                    <h3><span style="color: #b92c28">注: 学生在提交完申请后请进行学生互评</span></h3>
                 </div>
               </div>
             </div>
@@ -426,9 +429,13 @@
   <script src="{% static 'lib/sparkline-chart.js' %}"></script>
   <script>
     $(".show-content").click(function () {
-        var meeting_id = $(".show-content").val();
+        var meeting_id = $(this).val();
         window.location.href = "{% url 'dataManagement:requestLogShow' %}?meeting_id="+meeting_id
 
+    })
+    $(".student-grade").click(function () {
+        var meeting_id = $(this).val();
+        window.location.href = "{% url 'dataManagement:peerAssessment' %}?meeting_id="+meeting_id
     })
   </script>
 </body>

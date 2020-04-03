@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import auth
 from django.http import JsonResponse
+from dataManagement.models import Student
 from .models import MyUser
 
 
@@ -40,6 +41,9 @@ class Register(View):
             return JsonResponse({"status": "该邮箱已被注册"})
         else:
             user = MyUser.objects.create_user(username=username, password=password, email=email)
+            user_for_student = Student.objects.filter(sno=user.username)
+            if user_for_student:
+                user_for_student[0].registerStatus = True
             auth.login(request, user)
             return JsonResponse({"status": "成功"})
 

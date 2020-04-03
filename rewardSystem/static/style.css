@@ -81,3 +81,26 @@ a:hover{
     padding-left: 10px;
     padding-right: 10px;
 }
+/* 学生互评 */
+/*.well ul{*/
+/*    display:inline;*/
+/*    white-space: nowrap;*/
+/*}*/
+/*.well ul li{*/
+/*    padding: 10px 20px;*/
+/*    display: inline-block;*/
+/*    background:pink;*/
+/*    white-space:nowrap;*/
+/*    width: 100px;*/
+/*}*/
+#mask {
+    width: 100%;
+    height: 100%;
+    background-color: #333333;
+    opacity: 0.3;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: none;
+}

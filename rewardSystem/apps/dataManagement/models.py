@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import  post_save
+from django.db.models.signals import pre_delete #删除文件
+from django.dispatch.dispatcher import receiver #删除文件
 from django.forms import fields
 # Create your models here.
 
@@ -66,7 +68,7 @@ class FuTable(models.Model):
 
 # 赋分项
 class AssignItem(models.Model):
-    fuTable = models.ForeignKey(FuTable, on_delete=models.CASCADE)
+    fuTable = models.ForeignKey(FuTable, on_delete=models.CASCADE, related_name="fuItem")
     title = models.CharField(verbose_name="赋分项", max_length=50)
     grade = models.IntegerField(verbose_name="分数")
     scoring = models.TextField(verbose_name="赋分标准", max_length=300)
@@ -84,13 +86,14 @@ class ApplicationForm(models.Model):
     sname = models.CharField(max_length=20, verbose_name="学生姓名")
     presentation = models.TextField(max_length=500, verbose_name="学生简介")
     # baseGrade = models.SmallIntegerField(verbose_name="基本分", default=10)
-    ETC_CHOICe = [
+    CET_CHOICE = [
         ('四级', '四级'),
         ('六级', '六级')
     ]
 
-    englishChoice = models.CharField(max_length=2, verbose_name="四级/六级", choices=ETC_CHOICe, default="四级")
-    etcImage = models.ImageField(verbose_name="四级/六级图片", upload_to='ETCImage', blank=True)
+    englishChoice = models.CharField(max_length=2, verbose_name="四级/六级", choices=CET_CHOICE, default="四级")
+    cetImage = models.ImageField(verbose_name="四级/六级图片", upload_to='ETCImage', blank=True)
+    cetstatus = models.BooleanField(verbose_name="使用状态", default=False)
     # englishGrade = models.IntegerField(verbose_name="四级/六级分数")
     # 学术活动
     academicActivityText = models.CharField(verbose_name="参与学术活动介绍", max_length=500)
@@ -112,7 +115,8 @@ class ApplicationForm(models.Model):
     # socialWorkGrade = models.SmallIntegerField(verbose_name="社会服务分数", null=True, blank=True)
     # mentorGrade = models.SmallIntegerField(verbose_name="导师评分", null=True, blank=True)
     # otherGrade = models.SmallIntegerField(verbose_name="学生评分", null=True, blank=True)
-    otherstatus = models.BooleanField(verbose_name="学生互评状态", default=False)
+    otherstatus = models.BooleanField(verbose_name="是否被评分", default=False)
+    tootherstatus = models.BooleanField(verbose_name="是否评分", default=False)
     judgesGrade = models.SmallIntegerField(verbose_name="评委赋分", null=True, blank=True)
     upload_time = models.DateTimeField(verbose_name="提交时间", auto_now_add=True)
     evaluate = models.TextField(verbose_name="说明", max_length=200)
@@ -126,7 +130,7 @@ class ApplicationForm(models.Model):
     fuTable = models.ForeignKey(FuTable, verbose_name="赋分表", on_delete=models.DO_NOTHING, null=True, blank=True, )
 
     def __str__(self):
-        return "%s的赋分表"%self.sname
+        return "%s的申请表"%self.sname
 
     class Meta:
         verbose_name = "申请表"
@@ -137,6 +141,7 @@ class ApplicationForm(models.Model):
 class AcademicActivity(models.Model):
     applicationForm = models.ForeignKey(ApplicationForm, to_field='id', on_delete=models.CASCADE,
                                         related_name="student_academicActivityImage")
+    name = models.CharField(verbose_name="文件名", max_length=100)
     academicActivityImage = models.ImageField(verbose_name="相关图片", upload_to="academicActivityImage")
 
     class Meta:
@@ -146,8 +151,9 @@ class AcademicActivity(models.Model):
 
 # 发表论文文件
 class Publications(models.Model):
-    publications = models.ForeignKey(ApplicationForm, to_field='id', on_delete=models.CASCADE,
+    applicationForm = models.ForeignKey(ApplicationForm, to_field='id', on_delete=models.CASCADE,
                                      related_name="student_publicationsImage")
+    name = models.CharField(verbose_name="文件名", max_length=100)
     publicationsImage = models.ImageField(verbose_name="相关图片", upload_to="publicationsImage")
 
     class Meta:
@@ -157,9 +163,10 @@ class Publications(models.Model):
 
 # 参与项目文件
 class ParticipateItems(models.Model):
-    participateItems = models.ForeignKey(ApplicationForm, to_field='id', on_delete=models.CASCADE,
+    applicationForm = models.ForeignKey(ApplicationForm, to_field='id', on_delete=models.CASCADE,
                                          related_name="student_participateItemsImage")
-    publicationsImage = models.ImageField(verbose_name="相关图片", upload_to="participateItemsImage")
+    name = models.CharField(verbose_name="文件名", max_length=100)
+    participateItemsImage = models.ImageField(verbose_name="相关图片", upload_to="participateItemsImage")
 
     class Meta:
         verbose_name = "参与项目文件"
@@ -168,8 +175,9 @@ class ParticipateItems(models.Model):
 
 # 科研项目
 class ResearchProjects(models.Model):
-    researchProjects = models.ForeignKey(ApplicationForm, to_field='id', on_delete=models.CASCADE,
+    applicationForm = models.ForeignKey(ApplicationForm, to_field='id', on_delete=models.CASCADE,
                                          related_name="student_researchProjectsImage")
+    name = models.CharField(verbose_name="文件名", max_length=100)
     researchProjectsImage = models.ImageField(verbose_name="相关图片", upload_to="researchProjectsImage")
 
     class Meta:
@@ -179,8 +187,9 @@ class ResearchProjects(models.Model):
 
 # 研究生创新项目
 class InnovationProjects(models.Model):
-    innovationProjects = models.ForeignKey(ApplicationForm, to_field='id', on_delete=models.CASCADE,
+    applicationForm = models.ForeignKey(ApplicationForm, to_field='id', on_delete=models.CASCADE,
                                            related_name="student_innovationProjectsImage")
+    name = models.CharField(verbose_name="文件名", max_length=100)
     innovationProjectsImage = models.ImageField(verbose_name="相关图片", upload_to="innovationProjectsImage")
 
     class Meta:
@@ -190,8 +199,9 @@ class InnovationProjects(models.Model):
 
 # 社会服务文件
 class SocialWork(models.Model):
-    socialWork = models.ForeignKey(ApplicationForm, to_field='id', on_delete=models.CASCADE,
+    applicationForm = models.ForeignKey(ApplicationForm, to_field='id', on_delete=models.CASCADE,
                                    related_name="student_socialWorkImage")
+    name = models.CharField(verbose_name="文件名", max_length=100)
     socialWorkImage = models.ImageField(verbose_name="相关图片", upload_to="socialWorkImage")
 
     class Meta:
@@ -328,3 +338,34 @@ class OtherStudentGrade(models.Model):
     class Meta:
         verbose_name = "学生互评"
         verbose_name_plural = verbose_name
+
+
+# 删除数据同时删除文件
+@receiver(pre_delete, sender=AcademicActivity) #sender=你要删除或修改文件字段所在的类**
+def delete_academicActivityImage(instance, **kwargs):       #函数名随意
+    instance.academicActivityImage.delete(False) #file是保存文件或图片的字段名**
+
+
+@receiver(pre_delete, sender=Publications)  # sender=你要删除或修改文件字段所在的类**
+def delete_publicationsImage(instance, **kwargs):  # 函数名随意
+    instance.publicationsImage.delete(False)  # file是保存文件或图片的字段名**
+
+
+@receiver(pre_delete, sender=ParticipateItems)  # sender=你要删除或修改文件字段所在的类**
+def delete_participateItems (instance, **kwargs):  # 函数名随意
+    instance.participateItemsImage.delete(False)  # file是保存文件或图片的字段名**
+
+
+@receiver(pre_delete, sender=InnovationProjects)  # sender=你要删除或修改文件字段所在的类**
+def delete_innovationProjects (instance, **kwargs):  # 函数名随意
+    instance.innovationProjectsImage.delete(False)  # file是保存文件或图片的字段名**
+
+
+@receiver(pre_delete, sender=ResearchProjects)  # sender=你要删除或修改文件字段所在的类**
+def delete_researchProjects (instance, **kwargs):  # 函数名随意
+    instance.researchProjectsImage.delete(False)  # file是保存文件或图片的字段名**
+
+
+@receiver(pre_delete, sender=SocialWork)  # sender=你要删除或修改文件字段所在的类**
+def delete_socialWork (instance, **kwargs):  # 函数名随意
+    instance.socialWorkImage.delete(False)  # file是保存文件或图片的字段名**

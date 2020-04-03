@@ -3609,7 +3609,9 @@
                 params = {id: $el.attr('id'), key: vKey, extra: extraData};
                 fnBefore = function (jqXHR) {
                     self.ajaxAborted = false;
-                    self._raise('filepredelete', [vKey, jqXHR, extraData]);
+                    var a = self._raise('filepredelete', [vKey, jqXHR, extraData]);
+                    // // 新添加
+                    if(!a)  return false;
                     if (self._abort()) {
                         jqXHR.abort();
                     } else {

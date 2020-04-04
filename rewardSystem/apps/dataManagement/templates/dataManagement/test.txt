@@ -5,3 +5,6 @@
 5. setPassword.html 需改密码
 6. transfer.html 提交成功后显示页面, 还有跳转到学生互评页面
 7. peerAssessment.html 学生互评页面,
+8. MeetingList.hmtl 所有会议列表
+9. MeetingForMyStudent 会议当前老师的学生列表
+10. MeetingForMyStudentCheck 老师对摸个学生的审核和评分

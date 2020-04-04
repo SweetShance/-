@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils import timezone
 from django.dispatch import receiver
-from django.db.models.signals import  post_save
+from django.db.models.signals import post_save, m2m_changed
 from django.db.models.signals import pre_delete #删除文件
 from django.dispatch.dispatcher import receiver #删除文件
 from django.forms import fields
+from MyUser.models import MyUser
 # Create your models here.
 
 
@@ -115,6 +116,7 @@ class ApplicationForm(models.Model):
     # socialWorkGrade = models.SmallIntegerField(verbose_name="社会服务分数", null=True, blank=True)
     # mentorGrade = models.SmallIntegerField(verbose_name="导师评分", null=True, blank=True)
     # otherGrade = models.SmallIntegerField(verbose_name="学生评分", null=True, blank=True)
+    # 学生互评
     otherstatus = models.BooleanField(verbose_name="是否被评分", default=False)
     tootherstatus = models.BooleanField(verbose_name="是否评分", default=False)
     judgesGrade = models.SmallIntegerField(verbose_name="评委赋分", null=True, blank=True)
@@ -122,7 +124,10 @@ class ApplicationForm(models.Model):
     evaluate = models.TextField(verbose_name="说明", max_length=200)
     # 等级
     grant = models.ForeignKey('GrantLevel', verbose_name="等级", on_delete=models.CASCADE, null=True)
-    activity = models.BooleanField(verbose_name="是否通过审核", default=False)
+    # 导师审核
+    # activity = models.BooleanField(verbose_name="是否通过审核", default=False)
+
+    activity = models.BooleanField(verbose_name="导师审核状态", default=False)
     jury = models.ForeignKey(Teacher, verbose_name="主审评委", on_delete=models.DO_NOTHING, null=True, blank=True)
     # 会议
     meeting = models.ForeignKey('Meeting', verbose_name="所属会议", on_delete=models.CASCADE, related_name="meeting_for_applicationform")
@@ -230,18 +235,29 @@ class Meeting(models.Model):
         return '%s'%self.title
 
 
-@receiver(post_save, sender = Meeting)
-def addStudent(sender, instance, created, **kwargs ):
-    if created:
-        # 获取当前时间前三年包括当前时间的学生, 例如: 2020 年那我就需要 2020 2019 2018 2017 的学生
-        import time
-        year = time.localtime().tm_year - 3
-        students = Student.objects.filter(startDate__gte="%s-8-1"%year)
-        for student in students:
-            instance.student.add(student)
+# def save_model(self, request, obj, form, change):
+#     if obj:
+#         # Save the object
+#         super().save_model(request, obj, form, change)
+#         # Add the user instance to M2M field of the request.user (The admin User) who create the RegularUser
+#     print(request, obj, form, change)
 
-    else:
-        print("yew")
+# @receiver(post_save, sender = Meeting)
+# def addStudent(sender, instance, created, **kwargs ):
+#     if created:
+#         print(Meeting.objects.all())
+#         # 获取当前时间前三年包括当前时间的学生, 例如: 2020 年那我就需要 2020 2019 2018 2017 的学生
+#         import time
+#         print("hello")
+#         year = time.localtime().tm_year - 3
+#         students = Student.objects.filter(startDate__gte="%s-8-1"%year)
+#         for student in students:
+#             instance.student.set(students)
+
+
+# @receiver(post_save, sender = Meeting)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.student.save()
 
 
 # 奖助等级
@@ -337,6 +353,18 @@ class OtherStudentGrade(models.Model):
 
     class Meta:
         verbose_name = "学生互评"
+        verbose_name_plural = verbose_name
+
+
+class Message(models.Model):
+    form_user = models.ForeignKey(MyUser, verbose_name="发送者", on_delete=models.CASCADE, related_name="send_message")
+    to_user = models.ForeignKey(MyUser, verbose_name="接收这", on_delete=models.CASCADE, related_name="have_message")
+    text = models.CharField(verbose_name="信息内容", max_length=200)
+    status = models.BooleanField(verbose_name="状态", default=False)
+    send_time = models.DateTimeField(verbose_name="发送时间", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "消息"
         verbose_name_plural = verbose_name
 
 

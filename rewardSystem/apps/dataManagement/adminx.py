@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Q
 from .models import Student, Teacher, ApplicationForm, Meeting, FuTable, AssignItem, GrantLevel, AcademicActivity, Publications,\
-                    ParticipateItems, ResearchProjects, InnovationProjects, SocialWork, Qualification
+                    ParticipateItems, ResearchProjects, InnovationProjects, SocialWork, Qualification, Message
 
 
 # 学生
@@ -85,7 +85,8 @@ class MeetingAdmin:
     list_filter = ['endTime', 'title']
     search_fields = ['title']
     list_editable = ["endTime", "gradeStatus"]
-    fields = ('title', 'student' ,'jury', 'endTime', 'gradeStatus')
+    # fields = ('title', 'student' ,'jury', 'endTime', 'gradeStatus')
+    fields = ('title', 'jury', 'endTime', 'gradeStatus')
 
 
 xadmin.site.register(Meeting, MeetingAdmin)
@@ -177,5 +178,14 @@ class QualificationAdmin:
 
 
 xadmin.site.register(Qualification, QualificationAdmin)
+
+
+# 消息
+class MessageAdmin:
+    list_display = ["from_user", "to_user", "send_time"]
+    list_filter = ["from_user__name", "to_user__name"]
+
+
+xadmin.site.register(Message, MeetingAdmin)
 
 

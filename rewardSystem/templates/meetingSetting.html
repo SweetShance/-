@@ -35,6 +35,9 @@
 
             <div style="margin-top: 20px;">
                 <div style="float: left; margin-right: 10px; margin-bottom: 30px; margin-top: 8px; {% if meeting.gradeStatus == "已结束" %} display:none {% endif %}" >
+                    <button class="btn btn-primary btn_setting add-all" data-toggle="modal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 一键添加</button>
+                </div>
+                <div style="float: left; margin-right: 10px; margin-bottom: 30px; margin-top: 8px; {% if meeting.gradeStatus == "已结束" %} display:none {% endif %}" >
                     <button class="btn btn-primary btn_setting add" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button>
                 </div>
                 <div class="del" style="float: left; margin-bottom: 30px; margin-top: 8px; {% if meeting.gradeStatus == "已结束" %} display:none {% endif %}">
@@ -46,7 +49,7 @@
                         {% if q %}<span class="input-group-btn"><a class="btn btn-default" href="?id={{ meeting_id }}">x</a></span>{% endif %}
                          <input  type="text" name="id" value="{{ meeting_id }}" hidden>
 
-                         <input id="searchbar" class="form-control" type="text" name="_q_" value="" placeholder="搜索 姓名或学号">
+                         <input id="searchbar1" class="form-control" type="text" name="_q_" value="" placeholder="搜索 姓名或学号">
                         <span class="input-group-btn"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button></span>
                         </div>
 
@@ -61,10 +64,10 @@
     </div>
     <!-- 学生列表 -->
     <div class="content">
-        <table class="table table-hover table-bordered" >
+        <table class="table table-hover table-bordered table-striped table-advance" >
         <thead>
             <tr>
-              <th style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><input type="checkbox"  class="checkboxAll"></th>
+              <th style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><input type="checkbox" style="margin-left: 19px;" class="checkboxAll"></th>
               <th>学生姓名</th>
               <th>学生学号</th>
               <th>入学年份</th>
@@ -113,7 +116,7 @@
                         <div class="input-group search-group" style="top:16px;">
                          <span class="input-group-btn" style="display: none"><a class="btn btn-default" href="javascript:;">x</a></span>
                          <input  type="text" name="id" class="meeting_id" value="{{ meeting_id }}" hidden>
-                         <input id="searchbar" class="form-control addsearch-text" type="text" name="q" value="" placeholder="搜索 姓名或学号">
+                         <input id="searchbar2" class="form-control addsearch-text" type="text" name="q" value="" placeholder="搜索 姓名或学号">
                         <span class="input-group-btn"><button class="btn btn-primary add-search" type="submit"><i class="fa fa-search"></i></button></span>
                         </div>
 {#                    </form>#}
@@ -138,86 +141,92 @@
 </div>
 <!-- 添加 模态框 end -->
 <script>
+    window.changehousts = "{% url "xadminData:meetingAddStudent" %}"
+    csrf_token = "{{ csrf_token }}"
+    {#    复选框全选#}
+    $('.checkboxAll').click(function () {
 
-</script>
-<script>
-window.changehousts = "{% url "xadminData:meetingAddStudent" %}"
-csrf_token = "{{ csrf_token }}"
-{#    复选框全选#}
-$('.checkboxAll').click(function () {
+        {#if($(".checkboxAll").attr("checked")){#}
 
-    {#if($(".checkboxAll").attr("checked")){#}
-
-        // 进行全选
-        $("[name=item]:checkbox").prop("checked", this.checked)
+            // 进行全选
+            $("[name=item]:checkbox").prop("checked", this.checked)
 
 
-})
-// 删除 start
-$('.delete').click(function () {
-    var checkedVal = [];
-    var count = $("input:checkbox:checked").length
-    if(count>0){
-        $("[name=item]:checkbox:checked").each(function () {
-            if($(this).val() != "on"){
-                checkedVal.push($(this).val());
-            }
-        })
-        var randint = "";
-        for(var i = 0; i < 4; i++){
-            randint += Math.floor(Math.random()*10);
-        }
-        var con=prompt("请输入随机验证码:" + randint );
-        if(con == randint){
-            $.ajax(
-                {
-                    url: "{% url 'xadminData:meetingDeleteStudent' %}",
-                    type: "post",
-                    cache: false,
-                    data: {"student_id": JSON.stringify(checkedVal),"meeting_id": {{ meeting_id }} ,csrfmiddlewaretoken:'{{ csrf_token }}'},
-                    success: function (data) {
-                        if(data.status == "成功"){
-                            alert("删除成功")
-                            window.location.reload();
-                        }else {
-                            alert("删除失败")
-                        }
-                    },
-                    error: function (xhr) {
-                        console.log("出现问题")
-
-                    }
-                }
-            )
-        }else {
-            alert("验证码错误")
-        }
-    }else {
-        alert("请至少选择一个")
-    }
-})
-// 删除 end
-// 添加 start
-$('.add-search').click(function () {
-    var q = $(".addsearch-text").val();
-    $(".student-list").load(
-        "{% url 'xadminData:meetingAddStudentList' %}",
-        {"meeting_id": {{meeting_id}}, "q": q, csrfmiddlewaretoken: '{{ csrf_token }}'},
-        function () {
-            var sc =  document.createElement("script");
-            sc.src= "{% static 'add.js' %}";
-            $("body").append(sc);
-        }
-    )
-
-});
-
-
-
-// 添加 end
-$(function () { $('#myModal').on('hide.bs.modal', function () {
-      window.location.reload();
     })
-   });
+    // 删除 start
+    $('.delete').click(function () {
+        var checkedVal = [];
+        var count = $("input:checkbox:checked").length
+        if(count>0){
+            $("[name=item]:checkbox:checked").each(function () {
+                if($(this).val() != "on"){
+                    checkedVal.push($(this).val());
+                }
+            })
+            var randint = "";
+            for(var i = 0; i < 4; i++){
+                randint += Math.floor(Math.random()*10);
+            }
+            var con=prompt("请输入随机验证码:" + randint );
+            if(con == randint){
+                $.ajax(
+                    {
+                        url: "{% url 'xadminData:meetingDeleteStudent' %}",
+                        type: "post",
+                        cache: false,
+                        data: {"student_id": JSON.stringify(checkedVal),"meeting_id": {{ meeting_id }} ,csrfmiddlewaretoken:'{{ csrf_token }}'},
+                        success: function (data) {
+                            if(data.status == "成功"){
+                                alert("删除成功")
+                                window.location.reload();
+                            }else {
+                                alert("删除失败")
+                            }
+                        },
+                        error: function (xhr) {
+                            console.log("出现问题")
+
+                        }
+                    }
+                )
+            }else {
+                alert("验证码错误")
+            }
+        }else {
+            alert("请至少选择一个")
+        }
+    })
+    // 删除 end
+    // 添加 start
+    $('.add-search').click(function () {
+        var q = $(".addsearch-text").val();
+        $(".student-list").load(
+            "{% url 'xadminData:meetingAddStudentList' %}",
+            {"meeting_id": {{meeting_id}}, "q": q, csrfmiddlewaretoken: '{{ csrf_token }}'},
+            function () {
+                var sc =  document.createElement("script");
+                sc.src= "{% static 'add.js' %}";
+                $("body").append(sc);
+            }
+        )
+
+    });
+    // 添加 end
+    $(function () { $('#myModal').on('hide.bs.modal', function () {
+          window.location.reload();
+        })
+       });
+    $(".add-all").click(function () {
+        var r = confirm("将会添加近三年的学生!")
+        if(r == true){
+            var meeting_id = $(".meeting_id").val()
+            $.post("{% url 'xadminData:meetingAddAllStudent' %}", {"meeting_id": meeting_id, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
+                alert(data.status);
+                window.location.reload();
+            })
+        }else{
+            alert("no")
+        }
+    })
 </script>
 {% endblock %}

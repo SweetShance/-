@@ -44,6 +44,8 @@ class Register(View):
             user_for_student = Student.objects.filter(sno=user.username)
             if user_for_student:
                 user_for_student[0].registerStatus = True
+                user.name = user_for_student[0].sname
+                user.save()
             auth.login(request, user)
             return JsonResponse({"status": "成功"})
 

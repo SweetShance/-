@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
-  <title>学生互评</title>
+  <title>导师综合评分</title>
   <!-- Bootstrap core CSS -->
   <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
   <!--external css-->
@@ -271,8 +271,8 @@
               <span>评审信息</span>
               </a>
             <ul class="sub">
-              <li class="active"><a href="{% url 'dataManagement:requestLog' %}">申请记录</a></li>
-              <li><a href="calendar.html">提交申请</a></li>
+              <li class="active"><a href="{% url 'dataManagement:meetingList' %}">我的学生</a></li>
+              <li><a href="calendar.html">我是评委</a></li>
               <li><a href="gallery.html">学生互评</a></li>
               <li><a href="todo_list.html">Todo List</a></li>
               <li><a href="dropzone.html">Dropzone File Upload</a></li>
@@ -367,7 +367,7 @@
 <!--    -->
     <section id="main-content">
       <section class="wrapper site-min-height">
-        <h3><i class="fa fa-angle-right"></i> {{ meeting_obj.title }} &nbsp;&nbsp;<span style="font-size: 15px;">结束时间:<span class="endTime">{{ meeting_obj.endTime }}</span></span></h3>
+        <h3><i class="fa fa-angle-right"></i> <a href="{% url 'dataManagement:meetingForMyStudent' %}?meeting_id={{ meeting_obj.id }}"> {{ meeting_obj.title }}</a> :&nbsp;&nbsp; {{ student_obj }}</span></span></h3>
         <!-- /row -->
         <input type="text" class="applicatinFormId" value="{{ application_form_student.id }}" hidden>
         <input type="text" class="meeting_id" value="{{ meeting_obj.id }}" hidden>
@@ -380,7 +380,7 @@
         <div class="row content-panel">
 
           <div class="col-md-10 col-md-offset-1 mt mb">
-            <h2 class="centered">学生互评</h2>
+            <h2 class="centered">导师综合评分</h2>
             <div class="accordion" id="accordion2">
               <div class="accordion-group">
                 <div class="accordion-heading">
@@ -661,15 +661,49 @@
               </br>
               <div class="row" style="border-top: 1px solid grey">
                 <div class="col-xs-12 col-md-6 col-lg-3 " style="margin-top: 10px;">
-                    <span style="font-size: 20px;">学生互评(满分10分):</span>
+                    <span style="font-size: 20px;">导师审核:</span>
                 </div>
-                <div class="col-xs-12 col-md-5 col-lg-3" style="margin-top: 10px;">
-                  <input type="number" min="0" max="10" class="form-control" id="grade" placeholder="填写分数" {% if student_otherGrade %}readonly{% endif %} value="{{ student_otherGrade }}">
-                  <button type="button" class="btn btn-primary submit-grade"  style="float: right; {% if student_otherGrade %}display: none; {% endif %} margin-top: 10px;" >提交</button>
-                </div>
-<!--                <input style="width: 300px; float: right" type="number" min="0" max="10" class="form-control" id="grade" placeholder="填写分数" {% if student_otherGrade %}readonly{% endif %} value="{{ student_otherGrade }}"> <button type="button" class="btn btn-primary submit-grade"  style="float: right; {% if student_otherGrade %}display: none; {% endif %}" >提交</button></span>-->
+                <div class="col-xs-12 col-md-5 col-lg-3" style="margin-top: 20px;">
+                  <label class="radio-inline">
+                    <input type="radio" name="inlineRadioOptions" class="inlineRadio1" {% if application_form_student.activity %} checked disabled {% endif %} value="通过"> 通过
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" name="inlineRadioOptions" class="inlineRadio1" {% if application_form_student.activity %} disabled {% endif %} value="不通过" > 不通过
+                  </label>
                 <br>
               </div>
+            </div>
+<!--           原因 -->
+            <div class="row text" style="display: none">
+              <div class="col-xs-12 col-md-6 col-lg-3 " style="margin-top: 20px;">
+                  <span style="font-size: 20px;">不通过原因</span>
+              </div>
+              <div class="col-xs-12 col-md-6 col-lg-7" style="margin-top: 20px;">
+                <textarea name="text" cols="30" rows="10" class="student_text" style="width: 100%"></textarea>
+<!--                <input type="number" min="0" max="10" class="form-control" id="grade" placeholder="填写分数" {% if student_otherGrade %}readonly{% endif %} value="{{ student_otherGrade }}">-->
+              </div>
+  <!--                <input style="width: 300px; float: right" type="number" min="0" max="10" class="form-control" id="grade" placeholder="填写分数" {% if student_otherGrade %}readonly{% endif %} value="{{ student_otherGrade }}"> <button type="button" class="btn btn-primary submit-grade"  style="float: right; {% if student_otherGrade %}display: none; {% endif %}" >提交</button></span>-->
+              <br>
+            </div>
+<!--            评分-->
+            <div class="row score"  style="; {% if not application_form_student.activity %} display:none; {% endif %} ">
+              <div class="col-xs-12 col-md-6 col-lg-7 " style="margin-top: 20px;">
+                  <span style="font-size: 20px;">导师综合评分(满分10分):</span>
+              </div>
+              <div class="col-xs-12 col-md-5 col-lg-3" style="margin-top: 20px;">
+                <input type="number" min="0" max="10" class="form-control" id="grade" placeholder="填写分数" {% if mentorGrade_obj.mentorGrade %}readonly{% endif %} value="{{ mentorGrade_obj.mentorGrade }}">
+              </div>
+  <!--                <input style="width: 300px; float: right" type="number" min="0" max="10" class="form-control" id="grade" placeholder="填写分数" {% if student_otherGrade %}readonly{% endif %} value="{{ student_otherGrade }}"> <button type="button" class="btn btn-primary submit-grade"  style="float: right; {% if student_otherGrade %}display: none; {% endif %}" >提交</button></span>-->
+              <br>
+            </div>
+            <div class="row">
+              <div class="col-xs-0 col-md-6 col-lg-3 " style="margin-top: 10px;">
+
+              </div>
+              <div class="col-xs-12 col-md-5 col-lg-7" style="margin-top: 10px;">
+                <button type="button" class="btn btn-primary submit-grade"  style="float: right; {% if mentorGrade_obj.mentorGrade %}display: none; {% endif %} margin-top: 10px;" >提交</button>
+              </div>
+
             </div>
             <!-- end accordion -->
           </div>
@@ -730,14 +764,17 @@
     //
     // })
     $(".submit-grade").click(function () {
-      var number = $("#grade").val();
-      if(number > 10 || number < 0 || number == ""){
-        alert("请输入正确的分数")
-      }else {
-        var applicationFormId = $(".applicatinFormId").val();
-        var meeting_id = $(".meeting_id").val();
-        $.ajax({
-          url: "{% url 'dataManagement:peerAssessment' %}",
+      // 判断
+      var val = $("input:radio:checked").val();
+      if(val == "通过"){
+        var number = $("#grade").val();
+        if(number > 10 || number < 0 || number == ""){
+          alert("请输入正确的分数")
+        }else {
+          var applicationFormId = $(".applicatinFormId").val();
+          var meeting_id = $(".meeting_id").val();
+          $.ajax({
+          url: "{% url 'dataManagement:meetingForMyStudentCheck' %}",
           type: 'post',
           cache: false,
           data: {"applicationFormId": applicationFormId, "meeting_id": meeting_id, "number": number, csrfmiddlewaretoken: '{{ csrf_token }}'},
@@ -745,10 +782,49 @@
             if(data.status == "成功"){
               $("#grade").attr("readOnly","true");
               $(".submit-grade").hide();
+              $("input:radio").attr("disabled", "disabled");
             }
             alert(data.status)
           }
         })
+      }
+      }else if(val == "不通过"){
+        var text = $(".student_text").val();
+        if($.trim(text) == ""){
+          alert("请填写不通过的原因!")
+        }else {
+          var applicationFormId = $(".applicatinFormId").val();
+          var meeting_id = $(".meeting_id").val();
+          $.ajax({
+          url: "{% url 'dataManagement:meetingForMyStudentCheck' %}",
+          type: 'post',
+          cache: false,
+          data: {"applicationFormId": applicationFormId, "meeting_id": meeting_id, "text": text, csrfmiddlewaretoken: '{{ csrf_token }}'},
+          success:function (data) {
+            if(data.status == "成功"){
+              $(".student_text").attr("readOnly","true");
+              $(".submit-grade").hide();
+              $("input:radio").attr("disabled", "disabled");
+            }
+            alert(data.status)
+          }
+        })
+        }
+      }
+    })
+  // 审核单选框
+    $(".inlineRadio1").click(function () {
+      var data = $(this).val();
+      if(data == "通过"){
+        $(".score").show();
+        if($(".text").css("display") != 'none'){
+          $(".text").hide();
+        }
+      }else if(data == "不通过"){
+        $(".text").show();
+        if($(".score").css("display") != 'none'){
+          $(".score").hide();
+        }
       }
     })
   </script>

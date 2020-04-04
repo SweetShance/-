@@ -7,7 +7,7 @@ import datetime, random
 from MyUser.models import MyUser
 from dataManagement.models import Student, Teacher, Meeting, ApplicationForm, AcademicActivity, Publications,\
     ParticipateItems, ResearchProjects, InnovationProjects, SocialWork, delete_academicActivityImage, delete_innovationProjects,delete_participateItems,\
-    delete_publicationsImage, delete_researchProjects, delete_socialWork, Qualification, OtherStudentGrade
+    delete_publicationsImage, delete_researchProjects, delete_socialWork, Qualification, OtherStudentGrade, MentorGrade, Message
 
 
 # Create your views here.
@@ -452,3 +452,141 @@ class PeerAssessment(View):
         # else:
         #     OtherStudentGrade.objects.create(applicationForm=applicationForm_obj, student=student_obj, otherGrade=number, meeting=meeting_obj)
             return JsonResponse({"status": "成功"})
+
+
+# 老师
+class MeetingList(View):
+    def get(self, request):
+        # 获取所有会议
+        meeting_obj_all = Meeting.objects.all()
+        context = {
+            "meeting_obj_all": meeting_obj_all
+        }
+        return render(request, template_name="dataManagement/MeetingList.html", context=context)
+
+
+# 老师 会学生列表
+class MeetingForMyStudent(View):
+    def get(self, request):
+        #
+        meeting_id = request.GET.get("meeting_id")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        if request.user.identity == "老师":
+            # 获取老师
+            teacher_obj = get_object_or_404(Teacher, tno=request.user.username)
+            # 获取当前会议中老师的所有学生
+            meeting_student_list_application_qualification = []
+            meeting_student_list = meeting_obj.student.filter(tutor=teacher_obj)
+            for meeting_student in meeting_student_list:
+                student_application_for_meeting = meeting_obj.meeting_for_applicationform.filter(student=meeting_student)
+                # 资格
+                student_qualification_for_meeting = meeting_obj.meeting_for_student.filter(sno=meeting_student.sno)
+
+                if student_application_for_meeting and not student_qualification_for_meeting:
+                    # 是否评分
+                    mentorGrade_application_for_meeting = MentorGrade.objects.filter(applicationForm=student_application_for_meeting[0])
+                    if mentorGrade_application_for_meeting:
+                        meeting_student_list_application_qualification.append([meeting_student, "已提交", "有资格", "已评分"])
+                    else:
+                        meeting_student_list_application_qualification.append([meeting_student, "已提交", "有资格", "未评分"])
+                elif not student_application_for_meeting and not student_qualification_for_meeting:
+                    meeting_student_list_application_qualification.append([meeting_student, "未提交", "有资格", "未评分"])
+                elif not student_application_for_meeting and student_qualification_for_meeting:
+                    meeting_student_list_application_qualification.append([meeting_student, "未提交", "无资格", "未评分"])
+            context = {
+                "meeting_obj": meeting_obj,
+                "meeting_student_list_application_qualification": meeting_student_list_application_qualification
+            }
+        else:
+            context = {
+                "this_status": "你的身份不是老师"
+            }
+
+        return render(request, template_name="dataManagement/meetingForMyStudent.html", context=context)
+
+
+# 老师对自己的学生审核评分
+class MeetingForMyStudentCheck(View):
+    def get(self, request):
+        meeting_id = request.GET.get("meeting_id")
+        student_id = request.GET.get("student_id")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        student_obj = get_object_or_404(Student, pk=student_id)
+        student_qualification = meeting_obj.meeting_for_student.filter(sno=student_obj.sno)
+        if student_qualification:
+            context = {
+                "this_status": "该学生本次会议没有申请资格",
+                "text": student_qualification[0].text,
+                "meeting_obj": meeting_obj,
+                "student_obj": student_obj,
+            }
+        else:
+            # 申请表
+            application_form_student = meeting_obj.meeting_for_applicationform.filter(student=student_obj)
+            if application_form_student:
+                application_form_student = application_form_student[0]
+                # 相关文件
+                student_academicActivityImages = application_form_student.student_academicActivityImage.all()
+                # 发表论文
+                student_publicationsImages = application_form_student.student_publicationsImage.all()
+                # 参与项目
+                student_participateItemsImages = application_form_student.student_participateItemsImage.all()
+                # 科研活动
+                student_researchProjectsImages = application_form_student.student_researchProjectsImage.all()
+                # 研究生创新项目
+                student_innovationProjectsImages = application_form_student.student_innovationProjectsImage.all()
+                # 社会服务
+                student_socialWorkImages = application_form_student.student_socialWorkImage.all()
+                # 获取该会议该学生申请表
+                context = {
+                    "meeting_obj": meeting_obj,
+                    "application_form_student": application_form_student,
+                    "student_obj": student_obj,
+                    "student_academicActivityImages": student_academicActivityImages,
+                    "student_publicationsImages": student_publicationsImages,
+                    "student_participateItemsImages": student_participateItemsImages,
+                    "student_researchProjectsImages": student_researchProjectsImages,
+                    "student_innovationProjectsImages": student_innovationProjectsImages,
+                    "student_socialWorkImages": student_socialWorkImages,
+                }
+                # 看当前学生导师是否已评分
+                mentorGrade_objs = MentorGrade.objects.filter(applicationForm = application_form_student)
+                if mentorGrade_objs:
+                    context["mentorGrade_obj"] = mentorGrade_objs[0]
+            else:
+                context = {
+                    "meeting_obj": meeting_obj,
+                    "student_obj": student_obj,
+                    "this_status": "该学生暂未提交申请"
+                }
+        return render(request, template_name="dataManagement/MeetingForMyStudentCheck.html", context=context)
+
+    def post(self, request):
+        # 获取会议
+        meeting_id = request.POST.get("meeting_id")
+        # 获取申请表
+        applicationFormId = request.POST.get("applicationFormId")
+        # 获取number
+        number = request.POST.get("number")
+        # 获取原因
+        text = request.POST.get("text")
+        # 获取申请表
+        applicationForm_obj = get_object_or_404(ApplicationForm, pk=applicationFormId)
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        if number:
+            mentoyGrade_obj = MentorGrade.objects.create(applicationForm=applicationForm_obj, meeting=meeting_obj, mentorGrade=number)
+            applicationForm_obj.activity = True
+            applicationForm_obj.save()
+            return JsonResponse({"status": "成功"})
+        elif text:
+            # 创建信息表
+            to_user = get_object_or_404(MyUser, username=applicationForm_obj.sno)
+            message = Message.objects.create(form_user=request.user, to_user=to_user, text=text)
+            return JsonResponse({"status": "成功"})
+        return JsonResponse({"status": "失败"})
+
+
+
+
+
+

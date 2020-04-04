@@ -25,7 +25,7 @@ class MeetingDeleteStudent(View):
             return JsonResponse({"status": "失败"})
         return JsonResponse({"status": "成功"})
 
-
+# 添加单个学生
 class MeetingAddStudentList(View):
     def get(self, request):
         pass
@@ -144,6 +144,7 @@ class MeetingImportChangeStudentSave(View):
         return HttpResponse("hello")
 
 
+# 分配评委
 class AllotJurySave(View):
     def post(self, request):
         # ["申请表id:评委id"]
@@ -159,5 +160,18 @@ class AllotJurySave(View):
         except Exception:
             return JsonResponse({"status": "失败"})
 
+        return JsonResponse({"status": "成功"})
 
+
+# 一键添加近三年的学生
+class MeetingToAddAllStudent(View):
+    def post(self, request):
+        # 获取meeting_id
+        meeting_id = request.POST.get("meeting_id")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        import time
+        # 获取学生
+        year = time.localtime().tm_year - 2
+        students = Student.objects.filter(startDate__gte="%s-8-1"%year)
+        meeting_obj.student.set(students)
         return JsonResponse({"status": "成功"})

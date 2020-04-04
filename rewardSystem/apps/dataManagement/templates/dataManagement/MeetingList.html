@@ -8,7 +8,12 @@
   <meta name="description" content="">
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
-  <title>我的信息</title>
+  <title>申请记录</title>
+
+  <!-- Favicons -->
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
   <!-- Bootstrap core CSS -->
   <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
   <!--external css-->
@@ -18,7 +23,7 @@
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
   <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
 
-  
+
 </head>
 
 <body>
@@ -242,43 +247,31 @@
               </a>
           </li>
           <li class="sub-menu">
-            <a class="active" href="javascript:;">
+            <a href="javascript:;">
               <i class="fa fa-desktop"></i>
               <span>设置</span>
               </a>
             <ul class="sub">
-              <li class="active"><a href="{% url 'dataManagement:myinfo' %}">我的信息</a></li>
+              <li><a href="{% url 'dataManagement:myinfo' %}">我的信息</a></li>
               <li><a href="{% url 'dataManagement:setPassword' %}">修改密码</a></li>
               <li><a href="requestLog.html">Panels</a></li>
               <li><a href="font_awesome.html">Font Awesome</a></li>
             </ul>
           </li>
           <li class="sub-menu">
-            <a href="javascript:;">
+            <a class="active" href="javascript:;">
               <i class="fa fa-cogs"></i>
               <span>评审信息</span>
               </a>
-            {% if request.user.identity == "学生" %}
-              <ul class="sub">
-                <li><a href="{% url 'dataManagement:requestLog' %}">申请记录</a></li>
-                <li><a href="calendar.html">提交申请</a></li>
-                <li><a href="gallery.html">学生互评</a></li>
-                <li><a href="todo_list.html">Todo List</a></li>
-                <li><a href="dropzone.html">Dropzone File Upload</a></li>
-                <li><a href="inline_editor.html">Inline Editor</a></li>
-                <li><a href="file_upload.html">Multiple File Upload</a></li>
-              </ul>
-            {% elif request.user.identity == "老师"  %}
-              <ul class="sub">
-                <li><a href="{% url 'dataManagement:meetingList' %}">我的学生</a></li>
-                <li><a href="calendar.html">我是评委</a></li>
-                <li><a href="gallery.html">学生互评</a></li>
-                <li><a href="todo_list.html">Todo List</a></li>
-                <li><a href="dropzone.html">Dropzone File Upload</a></li>
-                <li><a href="inline_editor.html">Inline Editor</a></li>
-                <li><a href="file_upload.html">Multiple File Upload</a></li>
-              </ul>
-            {% endif %}
+            <ul class="sub">
+              <li class="active"><a href="{% url 'dataManagement:meetingList' %}">我的学生</a></li>
+              <li><a href="calendar.html">我是评委</a></li>
+              <li><a href="gallery.html">学生互评</a></li>
+              <li><a href="todo_list.html">Todo List</a></li>
+              <li><a href="dropzone.html">Dropzone File Upload</a></li>
+              <li><a href="inline_editor.html">Inline Editor</a></li>
+              <li><a href="file_upload.html">Multiple File Upload</a></li>
+            </ul>
           </li>
           <li class="sub-menu">
             <a href="javascript:;">
@@ -365,139 +358,82 @@
         *********************************************************************************************************************************************************** -->
     <!--main content start-->
     <section id="main-content">
-      <section class="wrapper">
-        <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-12 col-md-offset-3" >
-            <!--  BASIC PROGRESS BARS -->
-            <div class="showback">
-              <h4><i class="fa fa-angle-right"></i> 我的信息</h4>
-              <div class="myinfo-content">
-                <form>
-                  <div class="form-group">
-                    <label for="exampleInputUserName">用户名/学号</label>
-                    <input type="email" class="form-control" id="exampleInputUserName" readonly value="{{ user_obj.username }}">
+      <section class="wrapper site-min-height">
+        <h3><i class="fa fa-angle-right"></i> 所有会议</h3>
+        <div class="row mt">
+          <div class="col-lg-12">
+            <div class="row">
+              <div class="col-md-10 .col-xs-12 col-md-offset-1 mb">
+                <div class="grey-panel pn donut-chart">
+                  <div class="grey-header">
+                    <h5>会议列表</h5>
                   </div>
-                  <div class="form-group">
-                    <label for="exampleInputName">姓名</label>
-                    <input type="text" class="form-control" id="exampleInputName" value="{{ user_obj.name }}">
+                  <div class="content-panel">
+                    <table class="table table-hover table-bordered table-striped table-advance">
+                        <thead>
+                          <tr style="text-align: center">
+                            <th class="text-center">会议名称</th>
+                            <th class="text-center">结束时间</th>
+                            <th class="text-center">评分状态</th>
+                            <th class="text-center">操作</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for meeting in meeting_obj_all %}
+                        <tr>
+                          <td>{{ meeting.title }}</td>
+                          <td>{{ meeting.endTime }}</td>
+                          <td><span class="label {% if meeting.gradeStatus == '未开始' %} label-info {% elif meeting.gradeStatus == '已开始' %}label-success {% else %}label-warning {% endif %} label-mini">{{ meeting.gradeStatus }}</span></td>
+                          <td>
+                            <button class="btn btn-primary btn-xs show-content" value="{{ meeting.id }}" title="进入会议"><i class="fa fa-pencil"></i></button>
+                          </td>
+                        </tr>
+                        {% empty %}
+                          <tr>
+                          <td>暂无内容</td>
+                          <td>暂无内容</td>
+                          <td>暂无内容</td>
+                          <td>暂无内容</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                   </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail">邮箱</label>
-                    <input type="email" class="form-control" id="exampleInputEmail" value="{{ user_obj.email }}">
-                    <span class="EmailError" style="color: #FF6347;"></span>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputPhone">电话</label>
-                    <input type="text" class="form-control" id="exampleInputPhone" value="{{ user_obj.phone }}">
-                    <span class="phoneError" style="color: #FF6347;"></span>
-                  </div>
-                  {% if user_info %}
-                    {% if request.user.identity == "学生" %}
-                        <div class="form-group">
-                      <label for="exampleInputSex">性别</label>
-<!--                      <input type="text" class="form-control" id="exampleInputSex" placeholder="{{ user_info.sex }}">-->
-                      <select class="form-control" id="exampleInputSex">
-                        <option>请选择</option>
-                        <option value="男" {% if user_info.sex == "男" %} selected {% endif %}>男</option>
-                        <option value="女" {% if user_info.sex == "女" %} selected {% endif %}>女</option>
-                      </select>
-                    </div>
-                        <div class="form-group">
-                          <label for="exampleInputJoin">入学年份</label>
-                          <input type="text" class="form-control" id="exampleInputJoin" readonly value="{{ user_info.startDate | date:'Y/m' }}">
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputTutor">导师</label>
-                          <input type="text" class="form-control" id="exampleInputTutor" readonly value="{{ user_info.tutor }}">
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputCET4">四级使用次数</label>
-                          <input type="text" class="form-control" id="exampleInputCET4" readonly value="{{ user_info.CET4Count }}">
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputCET6">六级使用次数</label>
-                          <input type="text" class="form-control" id="exampleInputCET6" readonly value="{{ user_info.CET6Count }}">
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleInputAdmissionstatus">入学方式</label>
-                          <input type="text" class="form-control" id="exampleInputAdmissionstatus" readonly value="{{ user_info.admissionstatus }}">
-                        </div>
-                    {% endif  %}
-                  {% endif %}
-                  <div class="form-group">
-                      <label for="exampleInputIdentity">身份</label>
-                      <input type="text" class="form-control" id="exampleInputIdentity" readonly value="{{ user_obj.identity }}">
-                  </div>
-                  <div style="text-align: center">
-<!--                    <span class="error" style="color: #FF6347;" ></span>-->
-<!--                    </br>-->
-                    <button class="btn btn-default save-info">修改</button>
-                  </div>
-                </form>
+                </div>
               </div>
             </div>
-            <!--/showback -->
           </div>
         </div>
-        <!--/ row -->
+        <br>
+        <div style="text-align: center;">
+          <h3><span style="color: #b92c28">注: 学生在提交完申请后请进行学生互评</span></h3>
+        </div>
       </section>
       <!-- /wrapper -->
     </section>
     <!-- /MAIN CONTENT -->
     <!--main content end-->
+    <!--footer start-->
+    <!--footer end-->
   </section>
-  <!-- js placed at the end of the document so the pages load faster -->
   <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
 
   <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
   <script class="include" type="text/javascript" src="{% static 'lib/jquery.dcjqaccordion.2.7.js' %}"></script>
   <script src="{% static 'lib/jquery.scrollTo.min.js' %}"></script>
   <script src="{% static 'lib/jquery.nicescroll.js' %}" type="text/javascript"></script>
+  <!-- js placed at the end of the document so the pages load faster -->
+  <script src="{% static 'lib/jquery.sparkline.js' %}"></script>
   <!--common script for all pages-->
   <script src="{% static 'lib/common-scripts.js' %}"></script>
   <!--script for this page-->
-  <script type="text/javascript" src="{% static 'lib/gritter/js/jquery.gritter.js' %}"></script>
-  <script type="text/javascript" src="{% static 'lib/gritter-conf.js' %}"></script>
+  <script src="{% static 'lib/sparkline-chart.js' %}"></script>
   <script>
-    $(".save-info").click(function () {
-      var r = confirm("确认修改吗?");
-      if (r == true) {
-          var name = $.trim($("#exampleInputName").val());
-          var email = $.trim($("#exampleInputEmail").val());
-          var phone = $.trim($("#exampleInputPhone").val());
-          var sex = $.trim($("#exampleInputSex").val());
-          var identity = $.trim($("#exampleInputIdentity").val());
-          // email
-          var reg1 = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
-          // phone
-          var pattern = /^1[34578]\d{9}$/;
-          if(reg1.test(email) == true){
-              if(phone != ""){
-                if(pattern.test(phone) == false){
-                  $(".phoneError").text("请填写正确号码!")
-                  return false;
-                }
-              }else {
-                $.post("{% url 'dataManagement:myinfo' %}", {"name": name, "email": email, "phone": phone, "sex": sex, "identity":identity, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
-                  alert(data.status);
-                })
-              }
-          }else{
-              $(".EmailError").text("请填写正确的邮箱!");
-              return false;
-            }
-      } else {
-          x = "您按了取消！";
-      }
+    $(".show-content").click(function () {
+        var meeting_id = $(this).val();
+        window.location.href = "{% url 'dataManagement:meetingForMyStudent' %}?meeting_id="+meeting_id
+
     })
-  // $("#exampleInputPhone").bind("changge", function () {
-  //   // phone
-  //         var pattern = /^1[34578]\d{9}$/;
-  //         var phone = $("#exampleInputPhone").val()
-  //         if(pattern.test($.trim(phone)) == false ){
-  //             $()
-  //         }
-  // })
   </script>
 </body>
 

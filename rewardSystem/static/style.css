@@ -104,3 +104,13 @@ a:hover{
     z-index: 1;
     display: none;
 }
+
+/* 禁用数字input上下箭头 */
+/* 去除webkit中input的type="number"时出现的上下图标 */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }

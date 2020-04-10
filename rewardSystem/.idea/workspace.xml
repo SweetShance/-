@@ -2,42 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="808e35bf-c4a6-4972-becb-7259c915367b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingForMyStudentCheck.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingList.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/meetingForMyStudent.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/JuryGradeMeetingList.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMark.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMeetingStudentList.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/MyUser/templates/MyUser/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/MyUser/templates/MyUser/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/MyUser/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/MyUser/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/adminx.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/adminx.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingForMyStudentCheck.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingForMyStudentCheck.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingList.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingList.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MyInfo.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MyInfo.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/requestLog.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/requestLog.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/meetingForMyStudent.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/meetingForMyStudent.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/setPassword.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/setPassword.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/test.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/xadminData/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/xadminData/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/xadminData/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/xadminData/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/academicActivityImage/2019-08-29_13-30-13_的屏幕截图_Ofujq4U.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/academicActivityImage/2019-08-29_13-30-13_的屏幕截图_cn0z5fi.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/academicActivityImage/2019-09-01_22-42-20_的屏幕截图_JJcYYy5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/academicActivityImage/2019-09-01_22-42-20_的屏幕截图_YzWJXvl.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/academicActivityImage/2019-09-01_22-42-20_的屏幕截图_fM1o6H1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/academicActivityImage/PortlandDawn_ZH-CN6187930845_1920x1080.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/innovationProjectsImage/2019-08-29_13-30-13_的屏幕截图.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/innovationProjectsImage/2019-09-01_22-42-20_的屏幕截图.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/publicationsImage/2019-08-29_13-30-13_的屏幕截图.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/publicationsImage/2019-08-29_13-30-13_的屏幕截图_TsBfXmG.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/publicationsImage/2019-08-29_13-30-13_的屏幕截图_VId7oMk.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/publicationsImage/2019-08-29_13-30-13_的屏幕截图_bAzjqUd.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/researchProjectsImage/2019-08-29_13-30-13_的屏幕截图_omzCEvp.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/researchProjectsImage/2019-09-01_22-42-20_的屏幕截图_KbpE3US.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/socialWorkImage/2019-08-29_13-30-13_的屏幕截图.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/meetingSetting.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/meetingSetting.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/meeting_for_student.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/meeting_for_student.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -247,7 +228,10 @@
       <workItem from="1585724395832" duration="1258000" />
       <workItem from="1585725712567" duration="2000" />
       <workItem from="1585725780361" duration="31122000" />
-      <workItem from="1585888787111" duration="28959000" />
+      <workItem from="1585888787111" duration="29073000" />
+      <workItem from="1586051573662" duration="603000" />
+      <workItem from="1586057733897" duration="10816000" />
+      <workItem from="1586429658376" duration="16419000" />
     </task>
     <servers />
   </component>
@@ -275,22 +259,22 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="681" y="290" width="424" height="492" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1582788241493" />
-    <state width="1864" height="105" key="GridCell.Tab.0.bottom" timestamp="1586007581746">
+    <state width="932" height="327" key="GridCell.Tab.0.bottom" timestamp="1586525889225">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="105" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1586007581746" />
-    <state width="1864" height="105" key="GridCell.Tab.0.center" timestamp="1586007581739">
+    <state width="932" height="327" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1586525889225" />
+    <state width="932" height="327" key="GridCell.Tab.0.center" timestamp="1586525889224">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="105" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1586007581739" />
-    <state width="1864" height="105" key="GridCell.Tab.0.left" timestamp="1586007581738">
+    <state width="932" height="327" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1586525889224" />
+    <state width="932" height="327" key="GridCell.Tab.0.left" timestamp="1586525889224">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="105" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1586007581738" />
-    <state width="1864" height="105" key="GridCell.Tab.0.right" timestamp="1586007581745">
+    <state width="932" height="327" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1586525889224" />
+    <state width="932" height="327" key="GridCell.Tab.0.right" timestamp="1586525889225">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="105" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1586007581745" />
+    <state width="932" height="327" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1586525889225" />
     <state width="1864" height="334" key="GridCell.Tab.1.bottom" timestamp="1582944931113">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
@@ -319,18 +303,18 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="679" y="114" width="552" height="887" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1582436362113" />
-    <state x="597" y="380" key="com.intellij.ide.util.TipDialog" timestamp="1585888787056">
+    <state x="597" y="380" key="com.intellij.ide.util.TipDialog" timestamp="1586429924055">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="597" y="380" key="com.intellij.ide.util.TipDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1585888787056" />
+    <state x="597" y="380" key="com.intellij.ide.util.TipDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1586429924055" />
     <state x="0" y="27" width="900" height="1053" key="find.popup" timestamp="1585965229272">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="0" y="27" width="900" height="1053" key="find.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1585965229272" />
-    <state x="630" y="390" width="672" height="678" key="search.everywhere.popup" timestamp="1586005572661">
+    <state x="630" y="390" width="672" height="678" key="search.everywhere.popup" timestamp="1586494603656">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="630" y="390" width="672" height="678" key="search.everywhere.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1586005572661" />
+    <state x="630" y="390" width="672" height="678" key="search.everywhere.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1586494603656" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

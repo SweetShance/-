@@ -2,12 +2,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.contrib import auth
 from django.views import View
-from django.db.models import Q
-import datetime, random
+from django.db.models import Q, F, SmallIntegerField, Sum
+import datetime, random, json
 from MyUser.models import MyUser
 from dataManagement.models import Student, Teacher, Meeting, ApplicationForm, AcademicActivity, Publications,\
     ParticipateItems, ResearchProjects, InnovationProjects, SocialWork, delete_academicActivityImage, delete_innovationProjects,delete_participateItems,\
-    delete_publicationsImage, delete_researchProjects, delete_socialWork, Qualification, OtherStudentGrade, MentorGrade, Message
+    delete_publicationsImage, delete_researchProjects, delete_socialWork, Qualification, OtherStudentGrade, MentorGrade, Message, ApplicationGrade
 
 
 # Create your views here.
@@ -584,6 +584,191 @@ class MeetingForMyStudentCheck(View):
             message = Message.objects.create(form_user=request.user, to_user=to_user, text=text)
             return JsonResponse({"status": "成功"})
         return JsonResponse({"status": "失败"})
+
+
+# 评委赋分
+class JuryGradeMeetingList(View):
+    def get(self, request):
+        # 获取但钱老师所在的会议
+        teacher_obj = get_object_or_404(Teacher, tno=request.user.username)
+        meeting_list_for_Jury = Meeting.objects.filter(jury=teacher_obj)
+        context = {
+            "meeting_list_for_Jury": meeting_list_for_Jury
+        }
+        return render(request, template_name="dataManagement/JuryGradeMeetingList.html", context=context)
+
+
+# 评委学生
+class JuryGradeMeetingStudentList(View):
+    def get(self, request):
+        meeting_id = request.GET.get("meeting_id")
+        # 判断当前老师是否提交主审
+        teacher = get_object_or_404(Teacher, tno=request.user.username)
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        # 获取主审学生赋分表
+        jury_chief_umpire_students_form = meeting_obj.meeting_for_applicationform.filter(jury=teacher)
+        # 获取主审学生的总分数 按赋分表分类
+        sum_grade_list = ApplicationGrade.objects.values('applicationForm').annotate(num=Sum('grade')).filter(teacher=teacher, meeting=meeting_obj, chief_umpire=True).order_by("applicationForm_id")
+        jury_chief_umpire_application_grade_list = []
+        # 如果主审学生全部评分
+        if jury_chief_umpire_students_form.count() == sum_grade_list.count():
+            for jury_chief_umpire_student_form in jury_chief_umpire_students_form:
+                # 获取主审分数
+                sum_grade_chief_umpirestudent_applicationForm = ApplicationGrade.objects.annotate(num=Sum('grade')).filter(teacher=teacher, meeting_id=meeting_obj, chief_umpire=True, applicationForm=jury_chief_umpire_student_form)
+                if sum_grade_chief_umpirestudent_applicationForm:
+                    jury_chief_umpire_application_grade_list.append([jury_chief_umpire_student_form,
+                                                                    sum_grade_chief_umpirestudent_applicationForm[0]])
+            # 获取该会议所有学生
+            students_application_for_meeting_list = meeting_obj.meeting_for_applicationform.all()
+            # 获取该会议所有学生及主审成绩
+            all_students_grade_for_meeting_list = []
+            for student_application_for_meeting in students_application_for_meeting_list:
+                # 如果这个老师全部提交了
+                if teacher in meeting_obj.referTeacher.all():
+                    # 我提交的成绩
+                    sum_grade_chief_umpire_student_applicationForm = ApplicationGrade.objects.annotate(
+                        num=Sum('grade')).filter(meeting_id=meeting_obj, teacher=teacher,
+                                                 applicationForm=student_application_for_meeting)
+                    all_students_grade_for_meeting_list.append([student_application_for_meeting, sum_grade_chief_umpire_student_applicationForm])
+                # 没有全部提交
+                else:
+                    # 获取其主审成绩
+                    sum_grade_chief_umpirestudent_applicationForm = ApplicationGrade.objects.annotate(num=Sum('grade')).filter(meeting_id=meeting_obj, chief_umpire=True, applicationForm=student_application_for_meeting)
+                    if sum_grade_chief_umpirestudent_applicationForm:
+                        # 添加到列表
+                        all_students_grade_for_meeting_list.append([student_application_for_meeting, sum_grade_chief_umpirestudent_applicationForm])
+                    else:
+                        all_students_grade_for_meeting_list.append([student_application_for_meeting, '主审暂未提交'])
+            context = {
+                "jury_chief_umpire_application_grade_list": jury_chief_umpire_application_grade_list,
+                "all_students_grade_for_meeting_list": all_students_grade_for_meeting_list,
+                "status": "该主审已提交",
+                "meeting_obj": meeting_obj
+            }
+        else:
+            # 只获取我的主审学生成绩
+            for jury_chief_umpire_student_form in jury_chief_umpire_students_form:
+                # 获取主审分数
+                sum_grade_chief_umpirestudent_applicationForm = ApplicationGrade.objects.annotate(num=Sum('grade')).filter(teacher=teacher, meeting_id=meeting_obj, chief_umpire=True, applicationForm=jury_chief_umpire_student_form)
+                if sum_grade_chief_umpirestudent_applicationForm:
+                    jury_chief_umpire_application_grade_list.append([jury_chief_umpire_student_form,
+                                                                    sum_grade_chief_umpirestudent_applicationForm[0]])
+                else:
+                    jury_chief_umpire_application_grade_list.append([jury_chief_umpire_student_form,
+                                                                    "暂未评分"])
+            context = {
+                "jury_chief_umpire_application_grade_list": jury_chief_umpire_application_grade_list,
+                "status": "该主审未提交",
+                "meeting_obj": meeting_obj
+            }
+            # 当前会议获取主审学生的赋分表
+        # jury_chief_umpire_students_form = meeting_obj.meeting_for_applicationform.filter(jury=teacher)
+        # # 获取申请表赋分里该老师的学生
+        # #  判断主审是否提交
+        # jury_chief_umpire_students_grade = []
+        # tag = True
+        # context = {}
+        # for jury_chief_umpire_student_form in jury_chief_umpire_students_form:
+        #     meeting_student_application_grade = Grade.objects.filter(applicationForm=jury_chief_umpire_student_form, teacher=teacher)
+        #     if not meeting_student_application_grade: # 主审未提交(有一个主审学生成绩未查到)
+        #         tag = False
+        #     jury_chief_umpire_students_grade.append(Grade.objects.annotate(grade_all=F("englishGrade") + F("baseGrade") + F("academicActivityGrade") + F("publicationsGrade") + F("participateItemsGrade") + F("researchProjectsGrade") + F("innovationProjectsGrade") + F("socialWorkGrade")).filter(applicationForm=jury_chief_umpire_student_form))
+        #
+        # if not tag:
+        #
+        #     # 获取主审的学生
+        #     context = {
+        #         "this_status": "主审未提交",
+        #         "jury_chief_umpire_students": jury_chief_umpire_students_grade,
+        #     }
+        #
+        # if tag:
+        #     # 主审已提交 获取所有学生和当前老师的主审学生及成绩
+        #     meeting_student_application_list_grade = Grade.objects.annotate(grade_all=F("englishGrade") + F("baseGrade") + F("academicActivityGrade") + F("publicationsGrade") + F("participateItemsGrade") + F("researchProjectsGrade") + F("innovationProjectsGrade") + F("socialWorkGrade")).filter(meeting=meeting_obj)
+        #     context = {
+        #         "this_status": "主审已提交",
+        #         "jury_chief_umpire_students": jury_chief_umpire_students_grade,
+        #         "meeting_student_application_list": meeting_student_application_list_grade
+        #     }
+        return render(request, template_name="dataManagement/juryMeetingStudentList.html", context=context)
+
+
+# 评委打分时学生信息展示
+class JuryStudentApplicationFormShow(View):
+    def get(self, request):
+        meeting_id = request.GET.get("meeting_id")
+        student_id = request.GET.get("student_id")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        student_obj = get_object_or_404(Student, pk=student_id)
+        student_qualification = meeting_obj.meeting_for_student.filter(sno=student_obj.sno)
+        if student_qualification:
+            context = {
+                "this_status": "该学生本次会议没有申请资格",
+                "text": student_qualification[0].text,
+                "meeting_obj": meeting_obj,
+                "student_obj": student_obj,
+            }
+        else:
+            # 申请表
+            application_form_student = meeting_obj.meeting_for_applicationform.filter(student=student_obj)
+            if application_form_student:
+                application_form_student = application_form_student[0]
+                # 相关文件
+                student_academicActivityImages = application_form_student.student_academicActivityImage.all()
+                # 发表论文
+                student_publicationsImages = application_form_student.student_publicationsImage.all()
+                # 参与项目
+                student_participateItemsImages = application_form_student.student_participateItemsImage.all()
+                # 科研活动
+                student_researchProjectsImages = application_form_student.student_researchProjectsImage.all()
+                # 研究生创新项目
+                student_innovationProjectsImages = application_form_student.student_innovationProjectsImage.all()
+                # 社会服务
+                student_socialWorkImages = application_form_student.student_socialWorkImage.all()
+                # 获取赋分表
+                fuItem_list = application_form_student.fuTable.fuItem.all()
+                context = {
+                    "meeting_obj": meeting_obj,
+                    "application_form_student": application_form_student,
+                    "student_obj": student_obj,
+                    "student_academicActivityImages": student_academicActivityImages,
+                    "student_publicationsImages": student_publicationsImages,
+                    "student_participateItemsImages": student_participateItemsImages,
+                    "student_researchProjectsImages": student_researchProjectsImages,
+                    "student_innovationProjectsImages": student_innovationProjectsImages,
+                    "student_socialWorkImages": student_socialWorkImages,
+                    "fuItem_list": fuItem_list
+                }
+            else:
+                context = {
+                    "meeting_obj": meeting_obj,
+                    "student_obj": student_obj,
+                    "this_status": "该学生暂未提交申请"
+                }
+        return render(request, template_name="dataManagement/juryMark.html", context=context)
+
+    def post(self, request):
+        meeting_id = request.POST.get("meeting_id")
+        applicatinFormId = request.POST.get("applicatinFormId")
+        data = request.POST.get("data") # 获取的是一json字符串 使用json.loads 来展开,
+        print(meeting_id, applicatinFormId, data)
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        applicatinForm_obj = get_object_or_404(ApplicationForm, pk=applicatinFormId)
+        # 获取主审的赋分表
+        teacher = get_object_or_404(Teacher, username=request.user.username)
+        jury_chief_umpire_students_form = meeting_obj.meeting_for_applicationform.filter(jury=teacher)
+
+        # 遍历 data 并创建
+        for number in json.loads(data):
+            if applicatinForm_obj in jury_chief_umpire_students_form:
+                ApplicationGrade.objects.create(teacher=teacher, applicationForm=applicatinForm_obj, meeting=meeting_obj, grade=number, chief_umpire=True)
+            else:
+                ApplicationGrade.objects.create(teacher=teacher, applicationForm=applicatinForm_obj, meeting=meeting_obj, grade=number, chief_umpire=False)
+
+        return JsonResponse({"status": "成功"})
+
+
+
 
 
 

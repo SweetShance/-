@@ -8,3 +8,4 @@
 8. MeetingList.hmtl 所有会议列表
 9. MeetingForMyStudent 会议当前老师的学生列表
 10. MeetingForMyStudentCheck 老师对摸个学生的审核和评分
+11. juryMark 评委打分

@@ -74,6 +74,7 @@ class AssignItem(models.Model):
     grade = models.IntegerField(verbose_name="分数")
     scoring = models.TextField(verbose_name="赋分标准", max_length=300)
     state = models.TextField(verbose_name="说明", max_length=300)
+    show = models.BooleanField(verbose_name="是否让评委为其赋分", default=True)
 
     class Meta:
         verbose_name = "赋分项列表"
@@ -225,6 +226,7 @@ class Meeting(models.Model):
         ('已开始', '已开始'),
         ('已结束', '已结束')
     ]
+    referTeacher = models.ManyToManyField(Teacher, verbose_name="已提交评委", related_name="submit_teacher")
     gradeStatus = models.CharField(verbose_name="评分状态", max_length=10, choices=STATUS_CHOICE, default='未开始')
 
     class Meta:
@@ -303,32 +305,50 @@ class StudentGrade(models.Model):
 
 
 # 申请成绩表
-class Grade(models.Model):
-    teacher = models.ForeignKey(Teacher, verbose_name="评委老师", on_delete=models.DO_NOTHING)
+class ApplicationGrade(models.Model):
+    teacher = models.ForeignKey(Teacher, verbose_name="评委老师", on_delete=models.DO_NOTHING, related_name="jury_for_application_grade")
     applicationForm = models.ForeignKey(ApplicationForm, verbose_name="申请表", on_delete=models.CASCADE, related_name="applicationForm_grade")
-    meeting = models.ForeignKey(Meeting, verbose_name="会议", on_delete=models.CASCADE)
-    # 在这里输入四六级成绩就行,在计算时进行运算
-    englishGrade = models.IntegerField(verbose_name="四级/六级分数", null=True, blank=True)
-    baseGrade = models.SmallIntegerField(verbose_name="基本分", default=10)
-    #    学术活动分数
-    academicActivityGrade = models.SmallIntegerField(verbose_name="学术活动分数", null=True, blank=True)
-    #    发表论文
-    publicationsGrade = models.SmallIntegerField(verbose_name="发表论文分数", null=True, blank=True)
-    #    参与项目
-    participateItemsGrade = models.SmallIntegerField(verbose_name="参与项目分数", null=True, blank=True)
-    #    科研项目分数
-    researchProjectsGrade = models.SmallIntegerField(verbose_name="科研项目分数", null=True, blank=True)
-    # 研究生创新项目分数
-    innovationProjectsGrade = models.SmallIntegerField(verbose_name="研究生创新项目分数", null=True, blank=True)
-    # 社会服务分数
-    socialWorkGrade = models.SmallIntegerField(verbose_name="社会服务分数", null=True, blank=True)
+    meeting = models.ForeignKey(Meeting, verbose_name="会议", on_delete=models.CASCADE, related_name="meeting_for_application_grade")
+    # title = models.CharField(verbose_name="赋分项", max_length=100)
+    grade = models.SmallIntegerField(verbose_name="分数")
+    chief_umpire = models.BooleanField(verbose_name="主审", default=False)
 
     class Meta:
-        verbose_name = "成绩表"
+        verbose_name = "申请表成绩"
         verbose_name_plural = verbose_name
 
     def __str__(self):
         return "学生:%s, 评委:%s"%(self.applicationForm.sname, self.teacher.tname)
+
+
+# class Grade(models.Model):
+#     teacher = models.ForeignKey(Teacher, verbose_name="评委老师", on_delete=models.DO_NOTHING)
+#     applicationForm = models.ForeignKey(ApplicationForm, verbose_name="申请表", on_delete=models.CASCADE, related_name="applicationForm_grade")
+#     meeting = models.ForeignKey(Meeting, verbose_name="会议", on_delete=models.CASCADE)
+#     chief_umpire = models.BooleanField(verbose_name="主审", default=False)
+#     # 在这里输入四六级成绩就行,在计算时进行运算
+#     # 保存运算后的结果
+#     englishGrade = models.SmallIntegerField(verbose_name="四级/六级分数", null=True, blank=True)
+#     baseGrade = models.SmallIntegerField(verbose_name="基本分", default=10)
+#     #    学术活动分数
+#     academicActivityGrade = models.SmallIntegerField(verbose_name="学术活动分数", null=True, blank=True)
+#     #    发表论文
+#     publicationsGrade = models.SmallIntegerField(verbose_name="发表论文分数", null=True, blank=True)
+#     #    参与项目
+#     participateItemsGrade = models.SmallIntegerField(verbose_name="参与项目分数", null=True, blank=True)
+#     #    科研项目分数
+#     researchProjectsGrade = models.SmallIntegerField(verbose_name="科研项目分数", null=True, blank=True)
+#     # 研究生创新项目分数
+#     innovationProjectsGrade = models.SmallIntegerField(verbose_name="研究生创新项目分数", null=True, blank=True)
+#     # 社会服务分数
+#     socialWorkGrade = models.SmallIntegerField(verbose_name="社会服务分数", null=True, blank=True)
+#
+#     class Meta:
+#         verbose_name = "申请表成绩"
+#         verbose_name_plural = verbose_name
+#
+#     def __str__(self):
+#         return "学生:%s, 评委:%s"%(self.applicationForm.sname, self.teacher.tname)
 
 
 # 导师评分

@@ -4,8 +4,8 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Q
 from .models import Student, Teacher, ApplicationForm, Meeting, FuTable, AssignItem, GrantLevel, AcademicActivity, Publications,\
-                    ParticipateItems, ResearchProjects, InnovationProjects, SocialWork, Qualification, Message, ApplicationGrade
-
+                    ParticipateItems, ResearchProjects, InnovationProjects, SocialWork, Qualification, Message, ApplicationGrade,\
+                    Notice, NoticeFile
 
 # 学生
 class StudentAdmin:
@@ -86,7 +86,8 @@ class MeetingAdmin:
     search_fields = ['title']
     list_editable = ["endTime", "gradeStatus"]
     # fields = ('title', 'student' ,'jury', 'endTime', 'gradeStatus')
-    fields = ('title', 'jury', 'endTime', 'gradeStatus')
+    fields = ('title', 'jury',  "referTeacher", 'endTime', 'gradeStatus')
+    # readonly_fields = ['referTeacher']
 
 
 xadmin.site.register(Meeting, MeetingAdmin)
@@ -182,17 +183,43 @@ xadmin.site.register(Qualification, QualificationAdmin)
 
 # 消息
 class MessageAdmin:
-    list_display = ["from_user", "to_user", "send_time"]
-    list_filter = ["from_user__name", "to_user__name"]
+    list_display = ["get_from_name", "get_to_name", "send_time", "status"]
+    list_filter = ["from_user__name", "to_user__name", "status"]
+
+    def get_from_name(self, obj):
+        return obj.from_user.name
+
+    get_from_name.short_description = '发送者'
+
+    def get_to_name(self, obj):
+        return obj.to_user.name
+    get_to_name.short_description = '接收者'
 
 
-xadmin.site.register(Message, MeetingAdmin)
+xadmin.site.register(Message, MessageAdmin)
 
 
 # 申请表成绩
 class GradeAdmin:
     list_display = ["applicationForm", "teacher", "meeting", "title", "grade", "chief_umpire"]
-    list_filter = ["teacher__tname", "meeting__title"]
+    list_filter = ["teacher__tname", "meeting__title", "applicationForm__sname"]
 
 
 xadmin.site.register(ApplicationGrade, GradeAdmin)
+
+
+# 公告文件
+class NoticeFileInline:
+    model = NoticeFile # 致命类
+    extra = 1
+    style = 'table'
+
+
+# 公告
+class NoticeAdmin:
+    list_display = ["title", "message_type", "add_time", "show"]
+    list_filter = ["show", "message_type", ]
+    inlines = [NoticeFileInline]
+
+
+xadmin.site.register(Notice, NoticeAdmin)

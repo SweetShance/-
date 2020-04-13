@@ -1,19 +1,115 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib import auth
 from django.views import View
-from django.db.models import Q, F, SmallIntegerField, Sum
+from django.db.models import Q, F, SmallIntegerField, Sum, Count, Avg
+from django.core import serializers
 import datetime, random, json
 from MyUser.models import MyUser
 from dataManagement.models import Student, Teacher, Meeting, ApplicationForm, AcademicActivity, Publications,\
     ParticipateItems, ResearchProjects, InnovationProjects, SocialWork, delete_academicActivityImage, delete_innovationProjects,delete_participateItems,\
-    delete_publicationsImage, delete_researchProjects, delete_socialWork, Qualification, OtherStudentGrade, MentorGrade, Message, ApplicationGrade
+    delete_publicationsImage, delete_researchProjects, delete_socialWork, Qualification, OtherStudentGrade, MentorGrade, Message, ApplicationGrade,\
+    Notice, NoticeFile
 
 
 # Create your views here.
 class Index(View):
     def get(self, request):
-        return render(request, template_name="dataManagement/index.html", context={})
+        # 获取学生男女比例
+        nan_percent = int(Student.objects.filter(sex="男").count() * 100 / Student.objects.all().count())
+        # 近七次会议参与人数
+        meeting_student_number = Meeting.objects.values("title").annotate(num=Count("student"))[:7]
+        for meeting_student in meeting_student_number:
+            meeting_student["percent"] = meeting_student["num"]*100/50
+        # 会议的平均成绩
+        avg_list = []
+        avg_grade_meeting_list = ApplicationGrade.objects.values("meeting").annotate(num=Sum("grade")).order_by('-meeting_id')
+        for avg_grade_meeting in avg_grade_meeting_list:
+            avg_list.append(avg_grade_meeting["num"]/get_object_or_404(Meeting, pk=avg_grade_meeting['meeting']).student.all().count())
+        # 不符合资格人数
+        not_qualification = Qualification.objects.all().values("sno").distinct().count()
+        # 公告
+        # 公告通知
+        notice_list = Notice.objects.filter(message_type="公告通知", show=True)[:7]
+        # 评审通知
+        review_list = Notice.objects.filter(message_type="评审通知", show=True)[:7]
+        # 结果通知
+        result_list = Notice.objects.filter(message_type="结果通知", show=True)[:7]
+        # 消息
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
+
+
+        context = {
+            "nan_percent": nan_percent,
+            "meeting_student_number_list": meeting_student_number,
+            "avg_list": avg_list,
+            "not_qualification": [not_qualification, Student.objects.all().count() - not_qualification, int(not_qualification*100/Student.objects.all().count()), Student.objects.all().count()],
+            "notice_list": notice_list,
+            "review_list": review_list,
+            "result_list":result_list,
+            "no_read_message_list": no_read_message,
+            "no_read_message_count": no_read_message.count()
+        }
+        return render(request, template_name="dataManagement/index.html", context=context)
+
+
+class NoticeShow(View):
+    def get(self, request, pk):
+        notice_obj = get_object_or_404(Notice, id=pk)
+        # 获取文件
+        notice_obj_files = notice_obj.notice_files.all()
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
+        context = {
+            "notice_obj": notice_obj,
+            "notice_obj_files": notice_obj_files,
+            "no_read_message_list": no_read_message,
+            "no_read_message_count": no_read_message.count()
+        }
+        return render(request, template_name="dataManagement/noticeShow.html", context=context)
+
+
+class NoticListShow(View):
+    def get(self, request):
+        message_type = request.GET.get("message_type")
+        # 公告通知
+        if message_type == "1":
+            notice_list = Notice.objects.filter(message_type="公告通知", show=True)
+            status = "公告通知"
+        # 评审通知
+        elif message_type == "2":
+            notice_list = Notice.objects.filter(message_type="评审通知", show=True)
+            status = "评审通知"
+        # 结果通知
+        elif message_type == "3":
+            notice_list = Notice.objects.filter(message_type="结果通知", show=True)
+            status = "结果通知"
+        else:
+            notice_list = []
+
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
+        context = {"notice_list": notice_list,
+                   "status": status,
+                   "no_read_message_list": no_read_message,
+                   "no_read_message_count": no_read_message.count()
+                   }
+        return render(request, template_name="dataManagement/notice_list.html", context = context)
+
+
+# 通知文件下载
+class Download(View):
+    def get(self, request, pk):
+        notice_file_obj = get_object_or_404(NoticeFile, pk=pk)
+        # print(notice_file_obj.file_path)
+        # 打开文件
+        file = open(str(notice_file_obj.file.path), 'rb')
+        file_name = str(notice_file_obj.file).split("/")[1]
+        #
+        response = HttpResponse(file)
+        response['Content_Type'] = 'application/octet-stream'
+        response['Content-Disposition'] = 'attachment;filename="%s"' % file_name.encode('utf-8').decode(
+            'ISO-8859-1')
+
+        return response
 
 
 class MyInfo(View):
@@ -29,9 +125,12 @@ class MyInfo(View):
         elif request.user.identity == "老师":
             if Teacher.objects.filter(tno=request.user.username):
                 user_info = get_object_or_404(Teacher, tno=request.user.username)
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
         content = {
             "user_obj": user_obj,
-            "user_info": user_info
+            "user_info": user_info,
+            "no_read_message_list": no_read_message,
+            "no_read_message_count": no_read_message.count()
         }
 
         return render(request, template_name="dataManagement/MyInfo.html", context=content)
@@ -67,8 +166,12 @@ class MyInfo(View):
 
 class SetPassword(View):
     def get(self, request):
-
-        return render(request, template_name="dataManagement/setPassword.html", context={})
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
+        context = {
+            "no_read_message_list": no_read_message,
+            "no_read_message_count": no_read_message.count()
+        }
+        return render(request, template_name="dataManagement/setPassword.html", context=context)
 
     def post(self, request):
         oldPassword = request.POST.get("OldPassword")
@@ -90,11 +193,13 @@ class RequestLog(View):
         meeting_list = []
         if student_obj:
             meeting_list = student_obj[0].meeting_student.all()
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
 
         context = {
-            "meeting_list": meeting_list
+            "meeting_list": meeting_list,
+            "no_read_message_list": no_read_message,
+            "no_read_message_count": no_read_message.count()
         }
-        print(meeting_list)
 
         return render(request, template_name="dataManagement/requestLog.html", context=context)
 
@@ -111,7 +216,6 @@ class RequestLogShow(View):
         if student_objs:
             student_obj = student_objs[0]
         # 首先判断当前学生在该会议中是否有资格
-        print(meeting_obj)
         qualifications = meeting_obj.meeting_for_student.filter(sno=request.user.username)
         if qualifications or not student_objs:
             # 原因
@@ -145,6 +249,7 @@ class RequestLogShow(View):
             # 学术活动
             # endTime =  meeting_obj.endTime
             # 时间判断
+            no_read_message = Message.objects.filter(to_user=request.user, status=False)
             context = {
                 "meeting_obj": meeting_obj,
                 "application_form_student": application_form_student,
@@ -155,6 +260,8 @@ class RequestLogShow(View):
                 "student_researchProjectsImages": student_researchProjectsImages,
                 "student_innovationProjectsImages": student_innovationProjectsImages,
                 "student_socialWorkImages": student_socialWorkImages,
+                "no_read_message_list": no_read_message,
+                "no_read_message_count": no_read_message.count()
             }
             if datetime.datetime.now() > meeting_obj.endTime:
                 context["timeStatus"] = "已结束"
@@ -379,6 +486,7 @@ class PeerAssessment(View):
                 student_innovationProjectsImages = application_form_student.student_innovationProjectsImage.all()
                 # 社会服务
                 student_socialWorkImages = application_form_student.student_socialWorkImage.all()
+                no_read_message = Message.objects.filter(to_user=request.user, status=False)
                 context = {
                     "meeting_obj": meeting_obj,
                     "application_form_student": application_form_student,
@@ -389,7 +497,9 @@ class PeerAssessment(View):
                     "student_researchProjectsImages": student_researchProjectsImages,
                     "student_innovationProjectsImages": student_innovationProjectsImages,
                     "student_socialWorkImages": student_socialWorkImages,
-                    "student_otherGrade": otherStudentGrade[0].otherGrade
+                    "student_otherGrade": otherStudentGrade[0].otherGrade,
+                    "no_read_message_list": no_read_message,
+                    "no_read_message_count": no_read_message.count()
                 }
                 if otherStudentGrade[0].otherGrade:
                     context["status"] = "已完成"
@@ -414,6 +524,8 @@ class PeerAssessment(View):
                     student_innovationProjectsImages = application_form_student.student_innovationProjectsImage.all()
                     # 社会服务
                     student_socialWorkImages = application_form_student.student_socialWorkImage.all()
+                    # 消息
+                    no_read_message = Message.objects.filter(to_user=request.user, status=False)
                     context = {
                         "meeting_obj": meeting_obj,
                         "application_form_student": application_form_student,
@@ -424,6 +536,8 @@ class PeerAssessment(View):
                         "student_researchProjectsImages": student_researchProjectsImages,
                         "student_innovationProjectsImages": student_innovationProjectsImages,
                         "student_socialWorkImages": student_socialWorkImages,
+                        "no_read_message_list": no_read_message,
+                        "no_read_message_count": no_read_message.count()
                     }
                 else:
                     context = {
@@ -459,8 +573,12 @@ class MeetingList(View):
     def get(self, request):
         # 获取所有会议
         meeting_obj_all = Meeting.objects.all()
+        # 消息
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
         context = {
-            "meeting_obj_all": meeting_obj_all
+            "meeting_obj_all": meeting_obj_all,
+            "no_read_message_list": no_read_message,
+            "no_read_message_count": no_read_message.count()
         }
         return render(request, template_name="dataManagement/MeetingList.html", context=context)
 
@@ -493,13 +611,20 @@ class MeetingForMyStudent(View):
                     meeting_student_list_application_qualification.append([meeting_student, "未提交", "有资格", "未评分"])
                 elif not student_application_for_meeting and student_qualification_for_meeting:
                     meeting_student_list_application_qualification.append([meeting_student, "未提交", "无资格", "未评分"])
+            # 消息
+            no_read_message = Message.objects.filter(to_user=request.user, status=False)
             context = {
                 "meeting_obj": meeting_obj,
-                "meeting_student_list_application_qualification": meeting_student_list_application_qualification
+                "meeting_student_list_application_qualification": meeting_student_list_application_qualification,
+                "no_read_message_list": no_read_message,
+                "no_read_message_count": no_read_message.count()
             }
         else:
+            no_read_message = Message.objects.filter(to_user=request.user, status=False)
             context = {
-                "this_status": "你的身份不是老师"
+                "this_status": "你的身份不是老师",
+                "no_read_message_list": no_read_message,
+                "no_read_message_count": no_read_message.count()
             }
 
         return render(request, template_name="dataManagement/meetingForMyStudent.html", context=context)
@@ -559,6 +684,10 @@ class MeetingForMyStudentCheck(View):
                     "student_obj": student_obj,
                     "this_status": "该学生暂未提交申请"
                 }
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
+        context["no_read_message_list"] = no_read_message
+        context["no_read_message_count"] = no_read_message.count()
+
         return render(request, template_name="dataManagement/MeetingForMyStudentCheck.html", context=context)
 
     def post(self, request):
@@ -592,13 +721,16 @@ class JuryGradeMeetingList(View):
         # 获取但钱老师所在的会议
         teacher_obj = get_object_or_404(Teacher, tno=request.user.username)
         meeting_list_for_Jury = Meeting.objects.filter(jury=teacher_obj)
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
         context = {
-            "meeting_list_for_Jury": meeting_list_for_Jury
+            "meeting_list_for_Jury": meeting_list_for_Jury,
+            "no_read_message_list": no_read_message,
+            "no_read_message_count": no_read_message.count()
         }
         return render(request, template_name="dataManagement/JuryGradeMeetingList.html", context=context)
 
 
-# 评委学生
+# 评委学生列表以及提交评分
 class JuryGradeMeetingStudentList(View):
     def get(self, request):
         meeting_id = request.GET.get("meeting_id")
@@ -610,11 +742,11 @@ class JuryGradeMeetingStudentList(View):
         # 获取主审学生的总分数 按赋分表分类
         sum_grade_list = ApplicationGrade.objects.values('applicationForm').annotate(num=Sum('grade')).filter(teacher=teacher, meeting=meeting_obj, chief_umpire=True).order_by("applicationForm_id")
         jury_chief_umpire_application_grade_list = []
-        # 如果主审学生全部评分
+        # 如果该老师主审学生全部评分
         if jury_chief_umpire_students_form.count() == sum_grade_list.count():
             for jury_chief_umpire_student_form in jury_chief_umpire_students_form:
-                # 获取主审分数
-                sum_grade_chief_umpirestudent_applicationForm = ApplicationGrade.objects.annotate(num=Sum('grade')).filter(teacher=teacher, meeting_id=meeting_obj, chief_umpire=True, applicationForm=jury_chief_umpire_student_form)
+                # 获取该老师主审学生分数
+                sum_grade_chief_umpirestudent_applicationForm = ApplicationGrade.objects.values('applicationForm').annotate(num=Sum('grade')).filter(teacher=teacher, meeting_id=meeting_obj, chief_umpire=True, applicationForm=jury_chief_umpire_student_form)
                 if sum_grade_chief_umpirestudent_applicationForm:
                     jury_chief_umpire_application_grade_list.append([jury_chief_umpire_student_form,
                                                                     sum_grade_chief_umpirestudent_applicationForm[0]])
@@ -626,19 +758,25 @@ class JuryGradeMeetingStudentList(View):
                 # 如果这个老师全部提交了
                 if teacher in meeting_obj.referTeacher.all():
                     # 我提交的成绩
-                    sum_grade_chief_umpire_student_applicationForm = ApplicationGrade.objects.annotate(
+                    my_sum_grade_student_applicationForm = ApplicationGrade.objects.values('applicationForm').annotate(
                         num=Sum('grade')).filter(meeting_id=meeting_obj, teacher=teacher,
                                                  applicationForm=student_application_for_meeting)
-                    all_students_grade_for_meeting_list.append([student_application_for_meeting, sum_grade_chief_umpire_student_applicationForm])
+                    if my_sum_grade_student_applicationForm:
+                        all_students_grade_for_meeting_list.append([student_application_for_meeting, my_sum_grade_student_applicationForm[0]])
+                    else:
+                        all_students_grade_for_meeting_list.append([student_application_for_meeting, 0])
+
                 # 没有全部提交
                 else:
-                    # 获取其主审成绩
-                    sum_grade_chief_umpirestudent_applicationForm = ApplicationGrade.objects.annotate(num=Sum('grade')).filter(meeting_id=meeting_obj, chief_umpire=True, applicationForm=student_application_for_meeting)
-                    if sum_grade_chief_umpirestudent_applicationForm:
+                    # 获取该评委赋的分
+                    sum_grade_teacher_applicationForm = ApplicationGrade.objects.values('applicationForm').annotate(num=Sum('grade')).filter(meeting_id=meeting_obj, teacher=teacher, applicationForm=student_application_for_meeting)
+                    if sum_grade_teacher_applicationForm:
                         # 添加到列表
-                        all_students_grade_for_meeting_list.append([student_application_for_meeting, sum_grade_chief_umpirestudent_applicationForm])
+                        all_students_grade_for_meeting_list.append([student_application_for_meeting, sum_grade_teacher_applicationForm[0]])
+                    # 否则不展示分数
                     else:
-                        all_students_grade_for_meeting_list.append([student_application_for_meeting, '主审暂未提交'])
+                        all_students_grade_for_meeting_list.append([student_application_for_meeting, 0])
+
             context = {
                 "jury_chief_umpire_application_grade_list": jury_chief_umpire_application_grade_list,
                 "all_students_grade_for_meeting_list": all_students_grade_for_meeting_list,
@@ -661,36 +799,33 @@ class JuryGradeMeetingStudentList(View):
                 "status": "该主审未提交",
                 "meeting_obj": meeting_obj
             }
-            # 当前会议获取主审学生的赋分表
-        # jury_chief_umpire_students_form = meeting_obj.meeting_for_applicationform.filter(jury=teacher)
-        # # 获取申请表赋分里该老师的学生
-        # #  判断主审是否提交
-        # jury_chief_umpire_students_grade = []
-        # tag = True
-        # context = {}
-        # for jury_chief_umpire_student_form in jury_chief_umpire_students_form:
-        #     meeting_student_application_grade = Grade.objects.filter(applicationForm=jury_chief_umpire_student_form, teacher=teacher)
-        #     if not meeting_student_application_grade: # 主审未提交(有一个主审学生成绩未查到)
-        #         tag = False
-        #     jury_chief_umpire_students_grade.append(Grade.objects.annotate(grade_all=F("englishGrade") + F("baseGrade") + F("academicActivityGrade") + F("publicationsGrade") + F("participateItemsGrade") + F("researchProjectsGrade") + F("innovationProjectsGrade") + F("socialWorkGrade")).filter(applicationForm=jury_chief_umpire_student_form))
-        #
-        # if not tag:
-        #
-        #     # 获取主审的学生
-        #     context = {
-        #         "this_status": "主审未提交",
-        #         "jury_chief_umpire_students": jury_chief_umpire_students_grade,
-        #     }
-        #
-        # if tag:
-        #     # 主审已提交 获取所有学生和当前老师的主审学生及成绩
-        #     meeting_student_application_list_grade = Grade.objects.annotate(grade_all=F("englishGrade") + F("baseGrade") + F("academicActivityGrade") + F("publicationsGrade") + F("participateItemsGrade") + F("researchProjectsGrade") + F("innovationProjectsGrade") + F("socialWorkGrade")).filter(meeting=meeting_obj)
-        #     context = {
-        #         "this_status": "主审已提交",
-        #         "jury_chief_umpire_students": jury_chief_umpire_students_grade,
-        #         "meeting_student_application_list": meeting_student_application_list_grade
-        #     }
+        if teacher in meeting_obj.referTeacher.all():
+            context["submit"] = "已提交"
+        if meeting_obj.gradeStatus == "已结束":
+            context["submit"] = "已提交"
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
+        context["no_read_message_list"] = no_read_message
+
+        context["no_read_message_count"] = no_read_message.count()
+
         return render(request, template_name="dataManagement/juryMeetingStudentList.html", context=context)
+
+    def post(self, request):
+        meeting_id = request.POST.get("meeting_id")
+        teacher = get_object_or_404(Teacher, tno=request.user.username)
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        # 判断该老师是否为所有学生赋分
+        meeting_all_student_application= meeting_obj.meeting_for_applicationform.all()
+        no_grade_list = []
+        for student_application in meeting_all_student_application:
+            my_student = ApplicationGrade.objects.filter(teacher=teacher, meeting=meeting_obj, applicationForm=student_application)
+            if not my_student:
+                no_grade_list.append(student_application)
+        if not no_grade_list:
+            meeting_obj.referTeacher.add(teacher)
+            return JsonResponse({'status': '成功'})
+        else:
+            return JsonResponse({"status": no_grade_list})
 
 
 # 评委打分时学生信息展示
@@ -701,6 +836,7 @@ class JuryStudentApplicationFormShow(View):
         meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
         student_obj = get_object_or_404(Student, pk=student_id)
         student_qualification = meeting_obj.meeting_for_student.filter(sno=student_obj.sno)
+        teacher = get_object_or_404(Teacher, tno=request.user.username)
         if student_qualification:
             context = {
                 "this_status": "该学生本次会议没有申请资格",
@@ -725,8 +861,41 @@ class JuryStudentApplicationFormShow(View):
                 student_innovationProjectsImages = application_form_student.student_innovationProjectsImage.all()
                 # 社会服务
                 student_socialWorkImages = application_form_student.student_socialWorkImage.all()
+                fuItem_grade = []
                 # 获取赋分表
                 fuItem_list = application_form_student.fuTable.fuItem.all()
+                # 获取分数和fuItem_list 绑定
+                this_grade = ApplicationGrade.objects.filter(teacher=teacher, applicationForm=application_form_student, meeting=meeting_obj)
+                # 如果老师评了分数
+                if this_grade:
+                    for fuItem in fuItem_list:
+                        tag = False
+                        for grade_obj in this_grade:
+                            if fuItem.title == grade_obj.title:
+                                fuItem_grade.append([fuItem, grade_obj])
+                                tag = True
+                                break
+                        if not tag:
+                            fuItem_grade.append([fuItem, 0])
+
+                else:
+                    this_grade = ApplicationGrade.objects.filter(applicationForm=application_form_student,
+                                                                 meeting=meeting_obj, chief_umpire=True)
+                    # 如果主审评了分数
+                    if this_grade:
+                        for fuItem in fuItem_list:
+                            tag = False
+                            for grade_obj in this_grade:
+                                if fuItem.title == grade_obj.title:
+                                    fuItem_grade.append([fuItem, grade_obj])
+                                    tag = True
+                                    break
+                            if not tag:
+                                fuItem_grade.append([fuItem, 0])
+                    else:
+                        # 主审也没评分
+                        for fuItem in fuItem_list:
+                            fuItem_grade.append([fuItem, 0])
                 context = {
                     "meeting_obj": meeting_obj,
                     "application_form_student": application_form_student,
@@ -737,37 +906,142 @@ class JuryStudentApplicationFormShow(View):
                     "student_researchProjectsImages": student_researchProjectsImages,
                     "student_innovationProjectsImages": student_innovationProjectsImages,
                     "student_socialWorkImages": student_socialWorkImages,
-                    "fuItem_list": fuItem_list
+                    "fuItem_grade_all": fuItem_grade
                 }
+            #     分数展示
             else:
                 context = {
                     "meeting_obj": meeting_obj,
                     "student_obj": student_obj,
                     "this_status": "该学生暂未提交申请"
                 }
+        if teacher in meeting_obj.referTeacher.all():
+            context["submit"] = "已提交"
+        # 如果会议评分结束
+        if meeting_obj.gradeStatus == "已结束":
+            context["submit"] = "已提交"
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
+        context["no_read_message_list"] = no_read_message
+
+        context["no_read_message_count"] = no_read_message.count()
         return render(request, template_name="dataManagement/juryMark.html", context=context)
 
     def post(self, request):
         meeting_id = request.POST.get("meeting_id")
         applicatinFormId = request.POST.get("applicatinFormId")
         data = request.POST.get("data") # 获取的是一json字符串 使用json.loads 来展开,
-        print(meeting_id, applicatinFormId, data)
         meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
         applicatinForm_obj = get_object_or_404(ApplicationForm, pk=applicatinFormId)
         # 获取主审的赋分表
-        teacher = get_object_or_404(Teacher, username=request.user.username)
+        teacher = get_object_or_404(Teacher, tno=request.user.username)
         jury_chief_umpire_students_form = meeting_obj.meeting_for_applicationform.filter(jury=teacher)
 
         # 遍历 data 并创建
         for number in json.loads(data):
             if applicatinForm_obj in jury_chief_umpire_students_form:
-                ApplicationGrade.objects.create(teacher=teacher, applicationForm=applicatinForm_obj, meeting=meeting_obj, grade=number, chief_umpire=True)
+                # 首先判断该分数是否存在
+                this_applicationForm = ApplicationGrade.objects.filter(teacher=teacher, applicationForm=applicatinForm_obj,
+                                                meeting=meeting_obj, title=number[1],
+                                                chief_umpire=True)
+                if this_applicationForm:
+                    this_applicationForm[0].grade = number[0]
+                    this_applicationForm[0].save()
+                else:
+                    ApplicationGrade.objects.create(teacher=teacher, applicationForm=applicatinForm_obj, meeting=meeting_obj, title=number[1], grade=number[0], chief_umpire=True)
             else:
-                ApplicationGrade.objects.create(teacher=teacher, applicationForm=applicatinForm_obj, meeting=meeting_obj, grade=number, chief_umpire=False)
+                this_applicationForm = ApplicationGrade.objects.filter(teacher=teacher,
+                                                                       applicationForm=applicatinForm_obj,
+                                                                       meeting=meeting_obj, title=number[1],
+                                                                       )
+                if this_applicationForm:
+                    this_applicationForm[0].grade = number[0]
+                    this_applicationForm[0].save()
+                else:
+                    ApplicationGrade.objects.create(teacher=teacher, applicationForm=applicatinForm_obj, meeting=meeting_obj, title=number[1], grade=number[0], chief_umpire=False)
 
         return JsonResponse({"status": "成功"})
 
 
+# 消息
+class MessageIndex(View):
+    def get(self, request):
+        request_type = request.GET.get("num")
+        request_choice = request.GET.get("choice")
+        context = {}
+        if request_type == "1":
+            context["num"] = 1
+            if request_choice == "1":
+                message_list = Message.objects.filter(to_user=request.user)
+            elif request_choice == "2":
+                message_list = Message.objects.filter(to_user=request.user, status=True)
+            elif request_choice == "3":
+                message_list = Message.objects.filter(to_user=request.user, status=False)
+            else:
+                message_list = []
+        elif request_type == "2":
+            message_list = Message.objects.filter(from_user=request.user)
+        else:
+            message_list = []
+        context["message_list"] = message_list
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
+        context["no_read_message_list"] = no_read_message
+
+        context["no_read_message_count"] = no_read_message.count()
+
+        return render(request, template_name="dataManagement/inbox.html", context=context)
+
+
+class MessageShow(View):
+    def get(self, request, pk):
+        message_obj = get_object_or_404(Message, pk=pk)
+        if message_obj.to_user == request.user or message_obj.from_user == request.user:
+            message_obj.status = True
+            message_obj.save()
+            context = {
+                "message_obj": message_obj
+            }
+        else:
+            context = {}
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
+        context["no_read_message_list"] = no_read_message
+
+        context["no_read_message_count"] = no_read_message.count()
+        return render(request, template_name="dataManagement/mail_view.html", context=context)
+
+
+# 发送消息
+class EditMessage(View):
+    def get(self, request):
+        context = {}
+        no_read_message = Message.objects.filter(to_user=request.user, status=False)
+        context["no_read_message_list"] = no_read_message
+
+        context["no_read_message_count"] = no_read_message.count()
+        return render(request, template_name="dataManagement/edit_message.html", context=context)
+
+    def post(self, request):
+        username = request.POST.get("username")
+        text = request.POST.get("text")
+        myUser_obj = MyUser.objects.get(username=request.user.username)
+        toUser_obj = MyUser.objects.filter(username=username)
+        if myUser_obj:
+            Message.objects.create(from_user=myUser_obj, to_user=toUser_obj[0], text=text)
+            data = {"status": "成功"}
+        else:
+            data = {"status": "没有该用户"}
+
+        return JsonResponse(data)
+
+
+# 查询
+class EditSearchUser(View):
+    def post(self, request):
+        val = request.POST.get('val')
+        if val:
+            user_list = serializers.serialize("json", MyUser.objects.filter(Q(username__contains=val) | Q(name__contains=val)))
+        else:
+            user_list = []
+        return JsonResponse(user_list, safe=False)
 
 
 

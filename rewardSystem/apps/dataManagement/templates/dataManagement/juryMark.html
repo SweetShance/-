@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
-  <title>导师综合评分</title>
+  <title>评委赋分</title>
   <!-- Bootstrap core CSS -->
   <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
   <!--external css-->
@@ -50,185 +50,36 @@
       <div class="nav notify-row" id="top_menu">
         <!--  notification start -->
         <ul class="nav top-menu">
-          <!-- settings start -->
-          <li class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
-              <i class="fa fa-tasks"></i>
-              <span class="badge bg-theme">4</span>
-              </a>
-            <ul class="dropdown-menu extended tasks-bar">
-              <div class="notify-arrow notify-arrow-green"></div>
-              <li>
-                <p class="green">You have 4 pending tasks</p>
-              </li>
-              <li>
-                <a href="index.html#">
-                  <div class="task-info">
-                    <div class="desc">Dashio Admin Panel</div>
-                    <div class="percent">40%</div>
-                  </div>
-                  <div class="progress progress-striped">
-                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                      <span class="sr-only">40% Complete (success)</span>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="index.html#">
-                  <div class="task-info">
-                    <div class="desc">Database Update</div>
-                    <div class="percent">60%</div>
-                  </div>
-                  <div class="progress progress-striped">
-                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                      <span class="sr-only">60% Complete (warning)</span>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="index.html#">
-                  <div class="task-info">
-                    <div class="desc">Product Development</div>
-                    <div class="percent">80%</div>
-                  </div>
-                  <div class="progress progress-striped">
-                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                      <span class="sr-only">80% Complete</span>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="index.html#">
-                  <div class="task-info">
-                    <div class="desc">Payments Sent</div>
-                    <div class="percent">70%</div>
-                  </div>
-                  <div class="progress progress-striped">
-                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
-                      <span class="sr-only">70% Complete (Important)</span>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li class="external">
-                <a href="#">See All Tasks</a>
-              </li>
-            </ul>
-          </li>
-          <!-- settings end -->
           <!-- inbox dropdown start-->
           <li id="header_inbox_bar" class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
               <i class="fa fa-envelope-o"></i>
-              <span class="badge bg-theme">5</span>
+              <span class="badge bg-theme">{{ no_read_message_count }}</span>
               </a>
             <ul class="dropdown-menu extended inbox">
               <div class="notify-arrow notify-arrow-green"></div>
               <li>
-                <p class="green">You have 5 new messages</p>
+                <p class="green">你有{{ no_read_message_count }} 条信息未读</p>
               </li>
-              <li>
-                <a href="index.html#">
-                  <span class="photo"><img alt="avatar" src="img/ui-zac.jpg"></span>
-                  <span class="subject">
-                  <span class="from">Zac Snider</span>
-                  <span class="time">Just now</span>
-                  </span>
-                  <span class="message">
-                  Hi mate, how is everything?
-                  </span>
-                  </a>
-              </li>
-              <li>
-                <a href="index.html#">
-                  <span class="photo"><img alt="avatar" src="img/ui-divya.jpg"></span>
-                  <span class="subject">
-                  <span class="from">Divya Manian</span>
-                  <span class="time">40 mins.</span>
-                  </span>
-                  <span class="message">
-                  Hi, I need your help with this.
-                  </span>
-                  </a>
-              </li>
-              <li>
-                <a href="index.html#">
-                  <span class="photo"><img alt="avatar" src="img/ui-danro.jpg"></span>
-                  <span class="subject">
-                  <span class="from">Dan Rogers</span>
-                  <span class="time">2 hrs.</span>
-                  </span>
-                  <span class="message">
-                  Love your new Dashboard.
-                  </span>
-                  </a>
-              </li>
-              <li>
-                <a href="index.html#">
-                  <span class="photo"><img alt="avatar" src="img/ui-sherman.jpg"></span>
-                  <span class="subject">
-                  <span class="from">Dj Sherman</span>
-                  <span class="time">4 hrs.</span>
-                  </span>
-                  <span class="message">
-                  Please, answer asap.
-                  </span>
-                  </a>
-              </li>
-              <li>
-                <a href="index.html#">See all messages</a>
-              </li>
+              {% for no_read_message in no_read_message_list %}
+                <li>
+                  <a href="{% url 'dataManagement:messageShow' no_read_message.id %}">
+                    <span class="photo"><i class="fa fa-envelope-o"></i></span>
+                    <span class="subject">
+                    <span class="from">来自{{ no_read_message.from_user }}</span>
+                    <span class="time">{{ no_read_message.send_time }}</span>
+                    </span>
+                    <span class="message">
+                      {{ no_read_message.text | truncatechars:17 }}...
+                    </span>
+                    </a>
+                </li>
+              {% empty %}
+                暂无消息
+              {% endfor %}
             </ul>
           </li>
           <!-- inbox dropdown end -->
-          <!-- notification dropdown start-->
-          <li id="header_notification_bar" class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
-              <i class="fa fa-bell-o"></i>
-              <span class="badge bg-warning">7</span>
-              </a>
-            <ul class="dropdown-menu extended notification">
-              <div class="notify-arrow notify-arrow-yellow"></div>
-              <li>
-                <p class="yellow">You have 7 new notifications</p>
-              </li>
-              <li>
-                <a href="index.html#">
-                  <span class="label label-danger"><i class="fa fa-bolt"></i></span>
-                  Server Overloaded.
-                  <span class="small italic">4 mins.</span>
-                  </a>
-              </li>
-              <li>
-                <a href="index.html#">
-                  <span class="label label-warning"><i class="fa fa-bell"></i></span>
-                  Memory #2 Not Responding.
-                  <span class="small italic">30 mins.</span>
-                  </a>
-              </li>
-              <li>
-                <a href="index.html#">
-                  <span class="label label-danger"><i class="fa fa-bolt"></i></span>
-                  Disk Space Reached 85%.
-                  <span class="small italic">2 hrs.</span>
-                  </a>
-              </li>
-              <li>
-                <a href="index.html#">
-                  <span class="label label-success"><i class="fa fa-plus"></i></span>
-                  New User Registered.
-                  <span class="small italic">3 hrs.</span>
-                  </a>
-              </li>
-              <li>
-                <a href="index.html#">See all notifications</a>
-              </li>
-            </ul>
-          </li>
-          <!-- notification dropdown end -->
         </ul>
         <!--  notification end -->
       </div>
@@ -262,8 +113,6 @@
             <ul class="sub">
               <li><a href="{% url 'dataManagement:myinfo' %}">我的信息</a></li>
               <li><a href="{% url 'dataManagement:setPassword' %}">修改密码</a></li>
-              <li><a href="requestLog.html">Panels</a></li>
-              <li><a href="font_awesome.html">Font Awesome</a></li>
             </ul>
           </li>
           <li class="sub-menu">
@@ -274,85 +123,13 @@
             <ul class="sub">
               <li><a href="{% url 'dataManagement:meetingList' %}">我的学生</a></li>
               <li class="active"><a href="{% url 'dataManagement:juryGradeMeetingList' %}">我是评委</a></li>
-              <li><a href="todo_list.html">Todo List</a></li>
-              <li><a href="dropzone.html">Dropzone File Upload</a></li>
-              <li><a href="inline_editor.html">Inline Editor</a></li>
-              <li><a href="file_upload.html">Multiple File Upload</a></li>
-            </ul>
-          </li>
-          <li class="sub-menu">
-            <a href="javascript:;">
-              <i class="fa fa-book"></i>
-              <span>问题反馈</span>
-              </a>
-            <ul class="sub">
-              <li><a href="blank.html">Blank Page</a></li>
-              <li><a href="login.html">Login</a></li>
-              <li><a href="lock_screen.html">Lock Screen</a></li>
-              <li><a href="profile.html">Profile</a></li>
-              <li><a href="invoice.html">Invoice</a></li>
-              <li><a href="pricing_table.html">Pricing Table</a></li>
-              <li><a href="faq.html">FAQ</a></li>
-              <li><a href="404.html">404 Error</a></li>
-              <li><a href="500.html">500 Error</a></li>
-            </ul>
-          </li>
-          <li class="sub-menu">
-            <a href="javascript:;">
-              <i class="fa fa-tasks"></i>
-              <span>Forms</span>
-              </a>
-            <ul class="sub">
-              <li><a href="form_component.html">Form Components</a></li>
-              <li><a href="advanced_form_components.html">Advanced Components</a></li>
-              <li><a href="form_validation.html">Form Validation</a></li>
-              <li><a href="contactform.html">Contact Form</a></li>
-            </ul>
-          </li>
-          <li class="sub-menu">
-            <a href="javascript:;">
-              <i class="fa fa-th"></i>
-              <span>Data Tables</span>
-              </a>
-            <ul class="sub">
-              <li><a href="basic_table.html">Basic Table</a></li>
-              <li><a href="responsive_table.html">Responsive Table</a></li>
-              <li><a href="advanced_table.html">Advanced Table</a></li>
             </ul>
           </li>
           <li>
-            <a href="inbox.html">
+            <a href="{% url 'dataManagement:messageIndex' %}?num=1&&choice=1">
               <i class="fa fa-envelope"></i>
-              <span>Mail </span>
-              <span class="label label-theme pull-right mail-info">2</span>
-              </a>
-          </li>
-          <li class="sub-menu">
-            <a href="javascript:;">
-              <i class=" fa fa-bar-chart-o"></i>
-              <span>Charts</span>
-              </a>
-            <ul class="sub">
-              <li><a href="morris.html">Morris</a></li>
-              <li><a href="chartjs.html">Chartjs</a></li>
-              <li><a href="flot_chart.html">Flot Charts</a></li>
-              <li><a href="xchart.html">xChart</a></li>
-            </ul>
-          </li>
-          <li class="sub-menu">
-            <a href="javascript:;">
-              <i class="fa fa-comments-o"></i>
-              <span>Chat Room</span>
-              </a>
-            <ul class="sub">
-              <li><a href="lobby.html">Lobby</a></li>
-              <li><a href="chat_room.html"> Chat Room</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="google_maps.html">
-              <i class="fa fa-map-marker"></i>
-              <span>Google Maps </span>
+              <span>消息 </span>
+              <span class="label label-theme pull-right mail-info">{{ no_read_message_count }}</span>
               </a>
           </li>
         </ul>
@@ -367,7 +144,7 @@
 <!--    -->
     <section id="main-content">
       <section class="wrapper site-min-height">
-        <h3><i class="fa fa-angle-right"></i> <a href="{% url 'dataManagement:meetingForMyStudent' %}?meeting_id={{ meeting_obj.id }}"> {{ meeting_obj.title }}</a> :&nbsp;&nbsp; {{ student_obj }}</span></span></h3>
+        <h3><i class="fa fa-angle-right"></i> <a href="{% url 'dataManagement:juryMeetingStudentList' %}?meeting_id={{ meeting_obj.id }}"> {{ meeting_obj.title }}</a> :&nbsp;&nbsp; {{ student_obj }}</span></span></h3>
         <!-- /row -->
         <input type="text" class="applicatinFormId" value="{{ application_form_student.id }}" hidden>
         <input type="text" class="meeting_id" value="{{ meeting_obj.id }}" hidden>
@@ -375,7 +152,6 @@
           <div style="text-align: center; margin-top: 20%">
             <h1>{{this_status}}</h1>
           </div>
-
         {% else %}
         <div class="row content-panel">
           <div class="col-sm-9 mt mb"  style="height:800px;overflow-y:auto">
@@ -685,22 +461,22 @@
           <div class="fuTable col-sm-3" style="height:840px;overflow-y:auto; border: 1px solid grey">
                 <form>
                    <h3>赋分表:</h3>
-                    {% for fuItem in fuItem_list %}
-                      {% if fuItem.show %}
+                    {% for fuItem_grade in fuItem_grade_all %}
+                      {% if fuItem_grade.0.show %}
                         <div class="form-group" style="border-top: 1px dashed grey; margin-top: 10px;">
-                        <label style="width: 100%; margin-top: 10px;"><span style="font-size: 20px; color: #00c5de">{{ fuItem.title }} <span style="float: right; margin-right: 10px;">满分: {{ fuItem.grade }}</span></span> </label>
-                        <input type="number" min="0" class="form-control" placeholder="打分" onmousewheel="return false;">
+                        <label style="width: 100%; margin-top: 10px;"><span style="font-size: 20px; color: #00c5de">{{ fuItem_grade.0.title }} <span style="float: right; margin-right: 10px;">满分: {{ fuItem_grade.0.grade }}</span></span> </label>
+                        <input type="number" min="0" class="form-control" placeholder="打分" title="{{ fuItem_grade.0.title }}" value="{{ fuItem_grade.1.grade }}" onmousewheel="return false;">
                           <!--                          标准-->
                           <br>
                           <span style="font-size: 17px;">评分标准:</span>
                           <br>
-                                <span style="font-size: 15px; margin-left: 2em">{{ fuItem.scoring }}</span>
+                                <span style="font-size: 15px; margin-left: 2em">{{ fuItem_grade.0.scoring }}</span>
 <!--                          说明-->
                           <br>
                           <br>
                           <span style="font-size: 17px;">说明:</span>
                           <br>
-                                <span style="font-size: 15px;margin-left: 2em">{{ fuItem.state }}</span>
+                                <span style="font-size: 15px;margin-left: 2em">{{ fuItem_grade.0.state }}</span>
 
                       </div>
                       {% endif %}
@@ -722,7 +498,7 @@
     <!-- /MAIN CONTENT -->
     <!--main content end-->
   </section>
-
+  <span class="status">{{ submit }} </span>
 <!--  模态框 -->
   <div class="zhezhao"></div>
   ﻿<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="overflow-y:scroll" aria-hidden="true">
@@ -783,7 +559,7 @@
             var meeting_id = $(".meeting_id").val();
             var grade_arry = [];
             $(":input[type=number]").each(function () {
-              grade_arry.push($(this).val());
+              grade_arry.push([$(this).val(),$(this).attr("title")]);
             })
             //    提交
             $.post(
@@ -802,6 +578,14 @@
                   return false;
           });
    });
+    $(document).ready(function () {
+        var status = $(".status").text();
+        if($.trim(status) == "已提交"){
+
+          $(":input").attr("disabled","disabled");
+          $(".submit").hide();
+        }
+    })
   </script>
 </body>
 

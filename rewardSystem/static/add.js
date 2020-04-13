@@ -50,4 +50,8 @@ $(".add-student").click(function () {
     }
 })
 
-// 修改保存
+// 发送信息
+$(".search-field").click(function () {
+    var content = $(this).text();
+    $(".to_user").val(content);
+})

@@ -226,7 +226,7 @@ class Meeting(models.Model):
         ('已开始', '已开始'),
         ('已结束', '已结束')
     ]
-    referTeacher = models.ManyToManyField(Teacher, verbose_name="已提交评委", related_name="submit_teacher")
+    referTeacher = models.ManyToManyField(Teacher, verbose_name="已提交评委", related_name="submit_teacher", blank=True)
     gradeStatus = models.CharField(verbose_name="评分状态", max_length=10, choices=STATUS_CHOICE, default='未开始')
 
     class Meta:
@@ -309,7 +309,7 @@ class ApplicationGrade(models.Model):
     teacher = models.ForeignKey(Teacher, verbose_name="评委老师", on_delete=models.DO_NOTHING, related_name="jury_for_application_grade")
     applicationForm = models.ForeignKey(ApplicationForm, verbose_name="申请表", on_delete=models.CASCADE, related_name="applicationForm_grade")
     meeting = models.ForeignKey(Meeting, verbose_name="会议", on_delete=models.CASCADE, related_name="meeting_for_application_grade")
-    # title = models.CharField(verbose_name="赋分项", max_length=100)
+    title = models.CharField(verbose_name="赋分项", max_length=100)
     grade = models.SmallIntegerField(verbose_name="分数")
     chief_umpire = models.BooleanField(verbose_name="主审", default=False)
 
@@ -377,15 +377,51 @@ class OtherStudentGrade(models.Model):
 
 
 class Message(models.Model):
-    form_user = models.ForeignKey(MyUser, verbose_name="发送者", on_delete=models.CASCADE, related_name="send_message")
-    to_user = models.ForeignKey(MyUser, verbose_name="接收这", on_delete=models.CASCADE, related_name="have_message")
-    text = models.CharField(verbose_name="信息内容", max_length=200)
-    status = models.BooleanField(verbose_name="状态", default=False)
+    from_user = models.ForeignKey(MyUser, verbose_name="发送者", on_delete=models.CASCADE, related_name="send_message")
+    to_user = models.ForeignKey(MyUser, verbose_name="接收者", on_delete=models.CASCADE, related_name="have_message")
+    text = models.TextField(verbose_name="信息内容", max_length=200)
+    status = models.BooleanField(verbose_name="已读", default=False)
     send_time = models.DateTimeField(verbose_name="发送时间", auto_now_add=True)
 
     class Meta:
         verbose_name = "消息"
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return "%s给%s"%(self.from_user, self.to_user)
+
+
+# 通知消息
+class Notice(models.Model):
+    title = models.CharField(verbose_name="标题", max_length=50)
+    add_time = models.DateTimeField(verbose_name="发布时间", auto_now_add=True)
+    content = models.TextField(verbose_name="内容", max_length=500, blank=True, null=True)
+    MESSAGE_TYPE = [
+        ("公告通知", "公告通知"),
+        ("评审通知", "评审通知"),
+        ("结果通知", "结果通知"),
+    ]
+    message_type = models.CharField(verbose_name="公告类型", max_length=4, choices=MESSAGE_TYPE)
+    show = models.BooleanField(verbose_name="是否展示")
+
+    class Meta:
+        verbose_name = "通知"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return "%s"%self.title
+
+
+class NoticeFile(models.Model):
+    notice = models.ForeignKey(Notice, on_delete=models.CASCADE, related_name="notice_files")
+    file = models.FileField(verbose_name="文件", upload_to="notice", blank=True, null=True)
+
+    class Meta:
+        verbose_name = "公告文件"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return str(self.file).split("/")[1]
 
 
 # 删除数据同时删除文件

@@ -9,3 +9,7 @@
 9. MeetingForMyStudent 会议当前老师的学生列表
 10. MeetingForMyStudentCheck 老师对摸个学生的审核和评分
 11. juryMark 评委打分
+12 notice_list.html 通知列表
+13 noticeShow 信息内容展示
+14 inbox 消息
+15 edit_message 写消息

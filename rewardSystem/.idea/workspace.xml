@@ -2,32 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="808e35bf-c4a6-4972-becb-7259c915367b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/edit_message.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/inbox.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/mail_view.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/noticeShow.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/notice_list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/MyUser/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/MyUser/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/adminx.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/adminx.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/JuryGradeMeetingList.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/JuryGradeMeetingList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingForMyStudentCheck.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingForMyStudentCheck.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingList.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MyInfo.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MyInfo.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/applicationFormShow.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/applicationFormShow.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMark.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMark.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMeetingStudentList.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMeetingStudentList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/meetingForMyStudent.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/meetingForMyStudent.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/requestLog.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/requestLog.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/setPassword.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/setPassword.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/test.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/inbox.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/inbox.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/add.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/add.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -242,7 +221,7 @@
       <workItem from="1586057733897" duration="10816000" />
       <workItem from="1586429658376" duration="23068000" />
       <workItem from="1586570961073" duration="19181000" />
-      <workItem from="1586656957666" duration="32584000" />
+      <workItem from="1586656957666" duration="33590000" />
     </task>
     <servers />
   </component>
@@ -270,22 +249,22 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="681" y="290" width="424" height="492" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1582788241493" />
-    <state width="1864" height="239" key="GridCell.Tab.0.bottom" timestamp="1586755401411">
+    <state width="1864" height="239" key="GridCell.Tab.0.bottom" timestamp="1586768706840">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="239" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1586755401411" />
-    <state width="1864" height="239" key="GridCell.Tab.0.center" timestamp="1586755401411">
+    <state width="1864" height="239" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1586768706840" />
+    <state width="1864" height="239" key="GridCell.Tab.0.center" timestamp="1586768706838">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="239" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1586755401411" />
-    <state width="1864" height="239" key="GridCell.Tab.0.left" timestamp="1586755401411">
+    <state width="1864" height="239" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1586768706838" />
+    <state width="1864" height="239" key="GridCell.Tab.0.left" timestamp="1586768706837">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="239" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1586755401411" />
-    <state width="1864" height="239" key="GridCell.Tab.0.right" timestamp="1586755401411">
+    <state width="1864" height="239" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1586768706837" />
+    <state width="1864" height="239" key="GridCell.Tab.0.right" timestamp="1586768706839">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="239" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1586755401411" />
+    <state width="1864" height="239" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1586768706839" />
     <state width="1864" height="334" key="GridCell.Tab.1.bottom" timestamp="1582944931113">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
@@ -332,12 +311,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html</url>
-          <line>430</line>
+          <line>205</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html</url>
-          <line>605</line>
+          <line>380</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>

@@ -265,6 +265,8 @@ class RequestLogShow(View):
             }
             if datetime.datetime.now() > meeting_obj.endTime:
                 context["timeStatus"] = "已结束"
+            if meeting_obj.gradeStatus != "未开始":
+                context["timeStatus"] = "已结束"
         return render(request, template_name="dataManagement/applicationFormShow.html", context=context)
 
     # 用来提交
@@ -544,7 +546,10 @@ class PeerAssessment(View):
                         "this_status": "暂无可评学生请稍后评分!",
                         "meeting_obj": meeting_obj
                     }
-
+            if datetime.datetime.now() > meeting_obj.endTime:
+                context["timeStatus"] = "已结束"
+            if meeting_obj.gradeStatus != "未开始":
+                context["timeStatus"] = "已结束"
         return render(request, template_name="dataManagement/peerAssessment.html", context=context)
 
     def post(self, request):

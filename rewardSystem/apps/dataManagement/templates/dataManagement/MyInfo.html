@@ -116,6 +116,10 @@
             {% elif request.user.identity == "老师"  %}
               <ul class="sub">
                 <li><a href="{% url 'dataManagement:meetingList' %}">我的学生</a></li>
+<!--                <li><a href="{% url 'dataManagement:juryGradeMeetingList' %}">我是评委</a></li>-->
+              </ul>
+            {% elif request.user.identity == "评委"  %}
+              <ul class="sub">
                 <li><a href="{% url 'dataManagement:juryGradeMeetingList' %}">我是评委</a></li>
               </ul>
             {% endif %}

@@ -1,6 +1,7 @@
 from django.urls import path
 from xadminData.views import MeetingDeleteStudent, MeetingAddStudentList, MeetingAddStudent, MeetingImportAddStudent,\
-    MeetingImportDeleteStudent, MeetingImportChangeStudent, MeetingImportChangeStudentSave, AllotJurySave, MeetingToAddAllStudent
+    MeetingImportDeleteStudent, MeetingImportChangeStudent, MeetingImportChangeStudentSave, AllotJurySave, MeetingToAddAllStudent,\
+    MeetingJuryAllotAccount, ExportAccount
 
 app_name = "xadminData"
 urlpatterns = [
@@ -16,6 +17,10 @@ urlpatterns = [
     path("meetingImportChangeStudent/", MeetingImportChangeStudent.as_view(), name="meetingImportChangeStudent"),
     path("meetingImportChangeSave/", MeetingImportChangeStudentSave.as_view(), name="meetingImportChangeSave"),
     path("allotJurySave/", AllotJurySave.as_view(), name="allotJurySave"),
+    # 评委分配账户
+    path("allotAccount/", MeetingJuryAllotAccount.as_view(), name="allotAccount"),
+    # 导出评委账户
+    path("exportAccount/", ExportAccount.as_view(), name="ExportAccount"),
 
 
 ]

@@ -4,8 +4,10 @@ from django.http import JsonResponse
 from django.views import View
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
-import json
-from dataManagement.models import Student, Meeting, Qualification, ApplicationForm, Teacher
+import json, random, xlwt
+from io import BytesIO
+from dataManagement.models import Student, Meeting, Qualification, ApplicationForm, Jury
+from MyUser.models import MyUser
 
 
 # Create your views here.
@@ -24,6 +26,7 @@ class MeetingDeleteStudent(View):
         except ObjectDoesNotExist:
             return JsonResponse({"status": "失败"})
         return JsonResponse({"status": "成功"})
+
 
 # 添加单个学生
 class MeetingAddStudentList(View):
@@ -55,7 +58,6 @@ class MeetingAddStudent(View):
         print("hello")
         meeting_id = request.POST.get("meeting_id")
         student_id_list = json.loads(request.POST.get('student_id'))
-        print(meeting_id, student_id_list)
         meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
 
         try:
@@ -89,7 +91,6 @@ class MeetingImportAddStudent(View):
             if stu_obj_list:
                 return JsonResponse({"status": "该学生已存在"})
             else:
-                print("hello")
                 Qualification.objects.create(meeting=meeting_obj, sname=sname, sno=sno, text=text)
                 return JsonResponse({"status": "成功"})
         except Exception:
@@ -99,7 +100,6 @@ class MeetingImportAddStudent(View):
 class MeetingImportDeleteStudent(View):
 
     def post(self, request):
-        print(request.POST)
         meeting_id = request.POST.get("meeting_id")
         student_id_list = request.POST.get("checkedArr")
         try:
@@ -154,7 +154,7 @@ class AllotJurySave(View):
                 applicationform_id = applicationform_jury.split(":")[0]
                 jury_id = applicationform_jury.split(":")[1]
                 applicationform_obj = get_object_or_404(ApplicationForm, pk=applicationform_id)
-                jury_obj = get_object_or_404(Teacher, pk=jury_id)
+                jury_obj = get_object_or_404(Jury, pk=jury_id)
                 applicationform_obj.jury = jury_obj
                 applicationform_obj.save()
         except Exception:
@@ -175,3 +175,89 @@ class MeetingToAddAllStudent(View):
         students = Student.objects.filter(startDate__gte="%s-8-1"%year)
         meeting_obj.student.set(students)
         return JsonResponse({"status": "成功"})
+
+
+# 评委分配账户
+class MeetingJuryAllotAccount(View):
+    def post(self, request):
+        juryIdList = request.POST.get("juryId")
+        for juryId in json.loads(juryIdList):
+            jury_obj = get_object_or_404(Jury, pk=juryId)
+            # 没有创建用户
+            if not jury_obj.user_id:
+                # 随机用户名
+                tag = True
+                while tag:
+                    username = ""
+                    for i in range(0, 9):
+                        if i == 0:
+                            username += str(random.randint(1, 10))
+                        else:
+                            username += str(random.randint(0, 10))
+                    this_user = MyUser.objects.filter(username=username.strip())
+                    if not this_user:
+                        tag = False
+                # # 随机密码
+                password = ""
+                for i in range(0, 6):
+                    num = random.randint(0, 9)
+                    alf = chr(random.randint(97, 122))
+                    s = str(random.choice([num, alf]))
+                    password += s
+                    # 创建用户
+                user_obj = MyUser.objects.create_user(username=username.strip(), password=password.strip(), name=jury_obj.jname, identity="评委")
+                jury_obj.jno = username
+                jury_obj.password = password
+                jury_obj.user_id = user_obj.id
+                jury_obj.save()
+
+        return JsonResponse({"status": "成功"})
+
+
+# 导出账户
+class ExportAccount(View):
+    def get(self, requets):
+        meeting_id = requets.GET.get("meeting_id")
+        # 创建工作表
+        response = HttpResponse(content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = response['Content-Disposition'] = 'attachment;filename="%s".xls' % "评委用户".encode('utf-8').decode(
+            'ISO-8859-1')
+        wb = xlwt.Workbook(encoding='utf-8')
+        worksheet = wb.add_sheet('sheet1')
+        # 写入表头
+        worksheet.write(0, 0, "姓名")
+        worksheet.write(0, 1, "用户名")
+        worksheet.write(0, 2, "密码")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        meeting_jury_list = meeting_obj.jury.all()
+        execel_row = 1
+        # 写表头
+        for jury in meeting_jury_list:
+            worksheet.write(execel_row, 0, jury.jname)
+            worksheet.write(execel_row, 1, jury.jno)
+            worksheet.write(execel_row, 2, jury.password)
+            execel_row += 1
+        # 设置HTTPResponse的类型
+        """导出excel表"""
+        output = BytesIO()
+        wb.save(output)
+        # 重新定位到开始
+        output.seek(0)
+        response.write(output.getvalue())
+        return response
+
+        # for juryId in json.loads(juryIdList):
+        #     jury_obj = Jury.objects.get(pk=juryId)
+        #     sheet1.write(execel_row, 0, jury_obj.jname)
+        #     sheet1.write(execel_row, 1, jury_obj.jno)
+        #     sheet1.write(execel_row, 2, jury_obj.password)
+        #     execel_row += 1
+        # sio = BytesIO()
+        # wbk.save(sio)
+        # sio.seek(0)
+        # response = HttpResponse(sio.getvalue())
+        # response['Content_Type'] = 'application/octet-stream'
+        # response['Content-Disposition'] = 'attachment;filename="%s"' % "评委用户".encode('utf-8').decode(
+        #     'ISO-8859-1')
+        # response.write(sio.getvalue())
+        # return response

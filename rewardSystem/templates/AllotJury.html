@@ -18,6 +18,8 @@
             <li><a href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}">不符合资格学生</a></li>
     {#          //href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}"#}
             <li><a href="javascript:;">导入学生成绩</a></li>
+
+            <li><a href="{% url 'xadmin:juryList' %}?meeting_id={{ meeting_id }}">评委列表</a></li>
             <li class="active"><a href="javascript:;">分配评委</a></li>
             <li><a href="javascript:;">会议统计</a></li>
           </ul>
@@ -69,7 +71,7 @@
                 <td>
                     {% for jury in jury_list %}
                             <label>
-                                 <input type="radio" {% if meeting_status == "已结束" %} disabled {% endif %}name="{{ applicationform_jury.0.id }}" id="optionsRadios1" value="{{ applicationform_jury.0.id }}:{{ jury.id }}" {% if applicationform_jury.1.tno == jury.tno %} checked {% endif %}>
+                                 <input type="radio" {% if meeting_status == "已结束" %} disabled {% endif %}name="{{ applicationform_jury.0.id }}" id="optionsRadios1" value="{{ applicationform_jury.0.id }}:{{ jury.id }}" {% if applicationform_jury.1.jno == jury.jno %} checked {% endif %}>
                                     {{ jury }}
                             </label>
                     {% empty %}

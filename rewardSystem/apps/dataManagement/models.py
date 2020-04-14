@@ -27,7 +27,7 @@ class Student(models.Model):
         ("推免", "推免")
     ]
     admissionstatus = models.CharField(verbose_name="入学身份", max_length=20, default='自考')
-    status = models.BooleanField(verbose_name="申请资格", default=True)
+    # status = models.BooleanField(verbose_name="申请资格", default=True)
 
     class Meta:
         verbose_name = "学生"
@@ -53,6 +53,28 @@ class Teacher(models.Model):
 
     def __str__(self):
         return "%s"%self.tname
+
+
+# 评委
+class Jury(models.Model):
+    meeting = models.ForeignKey('Meeting', verbose_name="会议", on_delete=models.CASCADE, related_name="meeting_jury")
+    jno = models.CharField(max_length=20, verbose_name="用户名")
+    jname = models.CharField(max_length=20, verbose_name="姓名")
+    password = models.CharField(max_length=20, verbose_name="密码")
+    user_id = models.IntegerField(verbose_name="用户id", blank=True, null=True)
+    # chief_umpire_status = models.BooleanField(verbose_name="主审是否提交", default=False)
+    CHOICE = [
+        ("未提交", "未提交"),
+        ("已提交", "已提交")
+    ]
+    all_status = models.CharField(verbose_name="全部是否提交", max_length=3, choices=CHOICE, default="未提交")
+
+    class Meta:
+        verbose_name = "评委"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return "%s"%self.jname
 
 
 # 赋分表
@@ -122,14 +144,14 @@ class ApplicationForm(models.Model):
     tootherstatus = models.BooleanField(verbose_name="是否评分", default=False)
     judgesGrade = models.SmallIntegerField(verbose_name="评委赋分", null=True, blank=True)
     upload_time = models.DateTimeField(verbose_name="提交时间", auto_now_add=True)
-    evaluate = models.TextField(verbose_name="说明", max_length=200)
+    # evaluate = models.TextField(verbose_name="说明", max_length=200)
     # 等级
     grant = models.ForeignKey('GrantLevel', verbose_name="等级", on_delete=models.CASCADE, null=True)
     # 导师审核
     # activity = models.BooleanField(verbose_name="是否通过审核", default=False)
 
     activity = models.BooleanField(verbose_name="导师审核状态", default=False)
-    jury = models.ForeignKey(Teacher, verbose_name="主审评委", on_delete=models.DO_NOTHING, null=True, blank=True)
+    jury = models.ForeignKey(Jury, verbose_name="主审评委", on_delete=models.DO_NOTHING, null=True, blank=True)
     # 会议
     meeting = models.ForeignKey('Meeting', verbose_name="所属会议", on_delete=models.CASCADE, related_name="meeting_for_applicationform")
     # 赋分表
@@ -219,14 +241,14 @@ class SocialWork(models.Model):
 class Meeting(models.Model):
     title = models.CharField(verbose_name="申请会议名称", max_length=20, unique=True)
     student = models.ManyToManyField(Student, verbose_name="参与学生", blank=True, related_name="meeting_student")
-    jury = models.ManyToManyField(Teacher, verbose_name="评委老师", blank=True)
+    # jury = models.ManyToManyField(Jury, verbose_name="评委老师", blank=True)
     endTime = models.DateTimeField(verbose_name="申请结束时间")
     STATUS_CHOICE = [
         ('未开始', '未开始'),
         ('已开始', '已开始'),
         ('已结束', '已结束')
     ]
-    referTeacher = models.ManyToManyField(Teacher, verbose_name="已提交评委", related_name="submit_teacher", blank=True)
+    # referTeacher = models.ManyToManyField(Jury, verbose_name="已提交评委", related_name="submit_teacher", blank=True)
     gradeStatus = models.CharField(verbose_name="评分状态", max_length=10, choices=STATUS_CHOICE, default='未开始')
 
     class Meta:
@@ -306,7 +328,7 @@ class StudentGrade(models.Model):
 
 # 申请成绩表
 class ApplicationGrade(models.Model):
-    teacher = models.ForeignKey(Teacher, verbose_name="评委老师", on_delete=models.DO_NOTHING, related_name="jury_for_application_grade")
+    teacher = models.ForeignKey(Jury, verbose_name="评委老师", on_delete=models.DO_NOTHING, related_name="jury_for_application_grade")
     applicationForm = models.ForeignKey(ApplicationForm, verbose_name="申请表", on_delete=models.CASCADE, related_name="applicationForm_grade")
     meeting = models.ForeignKey(Meeting, verbose_name="会议", on_delete=models.CASCADE, related_name="meeting_for_application_grade")
     title = models.CharField(verbose_name="赋分项", max_length=100)
@@ -318,7 +340,7 @@ class ApplicationGrade(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return "学生:%s, 评委:%s"%(self.applicationForm.sname, self.teacher.tname)
+        return "学生:%s, 评委:%s"%(self.applicationForm.sname, self.teacher.jname)
 
 
 # class Grade(models.Model):

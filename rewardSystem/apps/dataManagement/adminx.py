@@ -5,12 +5,13 @@ from django.http import HttpResponse
 from django.db.models import Q
 from .models import Student, Teacher, ApplicationForm, Meeting, FuTable, AssignItem, GrantLevel, AcademicActivity, Publications,\
                     ParticipateItems, ResearchProjects, InnovationProjects, SocialWork, Qualification, Message, ApplicationGrade,\
-                    Notice, NoticeFile
+                    Notice, NoticeFile, Jury
+
 
 # 学生
 class StudentAdmin:
-    list_display = ['sno', 'sname', 'sex', 'startDate', 'tutor', 'registerStatus', 'status']
-    list_filter = ['startDate', 'tutor', 'registerStatus', 'status', 'sex', 'admissionstatus']
+    list_display = ['sno', 'sname', 'sex', 'startDate', 'tutor', 'registerStatus']
+    list_filter = ['startDate', 'tutor', 'registerStatus', 'sex', 'admissionstatus']
     search_fields = ['sno', 'sname']
     import_excel = True
     download_excel_templates = True
@@ -79,6 +80,20 @@ class TeacherAdmin:
 xadmin.site.register(Teacher, TeacherAdmin)
 
 
+# 评委
+class JuryAdmin:
+    model = Jury
+    extra = 1
+    style = 'table'
+    list_display = ["jno", "jname", "password"]
+    list_filter = ["meeting__title"]
+    readonly_fields = ['jno', 'password', 'user_id']
+    fields = ("jno", "jname", "password")
+
+
+xadmin.site.register(Jury, JuryAdmin)
+
+
 # 会议
 class MeetingAdmin:
     list_display = ['title', 'endTime', 'gradeStatus']
@@ -86,8 +101,10 @@ class MeetingAdmin:
     search_fields = ['title']
     list_editable = ["endTime", "gradeStatus"]
     # fields = ('title', 'student' ,'jury', 'endTime', 'gradeStatus')
-    fields = ('title', 'jury',  "referTeacher", 'endTime', 'gradeStatus')
+    fields = ('title', 'endTime', 'gradeStatus')
     # readonly_fields = ['referTeacher']
+    inlines = [JuryAdmin]
+
 
 
 xadmin.site.register(Meeting, MeetingAdmin)
@@ -202,7 +219,7 @@ xadmin.site.register(Message, MessageAdmin)
 # 申请表成绩
 class GradeAdmin:
     list_display = ["applicationForm", "teacher", "meeting", "title", "grade", "chief_umpire"]
-    list_filter = ["teacher__tname", "meeting__title", "applicationForm__sname"]
+    list_filter = ["teacher__jname", "meeting__title", "applicationForm__sname"]
 
 
 xadmin.site.register(ApplicationGrade, GradeAdmin)
@@ -223,3 +240,5 @@ class NoticeAdmin:
 
 
 xadmin.site.register(Notice, NoticeAdmin)
+
+

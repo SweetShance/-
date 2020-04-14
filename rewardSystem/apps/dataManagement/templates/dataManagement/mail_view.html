@@ -113,22 +113,15 @@
             {% if request.user.identity == "学生" %}
               <ul class="sub">
                 <li><a href="{% url 'dataManagement:requestLog' %}">申请记录</a></li>
-                <li><a href="calendar.html">提交申请</a></li>
-                <li><a href="gallery.html">学生互评</a></li>
-                <li><a href="todo_list.html">Todo List</a></li>
-                <li><a href="dropzone.html">Dropzone File Upload</a></li>
-                <li><a href="inline_editor.html">Inline Editor</a></li>
-                <li><a href="file_upload.html">Multiple File Upload</a></li>
               </ul>
             {% elif request.user.identity == "老师"  %}
               <ul class="sub">
                 <li><a href="{% url 'dataManagement:meetingList' %}">我的学生</a></li>
+<!--                <li><a href="{% url 'dataManagement:juryGradeMeetingList' %}">我是评委</a></li>-->
+              </ul>
+            {% elif request.user.identity == "评委"  %}
+              <ul class="sub">
                 <li><a href="{% url 'dataManagement:juryGradeMeetingList' %}">我是评委</a></li>
-                <li><a href="gallery.html">学生互评</a></li>
-                <li><a href="todo_list.html">Todo List</a></li>
-                <li><a href="dropzone.html">Dropzone File Upload</a></li>
-                <li><a href="inline_editor.html">Inline Editor</a></li>
-                <li><a href="file_upload.html">Multiple File Upload</a></li>
               </ul>
             {% endif %}
           </li>

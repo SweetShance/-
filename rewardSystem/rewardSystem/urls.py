@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.conf.urls.static import static   # 新加入
 from django.conf import settings             # 新加入
 import xadmin
-from .adminViews import MeetingManage, ImportStudent, Download_student_xls, AssignTables, MeetingSetting, AllotJury
+from .adminViews import MeetingManage, ImportStudent, Download_student_xls, AssignTables, MeetingSetting, AllotJury, JuryList
 from .views import MeetingStudent
 
 urlpatterns = [
@@ -30,6 +30,8 @@ urlpatterns = [
     path('xadmin/downloadStudentXls/', Download_student_xls.as_view()),
     path('meetingStudents/', MeetingStudent.as_view(), name="meetingStudents"),
     path('xadminData/', include("xadminData.urls")),
+    # 评委列表
+    path('xadmin/juryList/', JuryList.as_view(), name="juryList"),
     # 分配评委
     path("xadmin/allotJury/", AllotJury.as_view(), name="allotJury"),
     # 登录注册以及用户信息

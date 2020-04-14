@@ -30,6 +30,9 @@ a:hover{
     margin-top: 50px;
     margin-bottom: 10px;
 }
+.table-bordered a{
+    text-decoration: none !important;
+}
 /*.top{*/
 /*    border-bottom: 1px solid #8DB6CD;*/
 /*}*/

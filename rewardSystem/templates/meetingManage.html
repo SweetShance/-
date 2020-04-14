@@ -57,9 +57,9 @@
                     <span  style="color: {% if meeting.gradeStatus == '未开始' %}#4F94CD {% elif meeting.gradeStatus == '已开始' %} #2E8B57{% else %}#CD3700 {% endif %}" >{{ meeting.gradeStatus }}</span>
                 </td>
                 <td>
-                    <a href="{% url 'xadmin:importStudent' %}?id={{ meeting.id }}" title="导入不符合资格学生" class="import-student"><img style="width: 20px;" src="{% static 'image/导入.png' %}" alt=""></a>
-                    <a href="" title="导入学生成绩" class="import-student">&ensp;&ensp;<img style="width: 20px;" src="{% static 'image/导入 (1).png' %}" alt=""></a>
-                    <a href="{% url 'xadmin:meetingSetting' %}?id={{ meeting.id }}" title="会议统计" class="import-student">&ensp;&ensp;<img style="width: 20px;" src="{% static 'image/设置.png' %}" alt=""></a>
+{#                    <a href="{% url 'xadmin:importStudent' %}?id={{ meeting.id }}" title="导入不符合资格学生" class="import-student"><img style="width: 20px;" src="{% static 'image/导入.png' %}" alt=""></a>#}
+{#                    <a href="" title="导入学生成绩" class="import-student">&ensp;&ensp;<img style="width: 20px;" src="{% static 'image/导入 (1).png' %}" alt=""></a>#}
+                    <a href="{% url 'xadmin:meetingSetting' %}?id={{ meeting.id }}" title="会议管理" class="import-student"><img style="width: 20px;" src="{% static 'image/设置.png' %}" alt=""></a>
                 </td>
                 {#    状态 start #}
 

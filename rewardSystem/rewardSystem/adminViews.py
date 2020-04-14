@@ -158,7 +158,6 @@ class AssignTables(CommAdminView):
         studentsno = request.POST.get("studentsno")
         # 姓名
         studentsname = request.POST.get("studentsname")
-        print(futable, meeting_id, studentsname, studentsno)
         if meeting_id and futable:
             meeting = get_object_or_404(Meeting, id=meeting_id)
             if studentsno:
@@ -177,6 +176,23 @@ class AssignTables(CommAdminView):
                     applicationForm_obj.save()
 
         return redirect(form_url)
+
+
+# 会议评委列表
+class JuryList(CommAdminView):
+    def get(self, request):
+        context = super().get_context()
+        title = "分配主评委"
+        context["breadcrumbs"].append({'url': '/cwyadmin/', 'title': title})  # 把面包屑变量添加到context里面
+        context["title"] = title  # 把面包屑变量添加到context里面
+        meeting_id = request.GET.get("meeting_id")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        jury_list = meeting_obj.meeting_jury.all()
+        context["meeting_id"] = meeting_obj.id
+        context["jury_list"] = jury_list
+        context["meeting"] = meeting_obj
+
+        return render(request, template_name="JuryList.html", context=context)
 
 
 # 分配主审评委
@@ -200,7 +216,7 @@ class AllotJury(CommAdminView):
         # 所有赋分表
         applicationform_list = meeting_obj.meeting_for_applicationform.all()
         # 所有评委
-        jury_list = meeting_obj.jury.all()
+        jury_list = meeting_obj.meeting_jury.all()
         # 获取主审
         for applicationform in applicationform_list:
             applicationform_list_jury.append([applicationform, applicationform.jury])
@@ -222,7 +238,7 @@ class AllotJury(CommAdminView):
         print(applicationform_list)
         applicationform_list_jury = []
         # 获取所有评委
-        jury_list = meeting_obj.jury.all()
+        jury_list = meeting_obj.meeting_jury.all()
         for applicationform in applicationform_list:
             applicationform_list_jury.append([applicationform, applicationform.jury])
         context["applicationform_list_jury"] = applicationform_list_jury

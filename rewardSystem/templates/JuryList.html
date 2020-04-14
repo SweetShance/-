@@ -16,11 +16,11 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav nav-tabs nav-justified">
-        <li class="active"><a href="#">参与学生 <span class="sr-only">(current)</span></a></li>
+        <li><a href="{% url 'xadmin:meetingSetting' %}?id={{ meeting_id }}">参与学生 <span class="sr-only">(current)</span></a></li>
         <li><a href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}">不符合资格学生</a></li>
 {#          //href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}"#}
         <li><a href="javascript:;">导入学生成绩</a></li>
-        <li><a href="{% url 'xadmin:juryList' %}?meeting_id={{ meeting_id }}">评委列表</a></li>
+        <li class="active"><a href="{% url 'xadmin:juryList' %}?meeting_id={{ meeting_id }}">评委列表</a></li>
         <li><a href="{% url 'xadmin:allotJury' %}?meeting_id={{ meeting_id }}">分配评委</a></li>
         <li><a href="javascript:;">会议统计</a></li>
       </ul>
@@ -36,28 +36,19 @@
 
             <div style="margin-top: 20px;">
                 <div style="float: left; margin-right: 10px; margin-bottom: 30px; margin-top: 8px; {% if meeting.gradeStatus == "已结束" %} display:none {% endif %}" >
-                    <button class="btn btn-primary btn_setting add-all" data-toggle="modal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 一键添加</button>
+                    <button class="btn btn-primary btn_setting allocated-account" data-toggle="modal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 分配账户</button>
                 </div>
-                <div style="float: left; margin-right: 10px; margin-bottom: 30px; margin-top: 8px; {% if meeting.gradeStatus == "已结束" %} display:none {% endif %}" >
-                    <button class="btn btn-primary btn_setting add" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button>
-                </div>
+{#                <div style="float: left; margin-right: 10px; margin-bottom: 30px; margin-top: 8px; {% if meeting.gradeStatus == "已结束" %} display:none {% endif %}" >#}
+{#                    <button class="btn btn-primary btn_setting add-jury" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button>#}
+{#                </div>#}
+{#                <div class="del" style="float: left; margin-bottom: 30px; margin-top: 8px; {% if meeting.gradeStatus == "已结束" %} display:none {% endif %}">#}
+{#                    <button class="btn btn-primary btn_setting delete-jury"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp; 删除</button>#}
+{#                </div>#}
                 <div class="del" style="float: left; margin-bottom: 30px; margin-top: 8px; {% if meeting.gradeStatus == "已结束" %} display:none {% endif %}">
-                    <button class="btn btn-primary btn_setting delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp; 删除</button>
-                </div>
-                <div style="display: inline-block;">
-                    <form class="navbar-form navbar-left" action="{% url "xadmin:meetingSetting" %}" method="get">
-                        <div class="input-group search-group" style="margin-top: 1px;">
-                        {% if q %}<span class="input-group-btn"><a class="btn btn-default" href="?id={{ meeting_id }}">x</a></span>{% endif %}
-                         <input  type="text" name="id" value="{{ meeting_id }}" hidden>
-
-                         <input id="searchbar1" class="form-control" type="text" name="_q_" value="" placeholder="搜索 姓名或学号">
-                        <span class="input-group-btn"><button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button></span>
-                        </div>
-
-                    </form>
+                    <button class="btn btn-primary btn_setting export-jury"><span class="glyphicon glyphicon-export" aria-hidden="true"></span>&nbsp; 导出表格</button>
                 </div>
                 <div class="count" style="margin-top: 20px;">
-                    <span> 共有学生: <span style="color: #1b9dec; margin-right: 20px;">{{ meeting_students | length }}</span>  </span>
+                    <span> 共有评委: <span style="color: #1b9dec; margin-right: 20px;">{{ jury_list | length }}</span>  </span>
                 </div>
             </div>
 
@@ -69,22 +60,20 @@
         <thead>
             <tr>
               <th style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><input type="checkbox" style="margin-left: 19px;" class="checkboxAll"></th>
-              <th>学生姓名</th>
-              <th>学生学号</th>
-              <th>入学年份</th>
-              <th>导师</th>
-              <th>是否提交申请表</th>
+              <th>评委姓名</th>
+              <th>评委账户</th>
+              <th>评委密码</th>
+{#              <th>是否提交</th>#}
             </tr>
         </thead>
         <tbody>
-        {% for student in meeting_students %}
+        {% for jury in jury_list %}
             <tr >
-                <td style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><input class="checkbox" type="checkbox" name="item" value="{{ student.0.id }}"></td>
-                <td>{{ student.0.sname }}</td>
-                <td>{{ student.0.sno }}</td>
-                <td>{{ student.0.startDate }}</td>
-                <td>{{ student.0.tutor }}</td>
-                <td><span {% if student.1 == "已提交" %} style="color:#2E8B57 " {% elif student.1 == "未提交" %}style="color:#CD3700 "{% endif %}>{{ student.1 }}</span></td>
+                <td style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><input class="checkbox" type="checkbox" name="item" value="{{ jury.id }}"></td>
+                <td>{{ jury.jname }}</td>
+                <td>{{ jury.jno }}</td>
+                <td>{{ jury.password }}</td>
+{#                <td><span {% if jury.all_status == "已提交" %} style="color:#2E8B57 " {% elif jury.all_status == "未提交" %}style="color:#CD3700 "{% endif %}>{{ jury.all_status }}</span></td>#}
             </tr>
         {% empty %}
             <tr>
@@ -92,8 +81,7 @@
                 <td>暂无内容</td>
                 <td>暂无内容</td>
                 <td>暂无内容</td>
-                <td>暂无内容</td>
-                <td>暂无内容</td>
+{#                <td>暂无内容</td>#}
             </tr>
         {% endfor %}
         </tbody>
@@ -154,8 +142,14 @@
 
 
     })
-    // 删除 start
-    $('.delete').click(function () {
+    {#// 导出表格 #}
+    $('.export-jury').click(function () {
+        var meeting_id = $(".meeting_id").val();
+        window.location.href = "{% url 'xadminData:ExportAccount' %}?meeting_id="+meeting_id;
+    })
+
+    // 分配账户
+    $(".allocated-account").click(function () {
         var checkedVal = [];
         var count = $("input:checkbox:checked").length
         if(count>0){
@@ -164,69 +158,27 @@
                     checkedVal.push($(this).val());
                 }
             })
-            var randint = "";
-            for(var i = 0; i < 4; i++){
-                randint += Math.floor(Math.random()*10);
-            }
-            var con=prompt("请输入随机验证码:" + randint );
-            if(con == randint){
-                $.ajax(
-                    {
-                        url: "{% url 'xadminData:meetingDeleteStudent' %}",
-                        type: "post",
-                        cache: false,
-                        data: {"student_id": JSON.stringify(checkedVal),"meeting_id": {{ meeting_id }} ,csrfmiddlewaretoken:'{{ csrf_token }}'},
-                        success: function (data) {
-                            if(data.status == "成功"){
-                                alert("删除成功")
-                                window.location.reload();
-                            }else {
-                                alert("删除失败")
-                            }
-                        },
-                        error: function (xhr) {
-                            console.log("出现问题")
-
+            $.ajax(
+                {
+                    url: "{% url 'xadminData:allotAccount' %}",
+                    type: "post",
+                    cache: false,
+                    data: {"juryId": JSON.stringify(checkedVal),csrfmiddlewaretoken:'{{ csrf_token }}'},
+                    success: function (data) {
+                        if(data.status == "成功"){
+                            window.location.reload();
+                        }else {
+                            alert("失败")
                         }
+                    },
+                    error: function (xhr) {
+                        console.log("出现问题")
+
                     }
-                )
-            }else {
-                alert("验证码错误")
-            }
+                }
+            )
         }else {
             alert("请至少选择一个")
-        }
-    })
-    // 删除 end
-    // 添加 start
-    $('.add-search').click(function () {
-        var q = $(".addsearch-text").val();
-        $(".student-list").load(
-            "{% url 'xadminData:meetingAddStudentList' %}",
-            {"meeting_id": {{meeting_id}}, "q": q, csrfmiddlewaretoken: '{{ csrf_token }}'},
-            function () {
-                var sc =  document.createElement("script");
-                sc.src= "{% static 'add.js' %}";
-                $("body").append(sc);
-            }
-        )
-
-    });
-    // 添加 end
-    $(function () { $('#myModal').on('hide.bs.modal', function () {
-          window.location.reload();
-        })
-       });
-    $(".add-all").click(function () {
-        var r = confirm("将会添加近三年的学生!")
-        if(r == true){
-            var meeting_id = $(".meeting_id").val()
-            $.post("{% url 'xadminData:meetingAddAllStudent' %}", {"meeting_id": meeting_id, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
-                alert(data.status);
-                window.location.reload();
-            })
-        }else{
-            alert("no")
         }
     })
 </script>

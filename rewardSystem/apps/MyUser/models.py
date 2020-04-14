@@ -9,6 +9,7 @@ class MyUser(AbstractUser):
     IDENTITY = [
         ("学生", "学生"),
         ("老师", "老师"),
+        ("评委", "评委"),
         ("管理员", "管理员")
     ]
     identity = models.CharField(verbose_name="身份", max_length=10, choices=IDENTITY, default="学生")

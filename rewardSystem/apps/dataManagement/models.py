@@ -158,7 +158,7 @@ class ApplicationForm(models.Model):
     fuTable = models.ForeignKey(FuTable, verbose_name="赋分表", on_delete=models.DO_NOTHING, null=True, blank=True, )
 
     def __str__(self):
-        return "%s的申请表"%self.sname
+        return "%s的申请表<%s>"%(self.sname, self.meeting)
 
     class Meta:
         verbose_name = "申请表"
@@ -259,31 +259,6 @@ class Meeting(models.Model):
         return '%s'%self.title
 
 
-# def save_model(self, request, obj, form, change):
-#     if obj:
-#         # Save the object
-#         super().save_model(request, obj, form, change)
-#         # Add the user instance to M2M field of the request.user (The admin User) who create the RegularUser
-#     print(request, obj, form, change)
-
-# @receiver(post_save, sender = Meeting)
-# def addStudent(sender, instance, created, **kwargs ):
-#     if created:
-#         print(Meeting.objects.all())
-#         # 获取当前时间前三年包括当前时间的学生, 例如: 2020 年那我就需要 2020 2019 2018 2017 的学生
-#         import time
-#         print("hello")
-#         year = time.localtime().tm_year - 3
-#         students = Student.objects.filter(startDate__gte="%s-8-1"%year)
-#         for student in students:
-#             instance.student.set(students)
-
-
-# @receiver(post_save, sender = Meeting)
-# def save_user_profile(sender, instance, **kwargs):
-#     instance.student.save()
-
-
 # 奖助等级
 class GrantLevel(models.Model):
     title = models.CharField(verbose_name="名称", max_length=50)
@@ -322,8 +297,15 @@ class File1(models.Model):
 
 # 学生成绩
 class StudentGrade(models.Model):
+    meeting = models.ForeignKey(Meeting, verbose_name="会议", on_delete=models.CASCADE, related_name="meeting_student_grade")
     sname = models.CharField(verbose_name='姓名', max_length=20)
     sno = models.CharField(verbose_name="学号", max_length=11)
+    grade1 = models.IntegerField(verbose_name="课程平均成绩/考研成绩")
+    grade2 = models.IntegerField(verbose_name="复试成绩/开题成绩")
+
+    class Meta:
+        verbose_name = "学生成绩"
+        verbose_name_plural = verbose_name
 
 
 # 申请成绩表
@@ -341,36 +323,6 @@ class ApplicationGrade(models.Model):
 
     def __str__(self):
         return "学生:%s, 评委:%s"%(self.applicationForm.sname, self.teacher.jname)
-
-
-# class Grade(models.Model):
-#     teacher = models.ForeignKey(Teacher, verbose_name="评委老师", on_delete=models.DO_NOTHING)
-#     applicationForm = models.ForeignKey(ApplicationForm, verbose_name="申请表", on_delete=models.CASCADE, related_name="applicationForm_grade")
-#     meeting = models.ForeignKey(Meeting, verbose_name="会议", on_delete=models.CASCADE)
-#     chief_umpire = models.BooleanField(verbose_name="主审", default=False)
-#     # 在这里输入四六级成绩就行,在计算时进行运算
-#     # 保存运算后的结果
-#     englishGrade = models.SmallIntegerField(verbose_name="四级/六级分数", null=True, blank=True)
-#     baseGrade = models.SmallIntegerField(verbose_name="基本分", default=10)
-#     #    学术活动分数
-#     academicActivityGrade = models.SmallIntegerField(verbose_name="学术活动分数", null=True, blank=True)
-#     #    发表论文
-#     publicationsGrade = models.SmallIntegerField(verbose_name="发表论文分数", null=True, blank=True)
-#     #    参与项目
-#     participateItemsGrade = models.SmallIntegerField(verbose_name="参与项目分数", null=True, blank=True)
-#     #    科研项目分数
-#     researchProjectsGrade = models.SmallIntegerField(verbose_name="科研项目分数", null=True, blank=True)
-#     # 研究生创新项目分数
-#     innovationProjectsGrade = models.SmallIntegerField(verbose_name="研究生创新项目分数", null=True, blank=True)
-#     # 社会服务分数
-#     socialWorkGrade = models.SmallIntegerField(verbose_name="社会服务分数", null=True, blank=True)
-#
-#     class Meta:
-#         verbose_name = "申请表成绩"
-#         verbose_name_plural = verbose_name
-#
-#     def __str__(self):
-#         return "学生:%s, 评委:%s"%(self.applicationForm.sname, self.teacher.tname)
 
 
 # 导师评分

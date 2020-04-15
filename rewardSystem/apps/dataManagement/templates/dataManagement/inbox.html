@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
-  <title>Dashio - Bootstrap Admin Template</title>
+  <title>消息</title>
 
   <!-- Bootstrap core CSS -->
   <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -138,6 +138,7 @@
     <!-- **********************************************************************************************************************************************************
         MAIN CONTENT
         *********************************************************************************************************************************************************** -->
+    {% if not status %}
     <!--main content start-->
     <section id="main-content">
       <section class="wrapper">
@@ -189,6 +190,7 @@
                         <tr style="text-align: center">
                           <th class="text-center">已读</th>
                           <th class="text-center">发送者</th>
+                          <th class="text-center">接收者</th>
                           <th class="text-center">内容</th>
                           <th class="text-center">时间</th>
                         </tr>
@@ -198,6 +200,8 @@
                       <tr style="text-align: center; border-bottom: 1px solid #CFCFCF;">
                         <td class="inbox-small-cells"><i class="fa fa-star {% if message.status %} inbox-started {% endif %}"></i></td>
                         <td><a href="{% url 'dataManagement:messageShow' message.id %}" style="color: grey">{{ message.from_user }}</a></td>
+                        <td><a href="{% url 'dataManagement:messageShow' message.id %}" style="color: grey">{{ message.to_user }}</a></td>
+
                         <td><a href="{% url 'dataManagement:messageShow' message.id %}" style="color: grey">{{ message.text | truncatechars:30 }}...</a></td>
                         <td>{{ message.send_time }}</td>
                       </tr>
@@ -222,6 +226,7 @@
     </section>
     <!-- /MAIN CONTENT -->
     <!--main content end-->
+    {% endif %}
   </section>
   <!-- js placed at the end of the document so the pages load faster -->
   <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>

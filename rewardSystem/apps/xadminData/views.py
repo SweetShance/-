@@ -4,9 +4,9 @@ from django.http import JsonResponse
 from django.views import View
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
-import json, random, xlwt
+import json, random, xlwt, os
 from io import BytesIO
-from dataManagement.models import Student, Meeting, Qualification, ApplicationForm, Jury
+from dataManagement.models import Student, Meeting, Qualification, ApplicationForm, Jury, StudentGrade
 from MyUser.models import MyUser
 
 
@@ -246,18 +246,92 @@ class ExportAccount(View):
         response.write(output.getvalue())
         return response
 
-        # for juryId in json.loads(juryIdList):
-        #     jury_obj = Jury.objects.get(pk=juryId)
-        #     sheet1.write(execel_row, 0, jury_obj.jname)
-        #     sheet1.write(execel_row, 1, jury_obj.jno)
-        #     sheet1.write(execel_row, 2, jury_obj.password)
-        #     execel_row += 1
-        # sio = BytesIO()
-        # wbk.save(sio)
-        # sio.seek(0)
-        # response = HttpResponse(sio.getvalue())
-        # response['Content_Type'] = 'application/octet-stream'
-        # response['Content-Disposition'] = 'attachment;filename="%s"' % "评委用户".encode('utf-8').decode(
-        #     'ISO-8859-1')
-        # response.write(sio.getvalue())
-        # return response
+
+# 学生成绩
+# 下载学生成绩模板
+class Download_student_Grade(View):
+    def get(self, request):
+        file = open(os.getcwd()+'/media/studentMuBan/学生成绩模板.xlsx', 'rb')
+        file_name = "学生成绩模板"
+        response = HttpResponse(file)
+        response['Content_Type'] = 'application/octet-stream'
+        response['Content-Disposition'] = 'attachment;filename="%s.xlsx"'%file_name.encode('utf-8').decode('ISO-8859-1')
+        # response['Content-Disposition'] = 'attachment;filename="student.xlsx"'
+
+        return response
+
+
+# 添加成绩
+class AddStudentGrade(View):
+    def post(self, request):
+        sno = request.POST.get('sno')
+        sname = request.POST.get('sname')
+        grade1 = request.POST.get('number1')
+        grade2 = request.POST.get('number2')
+        meeting_id = request.POST.get('meeting_id')
+        print("hello")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        student_Grade_objs = StudentGrade.objects.filter(sno=sno)
+        if student_Grade_objs:
+            return JsonResponse({"status": "该学生已存在"})
+        else:
+            StudentGrade.objects.create(meeting=meeting_obj, sno=sno, sname=sname, grade1=grade1, grade2=grade2)
+            return JsonResponse({"status": "添加成功"})
+
+
+# 修改成绩
+class MeetingChangeStudentGrade(View):
+    def post(self, request):
+        meeting_id = request.POST.get("meeting_id")
+        sno = request.POST.get("sno")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        studentGradeObjs = meeting_obj.meeting_student_grade.filter(sno=sno)
+        if studentGradeObjs:
+            context = {
+                "studentGradeObj": studentGradeObjs[0]
+            }
+        return render(request, template_name="xadminData/ChangStudentGrade.html", context=context)
+
+
+# 修改成绩保存
+class MeetingChangStudentGradeSave(View):
+    def post(self, request):
+        meeting_id = request.POST.get("meeting_id")
+        sno = request.POST.get("sno")
+        sname = request.POST.get("sname")
+        graded1 = request.POST.get("number1")
+        graded2 = request.POST.get("number2")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        studentGradeObjs = meeting_obj.meeting_student_grade.filter(sno=sno)
+        if studentGradeObjs:
+            studentGradeObj = studentGradeObjs[0]
+            studentGradeObj.sno = sno
+            studentGradeObj.sname = sname
+            studentGradeObj.grade1 = graded1
+            studentGradeObj.grade2 = graded2
+            studentGradeObj.save()
+            return JsonResponse({'status': "成功"})
+        else:
+            return JsonResponse({"status": "该学生不存在"})
+
+
+class MeetingChangStudentGradeDelete(View):
+    def post(self, request):
+        meeting_id = request.POST.get("meeting_id")
+        sno_list = request.POST.get("checkedArr")
+        no_list = []
+        data = {}
+        for sno in json.loads(sno_list):
+            meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+            studentGradeObjs = meeting_obj.meeting_student_grade.filter(sno=sno)
+            if studentGradeObjs:
+                studentGradeObj = studentGradeObjs[0]
+                studentGradeObj.delete()
+                data["status"] = "成功"
+            else:
+                no_list.append(sno)
+        if no_list:
+            data["status"] = str(no_list) + "不存在"
+            return JsonResponse(data)
+        return JsonResponse(data)
+

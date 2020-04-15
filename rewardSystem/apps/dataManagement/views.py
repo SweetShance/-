@@ -9,7 +9,7 @@ from MyUser.models import MyUser
 from dataManagement.models import Student, Teacher, Meeting, ApplicationForm, AcademicActivity, Publications,\
     ParticipateItems, ResearchProjects, InnovationProjects, SocialWork, delete_academicActivityImage, delete_innovationProjects,delete_participateItems,\
     delete_publicationsImage, delete_researchProjects, delete_socialWork, Qualification, OtherStudentGrade, MentorGrade, Message, ApplicationGrade,\
-    Notice, NoticeFile, Jury
+    Notice, NoticeFile, Jury, StudentGrade
 
 
 # Create your views here.
@@ -141,6 +141,7 @@ class MyInfo(View):
         phone = request.POST.get("phone")
         sex = request.POST.get("sex")
         identity = request.POST.get("identity")
+        print(name,email, phone)
         user_obj = get_object_or_404(MyUser, pk=request.user.id)
         user_obj.name = name
         user_obj.email = email
@@ -566,6 +567,7 @@ class PeerAssessment(View):
                 return JsonResponse({"status": "该学生已被评分"})
             else:
                 otherGrade_obj[0].otherGrade = number
+                applicationForm_obj.otherstatus = True
                 otherGrade_obj[0].save()
                 return JsonResponse({"status": "成功"})
         # else:
@@ -865,6 +867,7 @@ class JuryStudentApplicationFormShow(View):
             application_form_student = meeting_obj.meeting_for_applicationform.filter(student=student_obj)
             if application_form_student:
                 application_form_student = application_form_student[0]
+
                 # 相关文件
                 student_academicActivityImages = application_form_student.student_academicActivityImage.all()
                 # 发表论文
@@ -917,6 +920,9 @@ class JuryStudentApplicationFormShow(View):
                         # 主审也没评分
                         for fuItem in fuItem_list:
                             fuItem_grade.append([fuItem, 0])
+                # 获取在校成绩列表
+
+                studentGradeObjs = StudentGrade.objects.filter(sno=application_form_student.sno, meeting=meeting_obj)
                 context = {
                     "meeting_obj": meeting_obj,
                     "application_form_student": application_form_student,
@@ -927,7 +933,8 @@ class JuryStudentApplicationFormShow(View):
                     "student_researchProjectsImages": student_researchProjectsImages,
                     "student_innovationProjectsImages": student_innovationProjectsImages,
                     "student_socialWorkImages": student_socialWorkImages,
-                    "fuItem_grade_all": fuItem_grade
+                    "studentGradeObj": studentGradeObjs[0],
+                    "fuItem_grade_all": fuItem_grade,
                 }
             #     分数展示
             else:
@@ -1009,6 +1016,10 @@ class MessageIndex(View):
         context["no_read_message_list"] = no_read_message
 
         context["no_read_message_count"] = no_read_message.count()
+        if not Student.objects.filter(sno=request.user.username):
+            if not Teacher.objects.filter(tno=request.user.username):
+                if not Jury.objects.filter(jno=request.user.username):
+                    context["status"] = "无资格"
 
         return render(request, template_name="dataManagement/inbox.html", context=context)
 
@@ -1039,6 +1050,7 @@ class EditMessage(View):
         context["no_read_message_list"] = no_read_message
 
         context["no_read_message_count"] = no_read_message.count()
+
         return render(request, template_name="dataManagement/edit_message.html", context=context)
 
     def post(self, request):

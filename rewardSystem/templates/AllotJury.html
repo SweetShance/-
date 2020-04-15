@@ -17,11 +17,12 @@
             <li><a href="{% url 'xadmin:meetingSetting' %}?id={{ meeting_id }}">参与学生 <span class="sr-only">(current)</span></a></li>
             <li><a href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}">不符合资格学生</a></li>
     {#          //href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}"#}
-            <li><a href="javascript:;">导入学生成绩</a></li>
+            <li><a href="{% url 'xadmin:importStudentGrade' %}?meeting_id={{ meeting_id }}">导入学生成绩</a></li>
+
 
             <li><a href="{% url 'xadmin:juryList' %}?meeting_id={{ meeting_id }}">评委列表</a></li>
             <li class="active"><a href="javascript:;">分配评委</a></li>
-            <li><a href="javascript:;">会议统计</a></li>
+{#            <li><a href="javascript:;">会议统计</a></li>#}
           </ul>
 
         </div><!-- /.navbar-collapse -->

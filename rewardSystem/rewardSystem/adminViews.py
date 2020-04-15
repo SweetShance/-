@@ -1,10 +1,11 @@
 from xadmin.views import CommAdminView
 from django.shortcuts import render, get_object_or_404, redirect, reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator
-from dataManagement.models import Meeting, File1, Qualification, FuTable
-from django.db.models import Q
-import time, hashlib, os, struct, xlrd
+from django.db.models import Q, Sum
+import time, hashlib, os, struct, xlrd, datetime
+from dataManagement.models import Meeting, File1, Qualification, FuTable, StudentGrade, Jury, ApplicationForm, OtherStudentGrade, Message, MentorGrade
+from MyUser.models import MyUser
 
 
 class MeetingManage(CommAdminView):
@@ -182,7 +183,7 @@ class AssignTables(CommAdminView):
 class JuryList(CommAdminView):
     def get(self, request):
         context = super().get_context()
-        title = "分配主评委"
+        title = "会议评委列表"
         context["breadcrumbs"].append({'url': '/cwyadmin/', 'title': title})  # 把面包屑变量添加到context里面
         context["title"] = title  # 把面包屑变量添加到context里面
         meeting_id = request.GET.get("meeting_id")
@@ -191,6 +192,7 @@ class JuryList(CommAdminView):
         context["meeting_id"] = meeting_obj.id
         context["jury_list"] = jury_list
         context["meeting"] = meeting_obj
+        context["meeting_id"] = meeting_obj.id
 
         return render(request, template_name="JuryList.html", context=context)
 
@@ -235,7 +237,6 @@ class AllotJury(CommAdminView):
         _q_ = request.POST.get("_q_")
         meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
         applicationform_list = meeting_obj.meeting_for_applicationform.filter(Q(sname__contains=_q_) | Q(sno__contains =_q_))
-        print(applicationform_list)
         applicationform_list_jury = []
         # 获取所有评委
         jury_list = meeting_obj.meeting_jury.all()
@@ -247,3 +248,157 @@ class AllotJury(CommAdminView):
         context["meeting_status"] = meeting_obj.gradeStatus
         context["q"] = "q"
         return render(request, template_name="AllotJury.html", context=context)
+
+
+class ImportStudentGrade(CommAdminView):
+    def get(self, request):
+        context = super().get_context()
+        title = "会议评委列表"
+        context["breadcrumbs"].append({'url': '/cwyadmin/', 'title': title})  # 把面包屑变量添加到context里面
+        context["title"] = title  # 把面包屑变量添加到context里面
+        meeting_id = request.GET.get("meeting_id")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        meeting_student_grade_list = meeting_obj.meeting_student_grade.all()
+        context["meeting_id"] = meeting_obj.id
+        context["meeting_obj"] = meeting_obj
+        context["meeting_student_grade_list"] = meeting_student_grade_list
+        return render(request, template_name="importGrade.html", context=context)
+
+    def post(self, request):
+        form_url = request.META.get('HTTP_REFERER', )
+        file = request.FILES.get('file')
+        id = request.POST.get('pk')
+        meeting_obj = get_object_or_404(Meeting, pk=id)
+        rexcel = xlrd.open_workbook(filename=None, file_contents=file.read())
+        # 获取表格
+        sheet = rexcel.sheet_by_index(0)
+        row = 1
+        while True:
+            try:
+                rows = sheet.row_values(row)
+                objs = StudentGrade.objects.filter(meeting=meeting_obj, sno=rows[1])
+                if not objs:
+                    StudentGrade.objects.create(meeting=meeting_obj, sname=rows[0], sno=rows[1], grade1=rows[2], grade2=rows[3])
+                row += 1
+            except IndexError:
+                break
+        return redirect(form_url)
+
+
+# 后台统计存在的问题例如: 未提交, 未评分等
+class StatisticsQuestion (CommAdminView):
+    def get(self, request):
+        context = super().get_context()
+        title = "会议进度"
+        context["breadcrumbs"].append({'url': '/cwyadmin/', 'title': title})  # 把面包屑变量添加到context里面
+        context["title"] = title  # 把面包屑变量添加到context里面
+        meeting_id = request.GET.get("id")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        # 获取会议是否有评委未提交
+        no_submit_jury = meeting_obj.meeting_jury.filter(all_status="未提交")
+        # 导师未评分的
+        no_check_applicationForm_list = meeting_obj.meeting_for_applicationform.filter(activity=False)
+        # 未参互评的
+        noTootherGrade_list = meeting_obj.meeting_for_applicationform.filter(tootherstatus=False)
+        # 未被互评的
+        nootherGrade_list = meeting_obj.meeting_for_applicationform.filter(otherstatus=False)
+        # 未提交的评委
+        noSublitJury_list = meeting_obj.meeting_jury.filter(all_status="未提交")
+
+        context["no_check_applicationForm_list"] = no_check_applicationForm_list
+        context["noTootherGrade_list"] = noTootherGrade_list
+        context["nootherGrade_list"] = nootherGrade_list
+        context["noSublitJury_list"] = noSublitJury_list
+        context["meeting_obj"] = meeting_obj
+
+        return render(request, template_name="statisticsQuestion.html", context=context)
+
+    def post(self, request):
+        to_user = request.POST.get("username")
+        meeting_id = request.POST.get("meeting_id")
+        data = request.POST.get("data")
+        from_user_obj = get_object_or_404(MyUser, username=request.user.username)
+        to_user_obj = get_object_or_404(MyUser, username=to_user)
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        if data.strip() == "1":
+            now_date = datetime.datetime.now()
+            message_objs = Message.objects.filter(from_user=from_user_obj, to_user=to_user_obj).order_by("-send_time")
+            if message_objs:
+                days = (now_date-message_objs[0].send_time).days
+                if days < 1:
+                    return JsonResponse({"status": "今天已提醒"})
+            else:
+                text = "在%s中你有学生未评分."%meeting_obj
+                Message.objects.create(from_user=from_user_obj, to_user=to_user_obj, text=text)
+                return JsonResponse({"status": "成功"})
+        elif data.strip() == "2":
+            now_date = datetime.datetime.now()
+            message_objs = Message.objects.filter(from_user=from_user_obj, to_user=to_user_obj).order_by("-send_time")
+            if message_objs:
+                days = (now_date - message_objs[0].send_time).days
+                if days < 1:
+                    return JsonResponse({"status": "今天已提醒"})
+            else:
+                text = "在%s中你为参与学生互评!请尽快进行否则将影响你的成绩."%meeting_obj
+                Message.objects.create(from_user=from_user_obj, to_user=to_user_obj, text=text)
+                return JsonResponse({"status": "成功"})
+        elif data.strip() == "3":
+            now_date = datetime.datetime.now()
+            message_objs = Message.objects.filter(from_user=from_user_obj, to_user=to_user_obj).order_by("-send_time")
+            if message_objs:
+                days = (now_date - message_objs[0].send_time).days
+                if days < 1:
+                    return JsonResponse({"status": "今天已提醒"})
+            else:
+                text = "在%s中你还为提交评分,请尽快提交." % meeting_obj
+                Message.objects.create(from_user=from_user_obj, to_user=to_user_obj, text=text)
+                return JsonResponse({"status": "成功"})
+        else:
+            return JsonResponse({"status": "存在问题"})
+
+
+class StatisticsResult(CommAdminView):
+    def get(self, request):
+        context = super().get_context()
+        title = "会议进度"
+        context["breadcrumbs"].append({'url': '/cwyadmin/', 'title': title})  # 把面包屑变量添加到context里面
+        context["title"] = title  # 把面包屑变量添加到context里面
+        meeting_id = request.GET.get("id")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        # 该会议的所有成绩
+        # 获取已提交老师人数
+        submit_jury_count = meeting_obj.meeting_jury.filter(all_status="已提交").count()
+        # 获取申请表平均成绩[{'applicationForm': 2, 'grade': 99}]
+        avg_applicationForm_list = meeting_obj.meeting_for_application_grade.values("applicationForm").annotate(grade=Sum("grade")/submit_jury_count)
+        # 累加学生互评和导师评分
+        for avg_applicationForm in avg_applicationForm_list:
+            # 取申请表
+            applicationFormObj = get_object_or_404(ApplicationForm, pk=avg_applicationForm["applicationForm"])
+            # 获取学生互评成绩
+            otherStudentGrade_objs = OtherStudentGrade.objects.filter(applicationForm=applicationFormObj, meeting=meeting_obj)
+            if otherStudentGrade_objs:
+                avg_applicationForm["grade"] += otherStudentGrade_objs[0].otherGrade
+            # 获取导师评分
+            mentorGrade_objs = MentorGrade.objects.filter(applicationForm=applicationFormObj, meeting=meeting_obj)
+            if mentorGrade_objs:
+                avg_applicationForm["grade"] += mentorGrade_objs[0].mentorGrade
+
+            avg_applicationForm["applicationForm"] = applicationFormObj
+        # 冒泡排序
+        i = 0
+        while i < len(avg_applicationForm_list):
+            j = 0
+            while j < len(avg_applicationForm_list) - i - 1:
+                if avg_applicationForm_list[j]["grade"] < avg_applicationForm_list[j + 1]["grade"]:
+                    x = avg_applicationForm_list[j]["grade"]
+                    z = avg_applicationForm_list[j]["applicationForm"]
+                    avg_applicationForm_list[j]["grade"] = avg_applicationForm_list[j + 1]["grade"]
+                    avg_applicationForm_list[j]["applicationForm"] = avg_applicationForm_list[j + 1]["applicationForm"]
+                    avg_applicationForm_list[j + 1]["grade"] = x
+                    avg_applicationForm_list[j+1]["applicationForm"] = z
+                j += 1
+            i += 1
+        context["meeting_obj"] = meeting_obj
+        context["avg_applicationForm_list"] = avg_applicationForm_list
+        return render(request, template_name="statisticsResult.html", context=context)
+

@@ -59,10 +59,10 @@
 		var password = $(".password").val();
 		var password_again = $(".password-again").val();
 		var email = $(".email").val()
-		if($.trim(username) == ""){
-			$(".error").text("用户名不能为空!");
-		}else if($.trim(password) == ""){
-			$(".error").text("密码不能为空!");
+		if($.trim(username) == "" || $.trim(username).length < 6){
+			$(".error").text("用户名最短6位!");
+		}else if($.trim(password) == "" || $.trim(password).length < 6 ){
+			$(".error").text("密码最短6位!");
 		}else if($.trim(password_again) == ""){
 		    $(".error").text("请确认密码!");
         }else if($.trim(email) == ""){

@@ -48,20 +48,25 @@ class GlobalSetting(object):
 
 
 from rewardSystem.adminViews import MeetingManage, ImportStudent, Download_student_xls, AssignTables, \
-    MeetingSetting, AllotJury, JuryList
+    MeetingSetting, AllotJury, JuryList, ImportStudentGrade, StatisticsQuestion, StatisticsResult
 # 注册自定义分配赋分表页面
 xadmin.site.register_view('meetingManage', MeetingManage, name='meetingManage')
 # 分配赋分表
 xadmin.site.register_view("assignTables", AssignTables, name='assignTables')
 # 会议设置页面
 xadmin.site.register_view('meetingSetting', MeetingSetting, name="meetingSetting")
+# 导入学生成绩
+xadmin.site.register_view('importStudentGrade', ImportStudentGrade, name="importStudentGrade")
 # 评委列表
 xadmin.site.register_view('juryList', JuryList, name="juryList")
 # 分配评委
 xadmin.site.register_view('allotJury', AllotJury, name="allotJury")
 xadmin.site.register_view('importStudent', ImportStudent, name="importStudent")
 xadmin.site.register_view('downloadStudent', Download_student_xls, name="downloadStudent")
-
+# 会议统计 问题
+xadmin.site.register_view('statisticsQuestion', StatisticsQuestion, name="statisticsQuestion")
+# 会议统计 结果
+xadmin.site.register_view('statisticsResult', StatisticsResult, name="statisticsResult")
 # 注册F
 xadmin.site.register(xadmin.views.CommAdminView, GlobalSetting)
 

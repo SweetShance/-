@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.db.models import Q
 from .models import Student, Teacher, ApplicationForm, Meeting, FuTable, AssignItem, GrantLevel, AcademicActivity, Publications,\
                     ParticipateItems, ResearchProjects, InnovationProjects, SocialWork, Qualification, Message, ApplicationGrade,\
-                    Notice, NoticeFile, Jury
+                    Notice, NoticeFile, Jury, StudentGrade, MentorGrade, OtherStudentGrade
 
 
 # 学生
@@ -178,8 +178,8 @@ class SocialWorkInline:
 
 # 申请表
 class ApplicationFormAdmin:
-    list_display = ['sno', 'sname', 'upload_time', 'otherstatus', 'activity', 'grant', 'jury']
-    list_filter = ['meeting__title', 'otherstatus', 'activity', 'grant', 'jury']
+    list_display = ['sno', 'sname', 'upload_time', 'otherstatus', "tootherstatus", 'activity', 'grant', 'jury']
+    list_filter = ['meeting__title', 'otherstatus', 'activity', 'grant', 'jury', "tootherstatus"]
     inlines = [AcademicActivityInline, PublicationsInline, ParticipateItemsInline, ResearchProjectsInline, \
                InnovationProjectsInline, SocialWorkInline]
     search_fields = ['sno', 'sname']
@@ -196,6 +196,43 @@ class QualificationAdmin:
 
 
 xadmin.site.register(Qualification, QualificationAdmin)
+
+
+# 申请表成绩
+class GradeAdmin:
+    list_display = ["applicationForm", "teacher", "meeting", "title", "grade", "chief_umpire"]
+    list_filter = ["teacher__jname", "meeting__title", "applicationForm__sname"]
+
+
+xadmin.site.register(ApplicationGrade, GradeAdmin)
+
+
+# 学生考试成绩
+class StudentGradeAdmin:
+    list_display = ["meeting", "sno", "sname", "grade1", "grade2"]
+    list_filter = ["meeting__title"]
+
+
+xadmin.site.register(StudentGrade, StudentGradeAdmin)
+
+
+# 导师评分
+class MentorGradeAdmin:
+    list_display = ["applicationForm", "meeting", "mentorGrade"]
+    list_filter = ["meeting__title"]
+    # search_fields = ["applicationForm"]
+
+
+xadmin.site.register(MentorGrade, MentorGradeAdmin)
+
+
+# 学生互评
+class OtherStudentGradeAdmin:
+    list_display = ["applicationForm", "student", "meeting", "otherGrade"]
+    list_filter = ["meeting"]
+
+
+xadmin.site.register(OtherStudentGrade, OtherStudentGradeAdmin)
 
 
 # 消息
@@ -215,16 +252,6 @@ class MessageAdmin:
 
 xadmin.site.register(Message, MessageAdmin)
 
-
-# 申请表成绩
-class GradeAdmin:
-    list_display = ["applicationForm", "teacher", "meeting", "title", "grade", "chief_umpire"]
-    list_filter = ["teacher__jname", "meeting__title", "applicationForm__sname"]
-
-
-xadmin.site.register(ApplicationGrade, GradeAdmin)
-
-
 # 公告文件
 class NoticeFileInline:
     model = NoticeFile # 致命类
@@ -240,5 +267,3 @@ class NoticeAdmin:
 
 
 xadmin.site.register(Notice, NoticeAdmin)
-
-

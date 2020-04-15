@@ -60,6 +60,7 @@
 {#                    <a href="{% url 'xadmin:importStudent' %}?id={{ meeting.id }}" title="导入不符合资格学生" class="import-student"><img style="width: 20px;" src="{% static 'image/导入.png' %}" alt=""></a>#}
 {#                    <a href="" title="导入学生成绩" class="import-student">&ensp;&ensp;<img style="width: 20px;" src="{% static 'image/导入 (1).png' %}" alt=""></a>#}
                     <a href="{% url 'xadmin:meetingSetting' %}?id={{ meeting.id }}" title="会议管理" class="import-student"><img style="width: 20px;" src="{% static 'image/设置.png' %}" alt=""></a>
+                    <a href="{% url 'xadmin:statisticsQuestion' %}?id={{ meeting.id }}" title="会议统计" class="import-student"><img style="width: 20px;" src="{% static 'image/STATISTICS.png' %}" alt=""></a>
                 </td>
                 {#    状态 start #}
 

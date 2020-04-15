@@ -248,12 +248,10 @@
           // phone
           var pattern = /^1[34578]\d{9}$/;
           if(reg1.test(email) == true){
-              if(phone != ""){
                 if(pattern.test(phone) == false){
                   $(".phoneError").text("请填写正确号码!")
                   return false;
-                }
-              }else {
+                }else {
                 $.post("{% url 'dataManagement:myinfo' %}", {"name": name, "email": email, "phone": phone, "sex": sex, "identity":identity, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
                   alert(data.status);
                 })

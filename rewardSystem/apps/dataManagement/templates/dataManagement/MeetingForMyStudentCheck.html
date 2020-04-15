@@ -125,7 +125,7 @@
             </ul>
           </li>
           <li>
-            <a href="inbox.html">
+            <a href="{% url 'dataManagement:messageIndex' %}">
               <i class="fa fa-envelope"></i>
               <span>消息 </span>
               <span class="label label-theme pull-right mail-info">{{ no_read_message_count }}</span>

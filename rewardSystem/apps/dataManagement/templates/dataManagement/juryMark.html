@@ -144,7 +144,7 @@
 <!--    -->
     <section id="main-content">
       <section class="wrapper site-min-height">
-        <h3><i class="fa fa-angle-right"></i> <a href="{% url 'dataManagement:juryMeetingStudentList' %}?meeting_id={{ meeting_obj.id }}"> {{ meeting_obj.title }}</a> :&nbsp;&nbsp; {{ student_obj }}</span></span></h3>
+        <h3><i class="fa fa-angle-right"></i> <a href="{% url 'dataManagement:juryMeetingStudentList' %}?meeting_id={{ meeting_obj.id }}"> {{ meeting_obj.title }}</a> :&nbsp;&nbsp; {{ student_obj }} &nbsp;&nbsp;入学年份: {{student_obj.startDate | date:"Y/m"}}&nbsp;&nbsp;{{ student_obj.admissionstatus }}  </span></span></h3>
         <!-- /row -->
         <input type="text" class="applicatinFormId" value="{{ application_form_student.id }}" hidden>
         <input type="text" class="meeting_id" value="{{ meeting_obj.id }}" hidden>
@@ -155,7 +155,7 @@
         {% else %}
         <div class="row content-panel">
           <div class="col-sm-9 mt mb"  style="height:800px;overflow-y:auto">
-            <h2 class="centered">导师综合评分</h2>
+            <h2 class="centered">综合评分</h2>
             <div class="accordion" id="accordion2">
               <div class="accordion-group">
                 <div class="accordion-heading">
@@ -168,6 +168,25 @@
                     <div class="panel panel-default">
                       <div class="panel-body">
                         {{ application_form_student.presentation }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="faq.html#collapsecetGrade">
+                    <em class="glyphicon glyphicon-chevron-right icon-fixed-width"></em>成绩
+                    </a>
+                </div>
+                <div id="collapsecetGrade" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        <span>课程平均成绩/考研成绩: {{ studentGradeObj.grade1 }}</span>
+                        </br>
+                        </br>
+                        <span>复试成绩/开题成绩: {{ studentGradeObj.grade2 }}</span>
                       </div>
                     </div>
                   </div>

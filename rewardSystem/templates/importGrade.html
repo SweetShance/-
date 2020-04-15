@@ -15,10 +15,9 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav nav-tabs nav-justified">
             <li><a href="{% url 'xadmin:meetingSetting' %}?id={{ meeting_id }}">参与学生 <span class="sr-only">(current)</span></a></li>
-            <li class="active"><a href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}">不符合资格学生</a></li>
+            <li><a href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}">不符合资格学生</a></li>
     {#          //href="{% url 'xadmin:importStudent' %}?id={{ meeting_id }}"#}
-{#              <li><a href="{% url 'xadmin:juryList' %}?meeting_id={{ meeting_id }}">评委列表</a></li>#}
-            <li><a href="{% url 'xadmin:importStudentGrade' %}?meeting_id={{ meeting_id }}">导入学生成绩</a></li>
+            <li class="active"><a href="{% url 'xadmin:importStudentGrade' %}?meeting_id={{ meeting_id }}">导入学生成绩</a></li>
             <li><a href="{% url 'xadmin:juryList' %}?meeting_id={{ meeting_id }}">评委列表</a></li>
             <li><a href="{% url 'xadmin:allotJury' %}?meeting_id={{ meeting_id }}">分配评委</a></li>
 {#            <li><a href="javascript:;">会议统计</a></li>#}
@@ -29,11 +28,11 @@
     </nav>
     <div class="top">
         <div style="float: left; margin-bottom: 30px; margin-top: 30px; margin-right: 5px;">
-            <a href="{% url 'xadmin:downloadStudent' %}">
+            <a href="{% url 'xadminData:downloadStudentGradeMuban' %}">
                 <input type="buttom" id="download" readonly value="下载模板" class="btn btn-primary">
             </a>
         </div>
-        <div style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};">
+        <div style="{% if meeting_obj.gradeStatus == "已结束" %} display:none {% endif %};">
             <form action="" method="post" style="width: 50%" enctype="multipart/form-data" >
                 {% csrf_token %}
                 <div class="form-group" style="">
@@ -41,7 +40,7 @@
                 <div class="col-sm-6">
                     <div class="input-group" style=" margin-top: 30px;">
                         <input type="hidden"  name="pk" value="{{ meeting_id }}" readonly>
-                        <input id='location' class="form-control" placeholder="导入不符合资格学生" required onclick="$('#i-file').click();">
+                        <input id='location' class="form-control" placeholder="导入学生成绩" required onclick="$('#i-file').click();">
                         <label class="input-group-btn">
                             <input type="submit" id="i-check" value="导入文件" class="btn btn-primary">
                         </label>
@@ -52,12 +51,11 @@
             </form>
         </div>
         <div>
-            <button class="btn btn-primary btn_setting add" data-toggle="modal" data-target="#myModal" style="margin-bottom: 30px; margin-top: 30px;{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button>
-            <button class="btn btn-primary btn_setting delete" style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp; 删除</button>
+            <button class="btn btn-primary btn_setting add" data-toggle="modal" data-target="#myModal" style="margin-bottom: 30px; margin-top: 30px;{% if meeting_obj.gradeStatus == "已结束" %} display:none {% endif %};"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button>
+            <button class="btn btn-primary btn_setting delete" style="{% if meeting_obj.gradeStatus == "已结束" %} display:none {% endif %};"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp; 删除</button>
             <span style="float: right; text-align: center; margin-top: 40px; margin-right: 30px;">共有学生: <span style="color: #1b9dec;">{{ meeting_for_student.count }}</span></span>
         </div>
         <div>
-
         </div>
     </div>
     <div class="content" style="    margin-top: 100px;">
@@ -67,22 +65,25 @@
               <th style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><input type="checkbox" class="first-checkbox checkboxAll" ></th>
               <th>学生姓名</th>
               <th>学生学号</th>
-              <th>原因</th>
+              <th>课程平均成绩/考研成绩</th>
+              <th>复试成绩/开题成绩</th>
               <th>操作</th>
             </tr>
         </thead>
         <tbody>
-        {% for student in meeting_for_student %}
+        {% for meeting_student_grade in meeting_student_grade_list %}
             <tr >
-                <td style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><input type="checkbox" name="item" value="{{ student.id }}" style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"></td>
-                <td>{{ student.sname }}</td>
-                <td>{{ student.sno }}</td>
-                <td>{% if student.text|length == 0  %} 暂无内容 {% else %}{{ student.text |truncatechars:50 }}{% endif %}</td>
+                <td style="{% if meeting.gradeStatus == "已结束" %} display:none {% endif %};"><input type="checkbox" name="item" value="{{ meeting_student_grade.sno }}" style="{% if meeting_obj.gradeStatus == "已结束" %} display:none {% endif %};"></td>
+                <td>{{ meeting_student_grade.sname }}</td>
+                <td>{{ meeting_student_grade.sno }}</td>
+                <td>{{ meeting_student_grade.grade1 }}</td>
+                <td>{{ meeting_student_grade.grade2 }}</td>
 {#                <th><a href="javascript:;" class="change" style="text-decoration-line: none"><span style="color: #4F94CD">修改</span></a></th>#}
-                <th><button type="button" class="btn btn-primary btn-sm change" data-toggle="modal" data-target="#change-model" value="{{ student.sno }}" {% if meeting.gradeStatus == "已结束" %}  disabled="disabled" {% endif %}>修改</button></th>
+                <th><button type="button" class="btn btn-primary btn-sm change" data-toggle="modal" data-target="#change-model" value="{{ meeting_student_grade.sno }}"{% if meeting_obj.gradeStatus == "已结束" %}  disabled="disabled" {% endif %}>修改</button></th>
             </tr>
         {% empty %}
             <tr>
+                <td>暂无内容</td>
                 <td>暂无内容</td>
                 <td>暂无内容</td>
                 <td>暂无内容</td>
@@ -111,8 +112,12 @@
                 <input type="text" class="form-control" id="sno">
             </div>
             <div class="form-group">
-                <label for="text">原因:</label>
-                <textarea class="form-control" id="text"></textarea>
+                <label for="number1">课程平均成绩/考研成绩:</label>
+                <input class="form-control" id="number1" type="number">
+            </div>
+            <div class="form-group">
+                <label for="number2">复试成绩/开题成绩:</label>
+                <input class="form-control" id="number2" type="number">
             </div>
       </div>
       <div class="modal-footer">
@@ -134,7 +139,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
         <button type="button" class="btn btn-primary save-change">保存</button>
       </div>
     </div>
@@ -151,24 +156,28 @@ $('.checkboxAll').click(function () {
 $('.save').click(function () {
     var name = $("#sname").val();
     var sno = $("#sno").val();
-    var text = $("#text").val();
+    var number1 = $("#number1").val();
+    var number2 = $("#number2").val();
     if(name ==""){
         alert("姓名必填")
     }else if(sno == ""){
         alert("学号必填")
-    }else if(text == ""){
-        alert("原因必填")
+    }else if(number1 == ""){
+        alert("成绩必填")
+    }else if(number2 == ""){
+        alert("成绩必填")
     }else {
         $.ajax({
-            url: "{% url 'xadminData:meetingimportAddStudent' %}",
+            url: "{% url 'xadminData:addStudentGrade' %}",
             type: 'post',
-            data: {"name": name, "sno": sno, "text": text, "meeting_id": '{{ meeting_id }}', csrfmiddlewaretoken: '{{ csrf_token }}' },
+            data: {"sname": name, "sno": sno, "number1": number1, "number2": number2, "meeting_id": '{{ meeting_id }}', csrfmiddlewaretoken: '{{ csrf_token }}' },
             cache: false,
             success: function (data) {
                 alert(data.status);
                 $("#sname").val("");
                 $("#sno").val("");
-                $("#text").val("");
+                $("#number1").val("");
+                $("#number2").val("");
             },
             error: function (xhr) {
                 pass;
@@ -180,7 +189,8 @@ $('.save').click(function () {
 $(".add-close").click(function () {
     $("#sname").val("");
     $("#sno").val("");
-    $("#text").val("");
+    $("#number1").val("");
+    $("#number2").val("");
     window.location.reload();
 
 });
@@ -198,11 +208,19 @@ $(".delete").click(function () {
         $("[name=item]:checkbox:checked").each(function () {
             checkedArr.push($(this).val())
         })
-        $.post("{% url 'xadminData:meetingImportDeleteStudent' %}", {"checkedArr": JSON.stringify(checkedArr), "meeting_id": '{{ meeting_id }}', csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
+        var randint = "";
+            for(var i = 0; i < 4; i++){
+                randint += Math.floor(Math.random()*10);
+            }
+        var con=prompt("请输入随机验证码:" + randint );
+        if($.trim(con) == randint ){
+            $.post("{% url 'xadminData:meetingChangStudentGradeDelete' %}", {"checkedArr": JSON.stringify(checkedArr), "meeting_id": '{{ meeting_id }}', csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
             alert(data.status);
             window.location.reload();
-        })
-
+            })
+        }else {
+            alert("验证码错误!")
+        }
     }else {
         alert("请至少选择一个");
     }
@@ -212,23 +230,22 @@ $(".delete").click(function () {
 $(".change").click(function () {
     var sno = $(this).val();
     {#$("change-model").show;#}
-    $(".change-model-content").load("{% url 'xadminData:meetingImportChangeStudent' %}", {"meeting_id":'{{ meeting_id }}', "sno": sno, csrfmiddlewaretoken: '{{ csrf_token }}'}, function () {
+    $(".change-model-content").load("{% url 'xadminData:meetingChangeStudentGrade' %}", {"meeting_id":'{{ meeting_id }}', "sno": sno, csrfmiddlewaretoken: '{{ csrf_token }}'}, function () {
         {#var sc =  document.createElement("script");#}
         {#    sc.src= "{% static 'add.js' %}";#}
         {#    $("body").append(sc);#}
-        pass;
     } )
 })
 
 // 修改保存 在add.js中
 $(".save-change").click(function () {
-    var student_id = $("#change-id").val();
     var sname = $("#change-sname").val();
     var sno = $("#change-sno").val();
-    var text = $("#change-text").val();
-    console.log(student_id, sname, sno, text)
-    $.post("{% url 'xadminData:meetingImportChangeSave' %}", {"meeting_id": '{{ meeting_id }}', "student_id": student_id, "sname": sname, "sno": sno, "text": text, csrfmiddlewaretoken: '{{ csrf_token }}'}, function(){
-        alert("修改成功");
+    var number1 = $("#change-number1").val();
+    var number2 = $("#change-number2").val();
+    alert(sname, sno)
+    $.post("{% url 'xadminData:meetingChangStudentGradeSave' %}", {"meeting_id": '{{ meeting_id }}', "sname": sname, "sno": sno, "number1": number1, "number2": number2, csrfmiddlewaretoken: '{{ csrf_token }}'}, function(data){
+        alert(data.status);
         window.location.reload();
         })
 

@@ -128,7 +128,7 @@ xadmin.site.register(FuTable, FuTableAdmin)
 
 # 奖助等级
 class GrantLevelAdmin:
-    list_display = ['title', 'money']
+    list_display = ['sort', 'title', 'money']
 
 
 xadmin.site.register(GrantLevel, GrantLevelAdmin)
@@ -178,8 +178,8 @@ class SocialWorkInline:
 
 # 申请表
 class ApplicationFormAdmin:
-    list_display = ['sno', 'sname', 'upload_time', 'otherstatus', "tootherstatus", 'activity', 'grant', 'jury']
-    list_filter = ['meeting__title', 'otherstatus', 'activity', 'grant', 'jury', "tootherstatus"]
+    list_display = ['sno', 'sname', 'upload_time', 'otherstatus', "tootherstatus", 'activity', 'jury']
+    list_filter = ['meeting__title', 'otherstatus', 'activity', 'jury', "tootherstatus"]
     inlines = [AcademicActivityInline, PublicationsInline, ParticipateItemsInline, ResearchProjectsInline, \
                InnovationProjectsInline, SocialWorkInline]
     search_fields = ['sno', 'sname']

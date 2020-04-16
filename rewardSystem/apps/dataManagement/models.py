@@ -103,6 +103,21 @@ class AssignItem(models.Model):
         verbose_name_plural = verbose_name
 
 
+#奖助
+class GrantLevel(models.Model):
+    sort = models.CharField(verbose_name="类别", max_length=100)
+    title = models.CharField(verbose_name="名称", max_length=50)
+    money = models.IntegerField(verbose_name="金额")
+    text = models.TextField(verbose_name="说明", max_length=100, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "其他奖助等级"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return "%s:%s"%(self.sort, self.title)
+
+
 # 申请表
 class ApplicationForm(models.Model):
     student = models.ForeignKey(Student, verbose_name="学生", on_delete=models.CASCADE, related_name="student_applicationform")
@@ -140,22 +155,25 @@ class ApplicationForm(models.Model):
     # mentorGrade = models.SmallIntegerField(verbose_name="导师评分", null=True, blank=True)
     # otherGrade = models.SmallIntegerField(verbose_name="学生评分", null=True, blank=True)
     # 学生互评
-    otherstatus = models.BooleanField(verbose_name="是否被评分", default=False)
-    tootherstatus = models.BooleanField(verbose_name="是否评分", default=False)
-    judgesGrade = models.SmallIntegerField(verbose_name="评委赋分", null=True, blank=True)
+
+    # judgesGrade = models.SmallIntegerField(verbose_name="评委赋分", null=True, blank=True)
     upload_time = models.DateTimeField(verbose_name="提交时间", auto_now_add=True)
     # evaluate = models.TextField(verbose_name="说明", max_length=200)
-    # 等级
-    grant = models.ForeignKey('GrantLevel', verbose_name="等级", on_delete=models.CASCADE, null=True)
-    # 导师审核
-    # activity = models.BooleanField(verbose_name="是否通过审核", default=False)
 
-    activity = models.BooleanField(verbose_name="导师审核状态", default=False)
-    jury = models.ForeignKey(Jury, verbose_name="主审评委", on_delete=models.DO_NOTHING, null=True, blank=True)
+
+
     # 会议
     meeting = models.ForeignKey('Meeting', verbose_name="所属会议", on_delete=models.CASCADE, related_name="meeting_for_applicationform")
     # 赋分表
     fuTable = models.ForeignKey(FuTable, verbose_name="赋分表", on_delete=models.DO_NOTHING, null=True, blank=True, )
+    jury = models.ForeignKey(Jury, verbose_name="主审评委", on_delete=models.DO_NOTHING, null=True, blank=True)
+
+    otherstatus = models.BooleanField(verbose_name="是否被评分", default=False)
+    tootherstatus = models.BooleanField(verbose_name="是否评分", default=False)
+    activity = models.BooleanField(verbose_name="导师审核状态", default=False)
+    grant = models.ManyToManyField(GrantLevel, verbose_name="奖助等级", blank=True, related_name="other_grant")
+    # 导师审核
+    # activity = models.BooleanField(verbose_name="是否通过审核", default=False)
 
     def __str__(self):
         return "%s的申请表<%s>"%(self.sname, self.meeting)
@@ -257,20 +275,6 @@ class Meeting(models.Model):
 
     def __str__(self):
         return '%s'%self.title
-
-
-# 奖助等级
-class GrantLevel(models.Model):
-    title = models.CharField(verbose_name="名称", max_length=50)
-    money = models.IntegerField(verbose_name="金额")
-    text = models.TextField(verbose_name="说明", max_length=100, null=True, blank=True)
-
-    class Meta:
-        verbose_name = "奖助学金等级"
-        verbose_name_plural = verbose_name
-
-    def __str__(self):
-        return "%s"%self.title
 
 
 # 学生资格(本次会议中不符合要求的学生)

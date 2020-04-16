@@ -2,11 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views import View
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.core.exceptions import ObjectDoesNotExist
 import json, random, xlwt, os
 from io import BytesIO
-from dataManagement.models import Student, Meeting, Qualification, ApplicationForm, Jury, StudentGrade
+from dataManagement.models import Student, Meeting, Qualification, ApplicationForm, Jury, StudentGrade, MentorGrade, OtherStudentGrade, GrantLevel
 from MyUser.models import MyUser
 
 
@@ -229,7 +229,7 @@ class ExportAccount(View):
         worksheet.write(0, 1, "用户名")
         worksheet.write(0, 2, "密码")
         meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
-        meeting_jury_list = meeting_obj.jury.all()
+        meeting_jury_list = meeting_obj.meeting_jury.all()
         execel_row = 1
         # 写表头
         for jury in meeting_jury_list:
@@ -335,3 +335,93 @@ class MeetingChangStudentGradeDelete(View):
             return JsonResponse(data)
         return JsonResponse(data)
 
+
+# 导出统计结果
+class ExportStatistics(View):
+    def get(self, request):
+        # 获取会议
+        meeting_id = request.GET.get('meeting_id')
+        # 所有成绩
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        # 该会议的所有成绩
+        # 获取已提交老师人数
+        submit_jury_count = meeting_obj.meeting_jury.filter(all_status="已提交").count()
+        # 获取申请表平均成绩[{'applicationForm': 2, 'grade': 99}]
+        avg_applicationForm_list = meeting_obj.meeting_for_application_grade.values("applicationForm").annotate(
+            grade=Sum("grade") / submit_jury_count)
+        avg_applicationForm_list = list(avg_applicationForm_list)
+        # 累加学生互评和导师评分
+        for avg_applicationForm in avg_applicationForm_list:
+            # 取申请表
+            applicationFormObj = get_object_or_404(ApplicationForm, pk=avg_applicationForm["applicationForm"])
+            # 获取学生互评成绩
+            otherStudentGrade_objs = OtherStudentGrade.objects.filter(applicationForm=applicationFormObj,
+                                                                      meeting=meeting_obj)
+            if otherStudentGrade_objs:
+                avg_applicationForm["grade"] += otherStudentGrade_objs[0].otherGrade
+            # 获取导师评分
+            mentorGrade_objs = MentorGrade.objects.filter(applicationForm=applicationFormObj, meeting=meeting_obj)
+            if mentorGrade_objs:
+                avg_applicationForm["grade"] += mentorGrade_objs[0].mentorGrade
+
+            avg_applicationForm["applicationForm"] = applicationFormObj
+            avg_applicationForm["grantList"] = applicationFormObj.grant.all()
+
+            # 冒泡排序
+        i = 0
+        while i < len(avg_applicationForm_list):
+            j = 0
+            while j < len(avg_applicationForm_list) - i - 1:
+                if avg_applicationForm_list[j]["grade"] < avg_applicationForm_list[j + 1]["grade"]:
+                    # 成绩
+                    x = avg_applicationForm_list[j]["grade"]
+                    # 申请表
+                    z = avg_applicationForm_list[j]["applicationForm"]
+                    # 等级
+                    y = avg_applicationForm_list[j]["grantList"]
+
+                    avg_applicationForm_list[j]["grade"] = avg_applicationForm_list[j + 1]["grade"]
+                    avg_applicationForm_list[j]["applicationForm"] = avg_applicationForm_list[j + 1]["applicationForm"]
+                    avg_applicationForm_list[j]['grantList'] = avg_applicationForm_list[j + 1]["grantList"]
+
+                    avg_applicationForm_list[j + 1]["grade"] = x
+                    avg_applicationForm_list[j + 1]["applicationForm"] = z
+                    avg_applicationForm_list[j + 1]['grantList'] = y
+                j += 1
+            i += 1
+
+        # avg_applicationForm_list 存储所有结果 [{"applicationForm":"申请表", "grade": "成绩, "grantList":"等级"}]
+        response = HttpResponse(content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = response[
+            'Content-Disposition'] = 'attachment;filename="%s".xls' % "会议结果".encode('utf-8').decode(
+            'ISO-8859-1')
+        wb = xlwt.Workbook(encoding='utf-8')
+        worksheet = wb.add_sheet('sheet1')
+        # 写入表头
+        worksheet.write(0, 0, "姓名")
+        worksheet.write(0, 1, "学号")
+        worksheet.write(0, 2, "成绩")
+        worksheet.write(0, 3, "等级")
+        worksheet.write(0, 4, "金额")
+        execel_row = 1
+        # 写表头
+        # [{"applicationForm": "申请表", "grade": "成绩, "grantList":"等级"}]
+        for avg_applicationForm in avg_applicationForm_list:
+            worksheet.write(execel_row, 0, avg_applicationForm["applicationForm"].sname)
+            worksheet.write(execel_row, 1, avg_applicationForm["applicationForm"].sno)
+            worksheet.write(execel_row, 2, avg_applicationForm["grade"])
+            excel_col = 3
+            for grant in avg_applicationForm["grantList"].order_by("-id"):
+                worksheet.write(execel_row, excel_col, grant.title)
+                excel_col += 1
+                worksheet.write(execel_row, excel_col, grant.money)
+                excel_col += 1
+            execel_row += 1
+        # 设置HTTPResponse的类型
+        """导出excel表"""
+        output = BytesIO()
+        wb.save(output)
+        # 重新定位到开始
+        output.seek(0)
+        response.write(output.getvalue())
+        return response

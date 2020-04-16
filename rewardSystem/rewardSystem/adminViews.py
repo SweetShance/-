@@ -3,8 +3,8 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Q, Sum
-import time, hashlib, os, struct, xlrd, datetime
-from dataManagement.models import Meeting, File1, Qualification, FuTable, StudentGrade, Jury, ApplicationForm, OtherStudentGrade, Message, MentorGrade
+import time, hashlib, os, struct, xlrd, datetime, json
+from dataManagement.models import Meeting, File1, Qualification, FuTable, StudentGrade, Jury, ApplicationForm, OtherStudentGrade, Message, MentorGrade, GrantLevel
 from MyUser.models import MyUser
 
 
@@ -370,6 +370,7 @@ class StatisticsResult(CommAdminView):
         submit_jury_count = meeting_obj.meeting_jury.filter(all_status="已提交").count()
         # 获取申请表平均成绩[{'applicationForm': 2, 'grade': 99}]
         avg_applicationForm_list = meeting_obj.meeting_for_application_grade.values("applicationForm").annotate(grade=Sum("grade")/submit_jury_count)
+        avg_applicationForm_list = list(avg_applicationForm_list)
         # 累加学生互评和导师评分
         for avg_applicationForm in avg_applicationForm_list:
             # 取申请表
@@ -384,21 +385,48 @@ class StatisticsResult(CommAdminView):
                 avg_applicationForm["grade"] += mentorGrade_objs[0].mentorGrade
 
             avg_applicationForm["applicationForm"] = applicationFormObj
-        # 冒泡排序
+            avg_applicationForm["grantList"] = applicationFormObj.grant.all()
+
+            # 冒泡排序
         i = 0
         while i < len(avg_applicationForm_list):
             j = 0
             while j < len(avg_applicationForm_list) - i - 1:
                 if avg_applicationForm_list[j]["grade"] < avg_applicationForm_list[j + 1]["grade"]:
+                    # 成绩
                     x = avg_applicationForm_list[j]["grade"]
+                    # 申请表
                     z = avg_applicationForm_list[j]["applicationForm"]
+                    # 等级
+                    y = avg_applicationForm_list[j]["grantList"]
+
                     avg_applicationForm_list[j]["grade"] = avg_applicationForm_list[j + 1]["grade"]
                     avg_applicationForm_list[j]["applicationForm"] = avg_applicationForm_list[j + 1]["applicationForm"]
+                    avg_applicationForm_list[j]['grantList'] = avg_applicationForm_list[j + 1]["grantList"]
+
                     avg_applicationForm_list[j + 1]["grade"] = x
                     avg_applicationForm_list[j+1]["applicationForm"] = z
+                    avg_applicationForm_list[j+1]['grantList'] = y
                 j += 1
             i += 1
         context["meeting_obj"] = meeting_obj
         context["avg_applicationForm_list"] = avg_applicationForm_list
+        # 奖助等级
+        grantLevel_list = GrantLevel.objects.all()
+        context["grantLevel_list"] = grantLevel_list
+
         return render(request, template_name="statisticsResult.html", context=context)
 
+    def post(self, request):
+        dataList = request.POST.get("dataList")
+        applicationForm_id = json.loads(dataList)[0].split(",")[0]
+        applicationForm_obj = get_object_or_404(ApplicationForm, pk=applicationForm_id)
+        # 先清空他的等级
+        applicationForm_obj.grant.clear()
+        # 再添加
+        for data in json.loads(dataList):
+            applicationForm_id, grant_id = data.split(",")
+            applicationForm_obj = get_object_or_404(ApplicationForm, pk=applicationForm_id)
+            grant_obj = get_object_or_404(GrantLevel, pk=grant_id)
+            applicationForm_obj.grant.add(grant_obj)
+        return JsonResponse({"status": "成功"})

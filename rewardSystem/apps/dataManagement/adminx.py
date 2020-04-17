@@ -48,11 +48,13 @@ xadmin.site.register(Student, StudentAdmin)
 
 # 老师
 class TeacherAdmin:
-    list_display = ['tno', 'tname', 'sex', 'register_status']
+    list_display = ['tno', 'tname', 'sex', 'register_status', 'password']
     list_filter = ['sex', 'register_status']
     search_fields = ['tno', 'tname']
+    readonly_fields = ['password']
     import_excel = True
     download_excel_templates = True
+    allocated_account = True
 
     def post(self, request, *args, **kwargs):
         if 'excel' in request.FILES:

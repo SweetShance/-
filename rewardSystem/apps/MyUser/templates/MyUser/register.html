@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}登录{% endblock %}
+{% block title %}注册{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'style.css' %}">
 {% endblock %}
@@ -22,14 +22,10 @@
           <br>
           <input type="email" class="form-control email" placeholder="邮箱">
           <br>
+          <input type="text" onkeyup="value=value.replace(/[^\w.\/]/ig,'')" style="width: 180px; float: left; margin-right: 10px;" class="form-control code" placeholder="验证码"><button type="button" style="width: 90px;" class="btn btn-info git-code">获取验证码</button>
           <span class="error" style="color: #FF6347"></span>
           <button class="btn btn-theme btn-block register"><i class="fa fa-lock"></i> 注&nbsp;册 </button>
           <hr>
-          <div class="login-social-link centered">
-            <p>or you can sign in via your social network</p>
-            <button class="btn btn-facebook" type="submit"><i class="fa fa-facebook"></i> Facebook</button>
-            <button class="btn btn-twitter" type="submit"><i class="fa fa-twitter"></i> Twitter</button>
-          </div>
           <div class="registration">
             已有账号<br/>
             <a class="" href="{% url 'MyUser:login' %}">
@@ -58,7 +54,8 @@
 		var username = $(".username").val();
 		var password = $(".password").val();
 		var password_again = $(".password-again").val();
-		var email = $(".email").val()
+		var email = $(".email").val();
+		var code = $(".code").val();
 		if($.trim(username) == "" || $.trim(username).length < 6){
 			$(".error").text("用户名最短6位!");
 		}else if($.trim(password) == "" || $.trim(password).length < 6 ){
@@ -69,15 +66,19 @@
 		    $(".error").text("邮箱不能为空!");
         } else if($.trim(password) != $.trim(password_again)){
 		    $(".error").text("两次密码不一致!");
-        } else {
-			$.post("{% url 'MyUser:register' %}", {"username": username, "password": password,"email": email, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
+        }else if($.trim(code) == "") {
+		  $(".error").text("验证码不能为空!");
+		} else
+        {
+			$.post("{% url 'MyUser:register' %}", {"username": username, "password": password,"email": email, "code": code, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
 				// window.location.href("{% url 'dataManagement:index' %}");
 				if(data.status == "成功"){
 					window.location.href = "{% url 'dataManagement:index' %}"
 				}else {
 					$(".error").text(data.status);
 					$(".password").val("");
-					$(".password-again").val("")
+					$(".password-again").val("");
+					$(".code").val("")
 				}
 			})
 		}
@@ -104,7 +105,37 @@
     if(reg1.test($.trim(email)) == false){
       $(".error").text("请输入正确邮箱格式!");
     }
-  })
+  });
+
+  //获取验证码
+    $(".git-code").click(function () {
+      var username = $(".username").val();
+      var email = $(".email").val();
+      if($.trim(username) == "" || $.trim(username).length < 6){
+			$(".error").text("用户名最短6位!");
+		}else if($.trim(email) == ""){
+		    $(".error").text("邮箱不能为空!");
+        }else {
+          $.post("{% url 'MyUser:sendEmail' %}", {'username': username, "email": email, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
+            if(data.status == "发送成功"){
+              $(".git-code").attr("disabled", "disabled")
+              var num = 180;
+              var timer = null;
+              clearInterval(timer);
+              timer = setInterval(function(){
+                  $(".git-code").text(num)
+                  num--
+                  if(num<1) {
+                      clearInterval(timer);
+                      $(".git-code").attr("disabled", false)
+                      $(".git-code").text("重新获取")
+                  }
+              },1000);
+            }
+          })
+      }
+
+    })
   </script>
 {% endblock %}
 </body>

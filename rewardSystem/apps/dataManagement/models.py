@@ -46,6 +46,7 @@ class Teacher(models.Model):
     ]
     sex = models.CharField(max_length=2, verbose_name="性别", choices=S_SEX, default="", null=True, blank=True)
     register_status = models.BooleanField(verbose_name="是否注册用户", default=False)
+    password = models.CharField(verbose_name="密码", max_length=20, blank=True, null=True)
 
     class Meta:
         verbose_name = "老师"
@@ -111,7 +112,7 @@ class GrantLevel(models.Model):
     text = models.TextField(verbose_name="说明", max_length=100, null=True, blank=True)
 
     class Meta:
-        verbose_name = "其他奖助等级"
+        verbose_name = "奖助等级"
         verbose_name_plural = verbose_name
 
     def __str__(self):

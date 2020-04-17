@@ -89,7 +89,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -107,6 +106,19 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# 发送邮件配置
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# smtp服务器地址
+EMAIL_HOST = "smtp.163.com"
+# smtp服务器端口号
+EMAIL_PORT = 465
+# 发送邮件的邮箱
+EMAIL_HOST_USER = "l2391454874@163.com"
+# 邮箱的授权密码
+EMAIL_HOST_PASSWORD = "YBVXOTUCIAUCLBSO"
+# 收件人看到的发件人
+EMAIL_FROM = "新疆农业大学奖助学金评定系统<l2391454874@163.com>"
 
 # # 邮箱设置
 # EMAIL_USE_SSL = True
@@ -144,3 +156,4 @@ STATICFILES_DIRS = [
 ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+

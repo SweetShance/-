@@ -1,0 +1,15 @@
+{% load i18n %}
+<div class="btn-group export">
+  <a class="dropdown-toggle btn btn-default btn-sm allocated" href="#">
+    分配账户
+  </a>
+</div>
+{# 模态框 #}
+<script>
+    $(".allocated").click(function () {
+        $.post("{% url 'xadminData:teacherAllotAccount' %}", {csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
+            alert(data.status);
+            window.location.reload();
+        })
+    })
+</script>

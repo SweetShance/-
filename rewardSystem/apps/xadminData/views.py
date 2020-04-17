@@ -6,7 +6,7 @@ from django.db.models import Q, Sum
 from django.core.exceptions import ObjectDoesNotExist
 import json, random, xlwt, os
 from io import BytesIO
-from dataManagement.models import Student, Meeting, Qualification, ApplicationForm, Jury, StudentGrade, MentorGrade, OtherStudentGrade, GrantLevel
+from dataManagement.models import Student, Teacher, Meeting, Qualification, ApplicationForm, Jury, StudentGrade, MentorGrade, OtherStudentGrade, GrantLevel
 from MyUser.models import MyUser
 
 
@@ -425,3 +425,29 @@ class ExportStatistics(View):
         output.seek(0)
         response.write(output.getvalue())
         return response
+
+
+# 评委分配账户
+class TeacherAllotAccount(View):
+    def post(self, request):
+        # 获取所有老师
+        teacher_list = Teacher.objects.all()
+        for teacher_obj in teacher_list:
+            user_objs = MyUser.objects.filter(username=teacher_obj.tno)
+            # 没有创建用户
+            if not user_objs:
+
+                # # 随机密码
+                password = ""
+                for i in range(0, 6):
+                    num = random.randint(0, 9)
+                    alf = chr(random.randint(97, 122))
+                    s = str(random.choice([num, alf]))
+                    password += s
+                    # 创建用户
+                user_obj = MyUser.objects.create_user(username=teacher_obj.tno, password=password.strip(), name=teacher_obj.tname, identity="老师")
+                teacher_obj.password = password.strip()
+                teacher_obj.register_status = True
+                teacher_obj.save()
+
+        return JsonResponse({"status": "成功"})

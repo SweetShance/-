@@ -5,7 +5,8 @@ from django.views import View
 from django.db.models import Q, F, SmallIntegerField, Sum, Count, Avg
 from django.core import serializers
 import datetime, random, json
-from MyUser.models import MyUser
+from MyUser.task import send_register_active_email
+from MyUser.models import MyUser, UserCode
 from dataManagement.models import Student, Teacher, Meeting, ApplicationForm, AcademicActivity, Publications,\
     ParticipateItems, ResearchProjects, InnovationProjects, SocialWork, delete_academicActivityImage, delete_innovationProjects,delete_participateItems,\
     delete_publicationsImage, delete_researchProjects, delete_socialWork, Qualification, OtherStudentGrade, MentorGrade, Message, ApplicationGrade,\
@@ -182,6 +183,19 @@ class SetPassword(View):
             # user = MyUser.objects.get(username=request.user)
             user.set_password(newPassword)
             user.save()
+            if request.user.identity == "老师":
+                teacher_objs = Teacher.objects.filter(tno=request.user.username)
+                if teacher_objs:
+                    teacher_obj = teacher_objs[0]
+                    teacher_obj.password = newPassword
+                    teacher_obj.save()
+            elif request.user.identity == "评委":
+                jury_objs = Jury.objects.filter(jno=request.user.username)
+                if jury_objs:
+                    print(jury_objs)
+                    jury_obj = jury_objs[0]
+                    jury_obj.password = newPassword
+                    jury_obj.save()
             return JsonResponse({"status": "成功"})
         else:
             return JsonResponse({"status": "密码错误"})
@@ -1078,7 +1092,60 @@ class EditSearchUser(View):
         return JsonResponse(user_list, safe=False)
 
 
+# 修改密码发送邮箱
+class SetPasswordSendEmail(View):
+    def post(self, request):
+        username = request.POST.get("username")
+        user_objs = MyUser.objects.filter(username=username)
+        if not user_objs:
+            return JsonResponse({"status": "该用户不存在"})
+        else:
+            email = user_objs[0].email
+            # 生成验证码
+            ret = ""
+            for i in range(5):
+                num = random.randint(0, 9)
+                alf = chr(random.randint(97, 122))
+                s = str(random.choice([num, alf]))
+                ret += s
+            # 把数据存到数据库
+            if email and username:
+                send_register_active_email(email, ret.strip())
+                UserCode.objects.create(username=username, code=ret.strip(), email=email)
+                return JsonResponse({"status": "发送成功"})
+            else:
+                return JsonResponse({"status": "邮箱存在问题"})
 
+
+# 忘记密码重新设置
+class ForgetPasswordSet(View):
+    def post(self, request):
+        code = request.POST.get('code')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        userCodes = UserCode.objects.filter(username=username, code=code).order_by("-date")
+        if userCodes:
+            timing = (datetime.datetime.now() - userCodes[0].date).total_seconds() / 60
+            if timing > 5:
+                return JsonResponse({"status": "验证码失效"})
+            else:
+                userObjs = MyUser.objects.filter(username=username)
+                if userObjs:
+                    userObj = userObjs[0]
+                    userObj.set_password(password)
+                    if userObj.identity == "老师":
+                        teacher_obj = get_object_or_404(Teacher, tno=username)
+                        teacher_obj.password = password
+                        teacher_obj.save()
+                    elif userObj.identity == "评委":
+                        jury_obj = get_object_or_404(Jury, jno=username)
+                        jury_obj.password = password
+                        jury_obj.save()
+                    return JsonResponse({"status": "修改成功"})
+                else:
+                    return JsonResponse({"status": "该用户不存在"})
+        else:
+            return JsonResponse({"status": "验证码错误"})
 
 
 

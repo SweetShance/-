@@ -14,7 +14,7 @@
       <div class="form-login">
         <h2 class="form-login-heading">登 &nbsp;&nbsp; 录</h2>
         <div class="login-wrap">
-          <input type="text" class="form-control username" placeholder="用户名" autofocus>
+          <input type="text" class="form-control username" onkeyup="value=value.replace(/[^\w.\/]/ig,'')" placeholder="用户名" autofocus>
           <br>
           <input type="password" class="form-control password" placeholder="密码">
           <label class="checkbox">
@@ -25,11 +25,6 @@
             </label>
           <button class="btn btn-theme btn-block login"><i class="fa fa-lock"></i> 登&nbsp;录 </button>
           <hr>
-          <div class="login-social-link centered">
-            <p>or you can sign in via your social network</p>
-            <button class="btn btn-facebook" type="submit"><i class="fa fa-facebook"></i> Facebook</button>
-            <button class="btn btn-twitter" type="submit"><i class="fa fa-twitter"></i> Twitter</button>
-          </div>
           <div class="registration">
             还没有账号?<br/>
             <a class="" href="{% url 'MyUser:register' %}">
@@ -46,12 +41,26 @@
                 <h4 class="modal-title">忘记密码?</h4>
               </div>
               <div class="modal-body">
-                <p>输入你的邮箱去重置密码.</p>
-                <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
+                <p>输入你的用户名去重置密码.</p>
+                <input type="text" name="email" placeholder="用户名"  onkeyup="value=value.replace(/[^\w.\/]/ig,'')" autocomplete="off" class="form-control placeholder-no-fix this-username">
               </div>
+              <div class="modal-body">
+                <p>验证码</p>
+                <input type="text" onkeyup="value=value.replace(/[^\w.\/]/ig,'')" style="width: 80%; float: left; margin-right: 10px;" class="form-control code" placeholder="验证码"><button type="button" style="width: 90px;" class="btn btn-info git-code">获取验证码</button>
+              </div>
+              <div class="modal-body">
+                <p>输入你的新密码</p>
+                <input type="password" name="password" placeholder="输入新密码" autocomplete="off" class="form-control placeholder-no-fix new-password">
+              </div>
+              <div class="modal-body">
+                <p>确认你的新密码</p>
+                <input type="password" name="passwordagain" placeholder="确认新密码" autocomplete="off" class="form-control placeholder-no-fix new-password-again">
+                <span class="errors" style="color: red; margin-top: 10px; margin-bottom: 10px;"></span>
+              </div>
+
               <div class="modal-footer">
                 <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
-                <button class="btn btn-theme" type="button">提交</button>
+                <button class="btn btn-theme reset" type="button">提交</button>
               </div>
             </div>
           </div>
@@ -88,6 +97,68 @@
 					window.location.href = "{% url 'dataManagement:index' %}"
 				}else {
 					alert(data.status);
+				}
+			})
+		}
+
+	})
+
+    // 修改密码
+    //获取验证码
+    $(".git-code").click(function () {
+      var thi_username = $(".this-username").val();
+      if($.trim(thi_username) == "" || $.trim(thi_username).length < 6){
+		    $(".error").text("请填写正确的用户名");
+        }else {
+          $.post("{% url 'dataManagement:setPasswordSendEmail' %}", {'username': thi_username, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
+            if(data.status == "发送成功"){
+              $(".git-code").attr("disabled", "disabled")
+              var num = 180;
+              var timer = null;
+              clearInterval(timer);
+              timer = setInterval(function(){
+                  $(".git-code").text(num)
+                  num--
+                  if(num<1) {
+                      clearInterval(timer);
+                      $(".git-code").attr("disabled", false)
+                      $(".git-code").text("重新获取")
+                  }
+              },1000);
+            }
+          })
+      }
+
+    })
+
+    // 提交
+    $(".reset").click(function () {
+        var username = $(".this-username").val();
+		var password = $(".new-password").val();
+		var password_again = $(".new-password-again").val();
+		var code = $(".code").val();
+		if($.trim(username) == "" || $.trim(username).length < 6){
+			$(".errors").text("用户名最短6位!");
+		}else if($.trim(password) == "" || $.trim(password).length < 6 ){
+			$(".errors").text("密码最短6位!");
+		}else if($.trim(password_again) == ""){
+		    $(".errors").text("请确认密码!");
+        }else if($.trim(password) != $.trim(password_again)){
+		    $(".errors").text("两次密码不一致!");
+        }else if($.trim(code) == "") {
+		  $(".errors").text("验证码不能为空!");
+		} else
+        {
+			$.post("{% url 'dataManagement:forgetPasswordSet' %}", {"username": username, "password": password,"code": code, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
+				// window.location.href("{% url 'dataManagement:index' %}");
+			  alert(data.status)
+              if(data.status == "修改成功"){
+					window.location.href = "{% url 'MyUser:login' %}"
+				}else {
+					$(".error").text(data.status);
+					$(".password").val("");
+					$(".password-again").val("");
+					$(".code").val("")
 				}
 			})
 		}

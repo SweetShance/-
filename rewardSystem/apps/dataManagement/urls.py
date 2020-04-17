@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .views import Index, MyInfo, SetPassword, RequestLog, RequestLogShow, ApplicationFormUpload,\
         DeleteOne, PeerAssessment, MeetingList, MeetingForMyStudent, MeetingForMyStudentCheck, JuryGradeMeetingList, \
         JuryGradeMeetingStudentList, JuryStudentApplicationFormShow, NoticListShow, NoticeShow, Download, MessageIndex,\
-        MessageShow, EditMessage, EditSearchUser
+        MessageShow, EditMessage, EditSearchUser, SetPasswordSendEmail, ForgetPasswordSet
 
 app_name = "dataManagement"
 urlpatterns = [
@@ -34,5 +34,8 @@ urlpatterns = [
     path("messageShow/<int:pk>", login_required(MessageShow.as_view()), name="messageShow"),
     path("editMessage/", login_required(EditMessage.as_view()), name="editMessage"),
     path("editSearchUser/", login_required(EditSearchUser.as_view()), name="editSearchUser"),
+    # 重置密码
+    path("setPasswordSendEmail/", SetPasswordSendEmail.as_view(), name="setPasswordSendEmail"),
+    path("forgetPasswordSet/", ForgetPasswordSet.as_view(), name="forgetPasswordSet")
 
 ]

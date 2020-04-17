@@ -19,3 +19,10 @@ class MyUser(AbstractUser):
 
     def __str__(self):
         return "%s"%self.name
+
+
+class UserCode(models.Model):
+    username = models.CharField(verbose_name="用户名", max_length=20)
+    email = models.EmailField(verbose_name="邮箱")
+    code = models.CharField(verbose_name="验证码", max_length=10)
+    date = models.DateTimeField(verbose_name="时间", auto_now_add=True)

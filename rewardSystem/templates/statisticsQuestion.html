@@ -28,26 +28,26 @@
         <table class="table table-hover table-bordered">
         <thead>
             <tr>
-              <th>学生姓名</th>
-              <th>学生学号</th>
-              <th>导师</th>
-              <th>操作</th>
+              <th style="text-align: center;">学生姓名</th>
+              <th style="text-align: center;">学生学号</th>
+              <th style="text-align: center;">导师</th>
+              <th style="text-align: center;">操作</th>
             </tr>
         </thead>
         <tbody>
         {% for no_check_applicationForm in no_check_applicationForm_list %}
             <tr >
-                <td>{{ no_check_applicationForm.sname }}</td>
-                <td>{{ no_check_applicationForm.sno }}</td>
-                <td>{{ no_check_applicationForm.student.tutor }}</td>
-                <td><button type="button" class="btn btn-primary btn-sm remind" data-toggle="modal" data="1" data-target="#change-model" value="{{ no_check_applicationForm.student.tutor.tno }}" {% if meeting.gradeStatus == "已结束" %}  disabled="disabled" {% endif %}>提醒</button></td>
+                <td style="text-align: center;">{{ no_check_applicationForm.sname }}</td>
+                <td style="text-align: center;">{{ no_check_applicationForm.sno }}</td>
+                <td style="text-align: center;">{{ no_check_applicationForm.student.tutor }}</td>
+                <td style="text-align: center;"><button type="button" class="btn btn-primary btn-sm remind" data-toggle="modal" data="1" data-target="#change-model" value="{{ no_check_applicationForm.student.tutor.tno }}" {% if meeting.gradeStatus == "已结束" %}  disabled="disabled" {% endif %}>&nbsp;&nbsp;提醒&nbsp;&nbsp;</button></td>
             </tr>
         {% empty %}
             <tr>
-                <td>暂无内容</td>
-                <td>暂无内容</td>
-                <td>暂无内容</td>
-                <td>暂无内容</td>
+                <td  style="text-align: center;">暂无内容</td>
+                <td style="text-align: center;">暂无内容</td>
+                <td style="text-align: center;">暂无内容</td>
+                <td style="text-align: center;">暂无内容</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -60,27 +60,27 @@
         <table class="table table-hover table-bordered">
         <thead>
             <tr>
-              <th>学生姓名</th>
-              <th>学生学号</th>
-              <th>导师</th>
-              <th>操作</th>
+              <th style="text-align: center;">学生姓名</th>
+              <th style="text-align: center;">学生学号</th>
+              <th style="text-align: center;">导师</th>
+              <th style="text-align: center;">操作</th>
             </tr>
         </thead>
         <tbody>
         {% for noTootherGrade in noTootherGrade_list %}
             <tr >
-                <td>{{ noTootherGrade.sname }}</td>
-                <td>{{ noTootherGrade.sno }}</td>
-                <td>{{ noTootherGrade.student.tutor }}</td>
+                <td style="text-align: center;">{{ noTootherGrade.sname }}</td>
+                <td style="text-align: center;">{{ noTootherGrade.sno }}</td>
+                <td style="text-align: center;">{{ noTootherGrade.student.tutor }}</td>
 {#                <th><a href="javascript:;" class="change" style="text-decoration-line: none"><span style="color: #4F94CD">修改</span></a></th>#}
-                <th><button type="button" class="btn btn-primary btn-sm remind" data="2" data-toggle="modal" data-target="#change-model" data="" value="{{ noTootherGrade.sno }}" {% if meeting.gradeStatus == "已结束" %}  disabled="disabled" {% endif %}>提醒</button></th>
+                <td style="text-align: center;"><button type="button" class="btn btn-primary btn-sm remind" data="2" data-toggle="modal" data-target="#change-model" data="" value="{{ noTootherGrade.sno }}" {% if meeting.gradeStatus == "已结束" %}  disabled="disabled" {% endif %}>&nbsp;&nbsp;提醒&nbsp;&nbsp;</button></td>
             </tr>
         {% empty %}
             <tr>
-                <td>暂无内容</td>
-                <td>暂无内容</td>
-                <td>暂无内容</td>
-                <td>暂无内容</td>
+                <td style="text-align: center;">暂无内容</td>
+                <td style="text-align: center;">暂无内容</td>
+                <td style="text-align: center;">暂无内容</td>
+                <td style="text-align: center;">暂无内容</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -89,28 +89,29 @@
     <div class="top" style="text-align: center">
         <span style="font-size: 20px;">未被互评的学生</span>
     </div>
-    <div class="content" style="    margin-top: 100px;">
+    <div class="content" style="margin-top: 100px;">
         <table class="table table-hover table-bordered">
         <thead>
             <tr>
-              <th>学生姓名</th>
-              <th>学生学号</th>
-              <th>导师</th>
+              <th style="text-align: center;">学生姓名</th>
+              <th style="text-align: center;">学生学号</th>
+              <th style="text-align: center;">导师</th>
+              <th style="text-align: center;">操作</th>
             </tr>
         </thead>
         <tbody>
         {% for nootherGrade in nootherGrade_list %}
-            <tr >
-
-                <td>{{ nootherGrade.sname }}</td>
-                <td>{{ nootherGrade.sno }}</td>
-                <td>{{ nootherGrade.student.tutor }}</td>
+            <tr>
+                <td style="text-align: center;">{{ nootherGrade.sname }}</td>
+                <td style="text-align: center;">{{ nootherGrade.sno }}</td>
+                <td style="text-align: center;">{{ nootherGrade.student.tutor }}</td>
+                <td style="text-align: center;"><button type="button" class="btn btn-primary btn-sm " data="2" data-toggle="modal" data-target="#change-model" data="" value="{{ noTootherGrade.sno }}" disabled="disabled">&nbsp;&nbsp;暂无&nbsp;&nbsp;</button></td>
             </tr>
         {% empty %}
             <tr>
-                <td>暂无内容</td>
-                <td>暂无内容</td>
-                <td>暂无内容</td>
+                <td style="text-align: center;">暂无内容</td>
+                <td style="text-align: center;">暂无内容</td>
+                <td style="text-align: center;">暂无内容</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -123,23 +124,23 @@
         <table class="table table-hover table-bordered">
         <thead>
             <tr>
-              <th>评委姓名</th>
-              <th>评委用户名</th>
-              <th>操作</th>
+              <th style="text-align: center;">评委姓名</th>
+              <th style="text-align: center;">评委用户名</th>
+              <th style="text-align: center;">操作</th>
             </tr>
         </thead>
         <tbody>
         {% for noSublitJury in noSublitJury_list %}
             <tr>
-                <td>{{ noSublitJury.jname }}</td>
-                <td>{{ noSublitJury.jno }}</td>
-                <th><button type="button" class="btn btn-primary btn-sm remind" data="3" data-toggle="modal" data-target="#change-model" value="{{ noSublitJury.jno }}" {% if meeting.gradeStatus == "已结束" %}  disabled="disabled" {% endif %}>提醒</button></th>
+                <td style="text-align: center;">{{ noSublitJury.jname }}</td>
+                <td style="text-align: center;">{{ noSublitJury.jno }}</td>
+                <th style="text-align: center;"><button type="button" class="btn btn-primary btn-sm remind" data="3" data-toggle="modal" data-target="#change-model" value="{{ noSublitJury.jno }}" {% if meeting.gradeStatus == "已结束" %}  disabled="disabled" {% endif %}>提醒</button></th>
             </tr>
         {% empty %}
             <tr>
-                <td>暂无内容</td>
-                <td>暂无内容</td>
-                <td>暂无内容</td>
+                <td style="text-align: center;">暂无内容</td>
+                <td style="text-align: center;">暂无内容</td>
+                <td style="text-align: center;">暂无内容</td>
 
             </tr>
         {% endfor %}
@@ -155,6 +156,7 @@ $(".remind").click(function () {
     var data = $(this).attr("data");
     var username = $(this).attr("value");
     var meeting_id = $(".meeting_id").val();
+    console.log(username, meeting_id, data)
     $.post("{% url 'xadmin:statisticsQuestion' %}", {"data": data, "username": username, "meeting_id": meeting_id, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
         alert(data.status)
         if(data.status == "成功"){

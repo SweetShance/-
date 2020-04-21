@@ -26,6 +26,7 @@
 {#        <a href="{% url 'xadminData:exportStatistics' %}?meeting_id={{ meeting_obj.id }}" style="float: right; margin-right: 20px; margin-bottom: 10px;"><button class="btn btn-primary btn_setting submit">导出结果</button></a>#}
         <button class="btn btn-primary btn_setting submit" style="margin-bottom: 10px;float: right; margin-right: 20px;">导出结果</button>
 {#        <button class="btn btn-primary btn_setting" data-toggle="modal" data-target="#myModal" style="margin-bottom: 10px;float: right; margin-right: 20px;"><a href="{% url 'xadminData:exportStatistics' %}?meeting_id={{ meeting_obj.id }}">导出结果</a></button>#}
+        <button class="btn btn-primary btn_setting statistics" style="margin-bottom: 10px;float: right; margin-right: 20px;">结果统计</button>
     </div>
     <input type="text" class="status" hidden value="{{ meeting_obj.gradeStatus }}">
     <div class="content" style="    margin-top: 100px;">
@@ -35,24 +36,29 @@
               <th>学生姓名</th>
               <th>学生学号</th>
               <th>导师</th>
+              <th>申请表成绩</th>
+              <th>学生互评成绩</th>
+              <th>导师评分成绩</th>
               <th>最终分数</th>
               <th>奖助</th>
               <th>操作</th>
             </tr>
         </thead>
         <tbody>
-
             {% for avg_applicationForm in avg_applicationForm_list %}
             <tr class="data-list">
-                <td>{{ avg_applicationForm.applicationForm.sname }}</td>
-                <td>{{ avg_applicationForm.applicationForm.sno }}</td>
-                <td>{{ avg_applicationForm.applicationForm.student.tutor }}</td>
-                <td>{{ avg_applicationForm.grade }}</td>
+                <td>{{ avg_applicationForm.0.applicationForm.sname }}</td>
+                <td>{{ avg_applicationForm.0.applicationForm.sno }}</td>
+                <td>{{ avg_applicationForm.0.applicationForm.student.tutor }}</td>
+                <td>{{ avg_applicationForm.0.grade1 }}</td>
+                <td>{{ avg_applicationForm.0.grade2 }}</td>
+                <td>{{ avg_applicationForm.0.grade3 }}</td>
+                <td>{{ avg_applicationForm.1 }}</td>
                 <td style="width: 500px;">
                     {% for grantLevel in grantLevel_list %}
                         <div class="checkbox">
                             <label>
-                              <input onclick="checkboxOnclick(this)" data="{{ grantLevel.sort }}" name="{{ avg_applicationForm.applicationForm.id }}" class="{{ avg_applicationForm.applicationForm.sname }}" type="checkbox"{% if grantLevel in avg_applicationForm.grantList %} checked {% endif %} value="{{ avg_applicationForm.applicationForm.id }}, {{ grantLevel.id }}">{{ grantLevel }}
+                              <input onclick="checkboxOnclick(this)" data="{{ grantLevel.sort }}" name="{{ avg_applicationForm.applicationForm.id }}" class="{{ avg_applicationForm.applicationForm.sname }}" type="checkbox"{% if grantLevel in avg_applicationForm.2 %} checked {% endif %} value="{{ avg_applicationForm.applicationForm.id }}, {{ grantLevel.id }}">{{ grantLevel }}
                             </label>
                         </div>
                     {% empty %}
@@ -67,6 +73,9 @@
             </tr>
             {% empty %}
                 <tr>
+                    <td>暂无内容</td>
+                    <td>暂无内容</td>
+                    <td>暂无内容</td>
                     <td>暂无内容</td>
                     <td>暂无内容</td>
                     <td>暂无内容</td>
@@ -139,11 +148,17 @@
         }
     })
     $(".submit").click(function () {
-        var result = confirm("你确定会议没有问题了,确定导出?")
+        var result = confirm("你确定会议没有问题了,并且已经进行了结果统计,确定导出?")
         if(result == true){
             var meeting_id = $(".meeting_id").val();
             window.location.href = "{% url 'xadminData:exportStatistics' %}?meeting_id="+meeting_id
         }
+    })
+    $(".statistics").click(function () {
+        var meeting_id = $(".meeting_id").val();
+        $.post("{% url 'dataManagement:StatisticsGrade' %}", {"id": meeting_id, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data){
+            window.location.reload()
+        })
     })
 </script>
 {% endblock %}

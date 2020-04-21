@@ -403,6 +403,15 @@ class NoticeFile(models.Model):
         return str(self.file).split("/")[1]
 
 
+# 存放所有学生的所有成绩
+class AllGrade(models.Model):
+    meeting = models.ForeignKey(Meeting, verbose_name="会议", on_delete=models.CASCADE, related_name="meetingALLGrade")
+    applicationForm = models.OneToOneField(ApplicationForm, verbose_name="申请表", on_delete=models.CASCADE, related_name="applicationFormALLGrade")
+    grade1 = models.IntegerField(verbose_name="评委平均分", blank=True, null=True)
+    grade2 = models.IntegerField(verbose_name="学生互评分", blank=True, null=True)
+    grade3 = models.IntegerField(verbose_name="导师评分", blank=True, null=True)
+
+
 # 删除数据同时删除文件
 @receiver(pre_delete, sender=AcademicActivity) #sender=你要删除或修改文件字段所在的类**
 def delete_academicActivityImage(instance, **kwargs):       #函数名随意

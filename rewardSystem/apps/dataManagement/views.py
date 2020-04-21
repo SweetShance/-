@@ -10,7 +10,7 @@ from MyUser.models import MyUser, UserCode
 from dataManagement.models import Student, Teacher, Meeting, ApplicationForm, AcademicActivity, Publications,\
     ParticipateItems, ResearchProjects, InnovationProjects, SocialWork, delete_academicActivityImage, delete_innovationProjects,delete_participateItems,\
     delete_publicationsImage, delete_researchProjects, delete_socialWork, Qualification, OtherStudentGrade, MentorGrade, Message, ApplicationGrade,\
-    Notice, NoticeFile, Jury, StudentGrade
+    Notice, NoticeFile, Jury, StudentGrade, AllGrade
 
 
 # Create your views here.
@@ -38,8 +38,7 @@ class Index(View):
         result_list = Notice.objects.filter(message_type="结果通知", show=True)[:7]
         # 消息
         no_read_message = Message.objects.filter(to_user=request.user, status=False)
-
-
+        # avg_list = [10,18]
         context = {
             "nan_percent": nan_percent,
             "meeting_student_number_list": meeting_student_number,
@@ -207,7 +206,7 @@ class RequestLog(View):
         student_obj = Student.objects.filter(sno=request.user.username)
         meeting_list = []
         if student_obj:
-            meeting_list = student_obj[0].meeting_student.all()
+            meeting_list = student_obj[0].meeting_student.all().order_by('-id')
         no_read_message = Message.objects.filter(to_user=request.user, status=False)
 
         context = {
@@ -593,7 +592,7 @@ class PeerAssessment(View):
 class MeetingList(View):
     def get(self, request):
         # 获取所有会议
-        meeting_obj_all = Meeting.objects.all()
+        meeting_obj_all = Meeting.objects.all().order_by("-id")
         # 消息
         no_read_message = Message.objects.filter(to_user=request.user, status=False)
         context = {
@@ -743,7 +742,7 @@ class JuryGradeMeetingList(View):
         jury_obj = get_object_or_404(Jury, jno=request.user.username)
         # meeting_list_for_Jury = Meeting.objects.filter(jury=jury_obj)
         meeting_list_for_Jury = []
-        meeting_list = Meeting.objects.all()
+        meeting_list = Meeting.objects.all().order_by('-id')
         for meeting in meeting_list:
             if meeting.meeting_jury.filter(jno=jury_obj.jno):
                 meeting_list_for_Jury.append(meeting)
@@ -1146,6 +1145,65 @@ class ForgetPasswordSet(View):
                     return JsonResponse({"status": "该用户不存在"})
         else:
             return JsonResponse({"status": "验证码错误"})
+
+
+# 统计结果
+class StatisticsGrade(View):
+    def post(self, request):
+        meeting_id = request.POST.get("id")
+        meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
+        # 该会议的所有成绩
+        meeting_obj.meetingALLGrade.values("applicationForm")
+        # 获取已提交老师人数
+        submit_jury_count = meeting_obj.meeting_jury.filter(all_status="已提交").count()
+        # 获取申请表平均成绩[{'applicationForm': 2, 'grade': 99}]
+        avg_applicationForm_list = meeting_obj.meeting_for_application_grade.values("applicationForm").annotate(grade=Sum("grade")/submit_jury_count)
+        # 累加学生互评和导师评分
+        for avg_applicationForm in avg_applicationForm_list:
+            # 取申请表
+            applicationFormObj = get_object_or_404(ApplicationForm, pk=avg_applicationForm["applicationForm"])
+            # 判断申请表是否在所有成绩表中
+            allGrade_objs = AllGrade.objects.filter(applicationForm=applicationFormObj)
+            if allGrade_objs:
+                allGrade_obj = allGrade_objs[0]
+            else:
+                allGrade_obj = AllGrade.objects.create(meeting=meeting_obj, applicationForm=applicationFormObj)
+            allGrade_obj.grade1 = avg_applicationForm["grade"]
+            # 获取学生互评成绩
+            otherStudentGrade_objs = OtherStudentGrade.objects.filter(applicationForm=applicationFormObj, meeting=meeting_obj)
+            if otherStudentGrade_objs:
+                allGrade_obj.grade2 = otherStudentGrade_objs[0].otherGrade
+            # 获取导师评分
+            mentorGrade_objs = MentorGrade.objects.filter(applicationForm=applicationFormObj, meeting=meeting_obj)
+            if mentorGrade_objs:
+                allGrade_obj.grade3 = mentorGrade_objs[0].mentorGrade
+
+            avg_applicationForm["applicationForm"] = applicationFormObj
+            avg_applicationForm["grantList"] = applicationFormObj.grant.all()
+            allGrade_obj.save()
+        return JsonResponse({"status": "成功"})
+            # 冒泡排序
+        # i = 0
+        # while i < len(avg_applicationForm_list):
+        #     j = 0
+        #     while j < len(avg_applicationForm_list) - i - 1:
+        #         if avg_applicationForm_list[j]["grade"] < avg_applicationForm_list[j + 1]["grade"]:
+        #             # 成绩
+        #             x = avg_applicationForm_list[j]["grade"]
+        #             # 申请表
+        #             z = avg_applicationForm_list[j]["applicationForm"]
+        #             # 等级
+        #             y = avg_applicationForm_list[j]["grantList"]
+        #
+        #             avg_applicationForm_list[j]["grade"] = avg_applicationForm_list[j + 1]["grade"]
+        #             avg_applicationForm_list[j]["applicationForm"] = avg_applicationForm_list[j + 1]["applicationForm"]
+        #             avg_applicationForm_list[j]['grantList'] = avg_applicationForm_list[j + 1]["grantList"]
+        #
+        #             avg_applicationForm_list[j + 1]["grade"] = x
+        #             avg_applicationForm_list[j+1]["applicationForm"] = z
+        #             avg_applicationForm_list[j+1]['grantList'] = y
+        #         j += 1
+        #     i += 1
 
 
 

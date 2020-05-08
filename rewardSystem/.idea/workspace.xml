@@ -3,14 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="808e35bf-c4a6-4972-becb-7259c915367b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/MyUser/task.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/MyUser/task.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/MyUser/templates/MyUser/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/MyUser/templates/MyUser/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/MyUser/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/MyUser/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/JuryGradeMeetingList.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/JuryGradeMeetingList.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingForMyStudentCheck.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingForMyStudentCheck.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingList.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingList.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MyInfo.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MyInfo.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/applicationFormShow.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/applicationFormShow.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/applicationFormShow1.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/applicationFormShow1.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/edit_message.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/edit_message.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/inbox.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/inbox.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/index.html" afterDir="false" />
@@ -23,14 +22,6 @@
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/requestLog.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/requestLog.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/setPassword.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/setPassword.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/xadminData/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/xadminData/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/studentMuBan/老师信息模板.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/media/studentMuBan/老师信息模板.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rewardSystem/adminViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/rewardSystem/adminViews.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rewardSystem/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/rewardSystem/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rewardSystem/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/rewardSystem/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/importGrade.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/importGrade.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -311,7 +302,8 @@
       <workItem from="1587807001436" duration="4673000" />
       <workItem from="1587956652453" duration="10380000" />
       <workItem from="1588517546745" duration="5000" />
-      <workItem from="1588902345836" duration="1585000" />
+      <workItem from="1588902345836" duration="3637000" />
+      <workItem from="1588906859012" duration="1835000" />
     </task>
     <servers />
   </component>
@@ -387,10 +379,10 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="679" y="114" width="552" height="887" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1582436362113" />
-    <state x="597" y="380" key="com.intellij.ide.util.TipDialog" timestamp="1588902346041">
+    <state x="597" y="380" key="com.intellij.ide.util.TipDialog" timestamp="1588906860428">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="597" y="380" key="com.intellij.ide.util.TipDialog/0.27.1920.1053/1920.0.1920.1080@0.27.1920.1053" timestamp="1588902346041" />
+    <state x="597" y="380" key="com.intellij.ide.util.TipDialog/0.27.1920.1053/1920.0.1920.1080@0.27.1920.1053" timestamp="1588906860428" />
     <state x="597" y="380" key="com.intellij.ide.util.TipDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1587956652175" />
     <state x="597" y="380" key="com.intellij.ide.util.TipDialog/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1588517547615" />
     <state x="0" y="27" width="1477" height="774" key="dock-window-1" timestamp="1586998106952">

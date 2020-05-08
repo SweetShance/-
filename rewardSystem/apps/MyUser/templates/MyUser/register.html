@@ -70,6 +70,7 @@
 		  $(".error").text("验证码不能为空!");
 		} else
         {
+          $(".error").text("");
 			$.post("{% url 'MyUser:register' %}", {"username": username, "password": password,"email": email, "code": code, csrfmiddlewaretoken: '{{ csrf_token }}'}, function (data) {
 				// window.location.href("{% url 'dataManagement:index' %}");
 				if(data.status == "成功"){

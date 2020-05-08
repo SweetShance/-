@@ -61,7 +61,7 @@
           <li id="header_inbox_bar" class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
               <i class="fa fa-envelope-o"></i>
-              <span class="badge bg-theme">{{ no_read_message_count }}</span>
+              {% if no_read_message_count != 0 %} <span class="badge bg-theme">{{ no_read_message_count }}</span>{% endif %}
               </a>
             <ul class="dropdown-menu extended inbox">
               <div class="notify-arrow notify-arrow-green"></div>
@@ -187,7 +187,7 @@
                       </div>
                     </div>
                     <!-- 四六级 start -->
-                    <div class="form-group last">
+                    <div cla    ss="form-group last">
                       <label class="control-label col-md-2"><h3><b>四/六级</b></h3></label>
                   <div class="col-md-9">
                     <div class="fileupload fileupload-new" data-provides="fileupload">

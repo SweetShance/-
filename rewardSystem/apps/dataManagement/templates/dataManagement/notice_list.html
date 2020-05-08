@@ -21,7 +21,7 @@
                     <li id="header_inbox_bar" class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
                             <i class="fa fa-envelope-o"></i>
-                            <span class="badge bg-theme">{{ no_read_message_count }}</span>
+                            {% if no_read_message_count != 0 %} <span class="badge bg-theme">{{ no_read_message_count }}</span>{% endif %}
                         </a>
                         <ul class="dropdown-menu extended inbox">
                             <div class="notify-arrow notify-arrow-green"></div>
@@ -132,9 +132,9 @@
                                     <!--                  <div class="panel-heading">公告通知 <a href="{% url 'dataManagement:noticListShow' %}?message_type=1"><span style="float: right">查看更多<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></span></a> </div>-->
                                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="margin-bottom: 10px;">
                                         <ul class="nav nav-tabs nav-justified">
-                                            <li {% if status=="公告通知" %}class="active" {% endif %}><a href="{% url 'dataManagement:noticListShow' %}?message_type=1">公告通知 <span class="sr-only">(current)</span></a></li>
-                                            <li {% if status=="评审通知" %}class="active" {% endif %}><a href="{% url 'dataManagement:noticListShow' %}?message_type=2">评审通知</a></li>
-                                            <li {% if status=="结果通知" %}class="active" {% endif %}><a href="{% url 'dataManagement:noticListShow' %}?message_type=3">结果通知</结果通知></a></li>
+                                            <li {% if status == '公告通知' %}class="active" {% endif %}><a href="{% url 'dataManagement:noticListShow' %}?message_type=1">公告通知 <span class="sr-only">(current)</span></a></li>
+                                            <li {% if status == "评审通知" %}class="active" {% endif %}><a href="{% url 'dataManagement:noticListShow' %}?message_type=2">评审通知</a></li>
+                                            <li {% if status == "结果通知" %}class="active" {% endif %}><a href="{% url 'dataManagement:noticListShow' %}?message_type=3">结果通知</结果通知></a></li>
                                         </ul>
                                     </div>
                                     <div class="panel-body">

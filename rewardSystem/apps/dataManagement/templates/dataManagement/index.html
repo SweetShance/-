@@ -21,7 +21,7 @@
                     <li id="header_inbox_bar" class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
                             <i class="fa fa-envelope-o"></i>
-                            <span class="badge bg-theme">{{ no_read_message_count }}</span>
+                            {% if no_read_message_count != 0 %} <span class="badge bg-theme">{{ no_read_message_count }}</span>{% endif %}
                         </a>
                         <ul class="dropdown-menu extended inbox">
                             <div class="notify-arrow notify-arrow-green"></div>
@@ -178,18 +178,10 @@
                                     <canvas id="serverstatus01" height="120" width="120"></canvas>
                                     <script>
                                         var doughnutData = [{
-                                            value: {
-                                                {
-                                                    nan_percent
-                                                }
-                                            },
+                                            value: {{nan_percent}},
                                             color: "#FF6B6B"
                                         }, {
-                                            value: 100 - {
-                                                {
-                                                    nan_percent
-                                                }
-                                            },
+                                            value: 100 - {{nan_percent}},
                                             color: "#fdfdfd"
                                         }];
                                         var myDoughnut = new Chart(document.getElementById("serverstatus01").getContext("2d")).Doughnut(doughnutData);
@@ -214,18 +206,10 @@
                                     <canvas id="serverstatus02" height="120" width="120"></canvas>
                                     <script>
                                         var doughnutData = [{
-                                            value: {
-                                                {
-                                                    not_qualification .1
-                                                }
-                                            },
+                                            value: {{not_qualification.1}},
                                             color: "#1c9ca7"
                                         }, {
-                                            value: {
-                                                {
-                                                    not_qualification .0
-                                                }
-                                            },
+                                            value: {{not_qualification.0}},
                                             color: "#f68275"
                                         }];
                                         var myDoughnut = new Chart(document.getElementById("serverstatus02").getContext("2d")).Doughnut(doughnutData);

@@ -42,7 +42,7 @@ urlpatterns = [
     # 会议统计 结果
     path("xadmin/statisticsResult/", StatisticsResult.as_view(), name="statisticsResult"),
     # 登录注册以及用户信息
-    path("", include("MyUser.urls")),
+    path("user/", include("MyUser.urls")),
     path("dataManagement/", include("dataManagement.urls")),
 
 

@@ -24,9 +24,9 @@ class Index(View):
             meeting_student["percent"] = meeting_student["num"]*100/50
         # 会议的平均成绩
         avg_list = []
-        avg_grade_meeting_list = ApplicationGrade.objects.values("meeting").annotate(num=Sum("grade")).order_by('-meeting_id')
+        avg_grade_meeting_list = AllGrade.objects.values("meeting").annotate(grade=Avg(F('grade1')+F('grade2')+F('grade3'))).order_by('meeting')
         for avg_grade_meeting in avg_grade_meeting_list:
-            avg_list.append(avg_grade_meeting["num"]/get_object_or_404(Meeting, pk=avg_grade_meeting['meeting']).student.all().count())
+            avg_list.append(avg_grade_meeting['grade'])
         # 不符合资格人数
         not_qualification = Qualification.objects.all().values("sno").distinct().count()
         # 公告
@@ -42,7 +42,7 @@ class Index(View):
         context = {
             "nan_percent": nan_percent,
             "meeting_student_number_list": meeting_student_number,
-            "avg_list": avg_list,
+            "avg_list": avg_list[-7:],
             "not_qualification": [not_qualification, Student.objects.all().count() - not_qualification, int(not_qualification*100/Student.objects.all().count()), Student.objects.all().count()],
             "notice_list": notice_list,
             "review_list": review_list,
@@ -141,7 +141,6 @@ class MyInfo(View):
         phone = request.POST.get("phone")
         sex = request.POST.get("sex")
         identity = request.POST.get("identity")
-        print(name,email, phone)
         user_obj = get_object_or_404(MyUser, pk=request.user.id)
         user_obj.name = name
         user_obj.email = email
@@ -154,7 +153,7 @@ class MyInfo(View):
                 user_info.save()
                 return JsonResponse({"status": "成功"})
             else:
-                return JsonResponse({"status": "学生不存在"})
+                return JsonResponse({"status": "老师不存在"})
         elif identity == "学生":
             if Student.objects.filter(sno=request.user.username):
                 user_info = get_object_or_404(Student, sno=request.user.username)
@@ -162,7 +161,7 @@ class MyInfo(View):
                 user_info.save()
                 return JsonResponse({"status": "成功"})
             else:
-                return JsonResponse({"status": "老师不存在"})
+                return JsonResponse({"status": "学生不存在"})
 
 
 class SetPassword(View):
@@ -191,7 +190,6 @@ class SetPassword(View):
             elif request.user.identity == "评委":
                 jury_objs = Jury.objects.filter(jno=request.user.username)
                 if jury_objs:
-                    print(jury_objs)
                     jury_obj = jury_objs[0]
                     jury_obj.password = newPassword
                     jury_obj.save()
@@ -731,6 +729,9 @@ class MeetingForMyStudentCheck(View):
             # 创建信息表
             to_user = get_object_or_404(MyUser, username=applicationForm_obj.sno)
             message = Message.objects.create(from_user=request.user, to_user=to_user, text=text)
+            if to_user.email:
+                text = "在%s会议中,你的申请表未通过,原因: %s"%(meeting_obj.title, text)
+                send_register_active_email(to_user.email, text, 1)
             return JsonResponse({"status": "成功"})
         return JsonResponse({"status": "失败"})
 
@@ -936,19 +937,33 @@ class JuryStudentApplicationFormShow(View):
                 # 获取在校成绩列表
 
                 studentGradeObjs = StudentGrade.objects.filter(sno=application_form_student.sno, meeting=meeting_obj)
-                context = {
-                    "meeting_obj": meeting_obj,
-                    "application_form_student": application_form_student,
-                    "student_obj": student_obj,
-                    "student_academicActivityImages": student_academicActivityImages,
-                    "student_publicationsImages": student_publicationsImages,
-                    "student_participateItemsImages": student_participateItemsImages,
-                    "student_researchProjectsImages": student_researchProjectsImages,
-                    "student_innovationProjectsImages": student_innovationProjectsImages,
-                    "student_socialWorkImages": student_socialWorkImages,
-                    "studentGradeObj": studentGradeObjs[0],
-                    "fuItem_grade_all": fuItem_grade,
-                }
+                if studentGradeObjs:
+                    context = {
+                        "meeting_obj": meeting_obj,
+                        "application_form_student": application_form_student,
+                        "student_obj": student_obj,
+                        "student_academicActivityImages": student_academicActivityImages,
+                        "student_publicationsImages": student_publicationsImages,
+                        "student_participateItemsImages": student_participateItemsImages,
+                        "student_researchProjectsImages": student_researchProjectsImages,
+                        "student_innovationProjectsImages": student_innovationProjectsImages,
+                        "student_socialWorkImages": student_socialWorkImages,
+                        "studentGradeObj": studentGradeObjs[0],
+                        "fuItem_grade_all": fuItem_grade,
+                    }
+                else:
+                    context = {
+                        "meeting_obj": meeting_obj,
+                        "application_form_student": application_form_student,
+                        "student_obj": student_obj,
+                        "student_academicActivityImages": student_academicActivityImages,
+                        "student_publicationsImages": student_publicationsImages,
+                        "student_participateItemsImages": student_participateItemsImages,
+                        "student_researchProjectsImages": student_researchProjectsImages,
+                        "student_innovationProjectsImages": student_innovationProjectsImages,
+                        "student_socialWorkImages": student_socialWorkImages,
+                        "fuItem_grade_all": fuItem_grade,
+                    }
             #     分数展示
             else:
                 context = {
@@ -1041,8 +1056,9 @@ class MessageShow(View):
     def get(self, request, pk):
         message_obj = get_object_or_404(Message, pk=pk)
         if message_obj.to_user == request.user or message_obj.from_user == request.user:
-            message_obj.status = True
-            message_obj.save()
+            if message_obj.from_user != request.user:
+                message_obj.status = True
+                message_obj.save()
             context = {
                 "message_obj": message_obj
             }

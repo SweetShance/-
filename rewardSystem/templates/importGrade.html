@@ -53,7 +53,7 @@
         <div>
             <button class="btn btn-primary btn_setting add" data-toggle="modal" data-target="#myModal" style="margin-bottom: 30px; margin-top: 30px;{% if meeting_obj.gradeStatus == "已结束" %} display:none {% endif %};"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; 添加</button>
             <button class="btn btn-primary btn_setting delete" style="{% if meeting_obj.gradeStatus == "已结束" %} display:none {% endif %};"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp; 删除</button>
-            <span style="float: right; text-align: center; margin-top: 40px; margin-right: 30px;">共有学生: <span style="color: #1b9dec;">{{ meeting_for_student.count }}</span></span>
+            <span style="float: right; text-align: center; margin-top: 40px; margin-right: 30px;">共有学生: <span style="color: #1b9dec;">{{ meeting_student_grade_list.count }}</span></span>
         </div>
         <div>
         </div>

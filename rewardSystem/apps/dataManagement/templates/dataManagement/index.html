@@ -1,384 +1,377 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block title %}奖助学金评定系统{% endblock %}
-{% block css %}
-<link rel="stylesheet" href="{% static 'style.css' %}">
-{% endblock %}
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %}奖助学金评定系统{% endblock %} {% block css %}
+<link rel="stylesheet" href="{% static 'style.css' %}"> {% endblock %} {% block content %}
 
 <body>
-  <section id="container">
-    <!-- **********************************************************************************************************************************************************
+    <section id="container">
+        <!-- **********************************************************************************************************************************************************
         TOP BAR CONTENT & NOTIFICATIONS
         *********************************************************************************************************************************************************** -->
-    <!--header start-->
-    <header class="header black-bg">
-      <div class="sidebar-toggle-box">
-        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
-      </div>
-      <!--logo start-->
-      <a href="index.html" class="logo"><b>奖助学金评定<span>系统</span></b></a>
-      <!--logo end-->
-      <div class="nav notify-row" id="top_menu">
-        <!--  notification start -->
-        <ul class="nav top-menu">
-          <!-- inbox dropdown start-->
-          <li id="header_inbox_bar" class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
-              <i class="fa fa-envelope-o"></i>
-              <span class="badge bg-theme">{{ no_read_message_count }}</span>
-              </a>
-            <ul class="dropdown-menu extended inbox">
-              <div class="notify-arrow notify-arrow-green"></div>
-              <li>
-                <p class="green">你有{{ no_read_message_count }} 条信息未读</p>
-              </li>
-              {% for no_read_message in no_read_message_list %}
-                <li>
-                  <a href="{% url 'dataManagement:messageShow' no_read_message.id %}">
-                    <span class="photo"><i class="fa fa-envelope-o"></i></span>
-                    <span class="subject">
+        <!--header start-->
+        <header class="header black-bg">
+            <div class="sidebar-toggle-box">
+                <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+            </div>
+            <!--logo start-->
+            <a href="index.html" class="logo"><b>奖助学金评定<span>系统</span></b></a>
+            <!--logo end-->
+            <div class="nav notify-row" id="top_menu">
+                <!--  notification start -->
+                <ul class="nav top-menu">
+                    <!-- inbox dropdown start-->
+                    <li id="header_inbox_bar" class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="badge bg-theme">{{ no_read_message_count }}</span>
+                        </a>
+                        <ul class="dropdown-menu extended inbox">
+                            <div class="notify-arrow notify-arrow-green"></div>
+                            <li>
+                                <p class="green">你有{{ no_read_message_count }} 条信息未读</p>
+                            </li>
+                            {% for no_read_message in no_read_message_list %}
+                            <li>
+                                <a href="{% url 'dataManagement:messageShow' no_read_message.id %}">
+                                    <span class="photo"><i class="fa fa-envelope-o"></i></span>
+                                    <span class="subject">
                     <span class="from">来自{{ no_read_message.from_user }}</span>
-                    <span class="time">{{ no_read_message.send_time }}</span>
-                    </span>
-                    <span class="message">
+                                    <span class="time">{{ no_read_message.send_time }}</span>
+                                    </span>
+                                    <span class="message">
                       {{ no_read_message.text | truncatechars:17 }}...
                     </span>
-                    </a>
-                </li>
-              {% empty %}
-                暂无消息
-              {% endfor %}
-            </ul>
-          </li>
-          <!-- inbox dropdown end -->
-        </ul>
-        <!--  notification end -->
-      </div>
-      <div class="top-menu">
-        <ul class="nav pull-right top-menu">
-          <li><a class="logout" href="{% url 'MyUser:logout' %}">Logout</a></li>
-        </ul>
-      </div>
-    </header>
-    <!--header end-->
-    <!-- **********************************************************************************************************************************************************
+                                </a>
+                            </li>
+                            {% empty %} 暂无消息 {% endfor %}
+                        </ul>
+                    </li>
+                    <!-- inbox dropdown end -->
+                </ul>
+                <!--  notification end -->
+            </div>
+            <div class="top-menu">
+                <ul class="nav pull-right top-menu">
+                    <li><a class="logout" href="{% url 'MyUser:logout' %}">退出</a></li>
+                </ul>
+            </div>
+        </header>
+        <!--header end-->
+        <!-- **********************************************************************************************************************************************************
         MAIN SIDEBAR MENU
         *********************************************************************************************************************************************************** -->
-    <!--sidebar start-->
-    <aside>
-      <div id="sidebar" class="nav-collapse ">
-        <!-- sidebar menu start-->
-        <ul class="sidebar-menu" id="nav-accordion">
-<!--          <p class="centered"><a href="profile.html"><img src="img/ui-sam.jpg" class="img-circle" width="80"></a></p>-->
-          <h5 class="centered">{% if request.user.name %}你好!&nbsp; {{ request.user.name }}{% else %} 请完善个人信息! {% endif %}</h5>
-          <li class="mt">
-            <a class="active" href="{% url 'dataManagement:index' %}">
-              <i class="fa fa-dashboard"></i>
-              <span>首页</span>
-              </a>
-          </li>
-          <li class="sub-menu">
-            <a href="javascript:;">
-              <i class="fa fa-desktop"></i>
-              <span>设置</span>
-              </a>
-            <ul class="sub">
-              <li><a href="{% url 'dataManagement:myinfo' %}">我的信息</a></li>
-              <li><a href="{% url 'dataManagement:setPassword' %}">修改密码</a></li>
-<!--              <li><a href="requestLog.html">Panels</a></li>-->
-<!--              <li><a href="font_awesome.html">Font Awesome</a></li>-->
-            </ul>
-          </li>
-          <li class="sub-menu">
-            <a href="javascript:;">
-              <i class="fa fa-cogs"></i>
-              <span>评审信息</span>
-              </a>
-            {% if request.user.identity == "学生" %}
-              <ul class="sub">
-                <li><a href="{% url 'dataManagement:requestLog' %}">申请记录</a></li>
-              </ul>
-            {% elif request.user.identity == "老师"  %}
-              <ul class="sub">
-                <li><a href="{% url 'dataManagement:meetingList' %}">我的学生</a></li>
-<!--                <li><a href="{% url 'dataManagement:juryGradeMeetingList' %}">我是评委</a></li>-->
-              </ul>
-            {% elif request.user.identity == "评委"  %}
-              <ul class="sub">
-                <li><a href="{% url 'dataManagement:juryGradeMeetingList' %}">我是评委</a></li>
-              </ul>
-            {% endif %}
-          </li>
-          <li>
-            <a href="{% url 'dataManagement:messageIndex' %}?num=1&&choice=1">
-              <i class="fa fa-envelope"></i>
-              <span>消息</span>
-              <span class="label label-theme pull-right mail-info">{{ no_read_message_count }}</span>
-              </a>
-          </li>
-        </ul>
-        <!-- sidebar menu end-->
-      </div>
-    </aside>
-    <!--sidebar end-->
-    <!-- **********************************************************************************************************************************************************
+        <!--sidebar start-->
+        <aside>
+            <div id="sidebar" class="nav-collapse ">
+                <!-- sidebar menu start-->
+                <ul class="sidebar-menu" id="nav-accordion">
+                    <!--          <p class="centered"><a href="profile.html"><img src="img/ui-sam.jpg" class="img-circle" width="80"></a></p>-->
+                    <h5 class="centered">{% if request.user.name %}你好!&nbsp; {{ request.user.name }}{% else %} 请完善个人信息! {% endif %}</h5>
+                    <li class="mt">
+                        <a class="active" href="{% url 'dataManagement:index' %}">
+                            <i class="fa fa-dashboard"></i>
+                            <span>首页</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class="fa fa-desktop"></i>
+                            <span>设置</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a href="{% url 'dataManagement:myinfo' %}">我的信息</a></li>
+                            <li><a href="{% url 'dataManagement:setPassword' %}">修改密码</a></li>
+                            <!--              <li><a href="requestLog.html">Panels</a></li>-->
+                            <!--              <li><a href="font_awesome.html">Font Awesome</a></li>-->
+                        </ul>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class="fa fa-cogs"></i>
+                            <span>评审信息</span>
+                        </a>
+                        {% if request.user.identity == "学生" %}
+                        <ul class="sub">
+                            <li><a href="{% url 'dataManagement:requestLog' %}">申请记录</a></li>
+                        </ul>
+                        {% elif request.user.identity == "老师" %}
+                        <ul class="sub">
+                            <li><a href="{% url 'dataManagement:meetingList' %}">我的学生</a></li>
+                            <!--                <li><a href="{% url 'dataManagement:juryGradeMeetingList' %}">我是评委</a></li>-->
+                        </ul>
+                        {% elif request.user.identity == "评委" %}
+                        <ul class="sub">
+                            <li><a href="{% url 'dataManagement:juryGradeMeetingList' %}">我是评委</a></li>
+                        </ul>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <a href="{% url 'dataManagement:messageIndex' %}?num=1&&choice=1">
+                            <i class="fa fa-envelope"></i>
+                            <span>消息</span>
+                            <span class="label label-theme pull-right mail-info">{{ no_read_message_count }}</span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- sidebar menu end-->
+            </div>
+        </aside>
+        <!--sidebar end-->
+        <!-- **********************************************************************************************************************************************************
         MAIN CONTENT
         *********************************************************************************************************************************************************** -->
-    <!--main content start-->
-    <section id="main-content">
-      <section class="wrapper">
-        <div class="row">
-          <div class="col-md-10 col-md-offset-1  main-chart">
-            <!--CUSTOM CHART START -->
-            <div class="border-head">
-              <h3>近七次会议参与人数</h3>
-            </div>
-            <div class="custom-bar-chart">
-              <ul class="y-axis">
-                <li><span>50</span></li>
-                <li><span>40</span></li>
-                <li><span>30</span></li>
-                <li><span>20</span></li>
-                <li><span>10</span></li>
-                <li><span>0</span></li>
-              </ul>
-              {% for meeting_student_number in meeting_student_number_list %}
-              <div class="bar">
-                <div class="title" style="bottom: -50px;">{{ meeting_student_number.title }}</div>
-                <div class="value tooltips" data-original-title="{{ meeting_student_number.num }}" data-toggle="tooltip" data-placement="top">{{ meeting_student_number.percent }}%</div>
-              </div>
-              {% endfor %}
-<!--              <div class="bar ">-->
-<!--                <div class="title">FEB</div>-->
-<!--                <div class="value tooltips" data-original-title="5.000" data-toggle="tooltip" data-placement="top">50%</div>-->
-<!--              </div>-->
-<!--              <div class="bar ">-->
-<!--                <div class="title">MAR</div>-->
-<!--                <div class="value tooltips" data-original-title="6.000" data-toggle="tooltip" data-placement="top">60%</div>-->
-<!--              </div>-->
-<!--              <div class="bar ">-->
-<!--                <div class="title">APR</div>-->
-<!--                <div class="value tooltips" data-original-title="4.500" data-toggle="tooltip" data-placement="top">45%</div>-->
-<!--              </div>-->
-<!--              <div class="bar">-->
-<!--                <div class="title">MAY</div>-->
-<!--                <div class="value tooltips" data-original-title="3.200" data-toggle="tooltip" data-placement="top">32%</div>-->
-<!--              </div>-->
-<!--              <div class="bar ">-->
-<!--                <div class="title">JUN</div>-->
-<!--                <div class="value tooltips" data-original-title="6.200" data-toggle="tooltip" data-placement="top">62%</div>-->
-<!--              </div>-->
-<!--              <div class="bar">-->
-<!--                <div class="title">JUL</div>-->
-<!--                <div class="value tooltips" data-original-title="7.500" data-toggle="tooltip" data-placement="top">75%</div>-->
-<!--              </div>-->
-            </div>
-            <!--custom chart end-->
-            <div class="row mt" style="margin-top: 50px;">
-              <!-- SERVER STATUS PANELS -->
-              <div class="col-md-4 col-sm-4 mb">
-                <div class="grey-panel pn donut-chart">
-                  <div class="grey-header">
-                    <h5>学生男女比例</h5>
-                  </div>
-                  <canvas id="serverstatus01" height="120" width="120"></canvas>
-                  <script>
-                    var doughnutData = [{
-                        value: {{ nan_percent }},
-                        color: "#FF6B6B"
-                      },
-                      {
-                        value: 100 - {{ nan_percent }},
-                        color: "#fdfdfd"
-                      }
-                    ];
-                    var myDoughnut = new Chart(document.getElementById("serverstatus01").getContext("2d")).Doughnut(doughnutData);
-                  </script>
-                  <div class="row">
-                    <div class="col-sm-6 col-xs-6 goleft">
-                      <p>sex<br/>男:</p>
-                    </div>
-                    <div class="col-sm-6 col-xs-6">
-                      <h2>{{ nan_percent }}%</h2>
-                    </div>
-                  </div>
-                </div>
-                <!-- /grey-panel -->
-              </div>
-              <!-- /col-md-4-->
-              <div class="col-md-4 col-sm-4 mb">
-                <div class="darkblue-panel pn">
-                  <div class="darkblue-header">
-                    <h5>不符合资格</h5>
-                  </div>
-                  <canvas id="serverstatus02" height="120" width="120"></canvas>
-                  <script>
-                    var doughnutData = [{
-                        value: {{ not_qualification.1 }},
-                        color: "#1c9ca7"
-                      },
-                      {
-                        value: {{ not_qualification.0 }},
-                        color: "#f68275"
-                      }
-                    ];
-                    var myDoughnut = new Chart(document.getElementById("serverstatus02").getContext("2d")).Doughnut(doughnutData);
-                  </script>
-                  <p>不符合资格</p>
-                  <footer>
-                    <div class="pull-left">
-                      <h5><i class="fa fa-hdd-o"></i>共有: {{ not_qualification.3 }}</h5>
-                    </div>
-                    <div class="pull-right">
-                      <h5>有不符合资格记录学生: {{ not_qualification.2 }}%</h5>
-                    </div>
-                  </footer>
-                </div>
-                <!--  /darkblue panel -->
-              </div>
-              <!-- /col-md-4 -->
-              <div class="col-md-4 col-sm-4 mb">
-                <!-- REVENUE PANEL -->
-                <div class="green-panel pn">
-                  <div class="green-header">
-                    <h5>近七次会议平均成绩(评委赋分)</h5>
-                  </div>
-                  <div class="chart mt">
-                    <div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="{{ avg_list }}">
-                    </div>
-                  </div>
-                  <p class="mt"><b></b><br/>Month Income</p>
-                </div>
-              </div>
-              <!-- /col-md-4 -->
-            </div>
-            <!-- /row -->
-            <div class="row">
-              <div class="col-md-4" style="padding: 0px">
-                <div class="panel panel-default">
-                  <div class="panel-heading">公告通知 <a href="{% url 'dataManagement:noticListShow' %}?message_type=1"><span style="float: right">查看更多<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></span></a> </div>
-                  <div class="panel-body">
-                    {% for notice in notice_list %}
-                    <a href=""><span>{{ notice.title }}</span></a>
-                    {% empty %}
-                      暂无内容
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="padding: 0px">
-                <div class="panel panel-default">
-                  <div class="panel-heading">评审通知<a href="{% url 'dataManagement:noticListShow' %}?message_type=2"><span style="float: right">查看更多<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></span></a> </div>
-                  <div class="panel-body">
-                    {% for review in review_list %}
-                    <a href=""><span>{{ review.title }}</span></a>
-                    {% empty %}
-                      暂无内容
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4" style="padding: 0px">
-                <div class="panel panel-default">
-                  <div class="panel-heading">结果通知<a href="{% url 'dataManagement:noticListShow' %}?message_type=3"><span style="float: right">查看更多<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></span></a> </div>
-                  <div class="panel-body">
-                    {% for result in result_list %}
-                    <a href=""><span>{{ result.title }}</span></a>
-                    {% empty %}
-                      暂无内容
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-            </div>
+        <!--main content start-->
+        <section id="main-content">
+            <section class="wrapper">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1  main-chart">
+                        <!--CUSTOM CHART START -->
+                        <div class="border-head">
+                            <h3>近七次会议参与人数</h3>
+                        </div>
+                        <div class="custom-bar-chart">
+                            <ul class="y-axis">
+                                <li><span>50</span></li>
+                                <li><span>40</span></li>
+                                <li><span>30</span></li>
+                                <li><span>20</span></li>
+                                <li><span>10</span></li>
+                                <li><span>0</span></li>
+                            </ul>
+                            {% for meeting_student_number in meeting_student_number_list %}
+                            <div class="bar">
+                                <div class="title" style="bottom: -50px;">{{ meeting_student_number.title }}</div>
+                                <div class="value tooltips" data-original-title="{{ meeting_student_number.num }}" data-toggle="tooltip" data-placement="top">{{ meeting_student_number.percent }}%</div>
+                            </div>
+                            {% endfor %}
+                            <!--              <div class="bar ">-->
+                            <!--                <div class="title">FEB</div>-->
+                            <!--                <div class="value tooltips" data-original-title="5.000" data-toggle="tooltip" data-placement="top">50%</div>-->
+                            <!--              </div>-->
+                            <!--              <div class="bar ">-->
+                            <!--                <div class="title">MAR</div>-->
+                            <!--                <div class="value tooltips" data-original-title="6.000" data-toggle="tooltip" data-placement="top">60%</div>-->
+                            <!--              </div>-->
+                            <!--              <div class="bar ">-->
+                            <!--                <div class="title">APR</div>-->
+                            <!--                <div class="value tooltips" data-original-title="4.500" data-toggle="tooltip" data-placement="top">45%</div>-->
+                            <!--              </div>-->
+                            <!--              <div class="bar">-->
+                            <!--                <div class="title">MAY</div>-->
+                            <!--                <div class="value tooltips" data-original-title="3.200" data-toggle="tooltip" data-placement="top">32%</div>-->
+                            <!--              </div>-->
+                            <!--              <div class="bar ">-->
+                            <!--                <div class="title">JUN</div>-->
+                            <!--                <div class="value tooltips" data-original-title="6.200" data-toggle="tooltip" data-placement="top">62%</div>-->
+                            <!--              </div>-->
+                            <!--              <div class="bar">-->
+                            <!--                <div class="title">JUL</div>-->
+                            <!--                <div class="value tooltips" data-original-title="7.500" data-toggle="tooltip" data-placement="top">75%</div>-->
+                            <!--              </div>-->
+                        </div>
+                        <!--custom chart end-->
+                        <div class="row mt" style="margin-top: 50px;">
+                            <!-- SERVER STATUS PANELS -->
+                            <div class="col-md-4 col-sm-4 mb">
+                                <div class="grey-panel pn donut-chart">
+                                    <div class="grey-header">
+                                        <h5>学生男女比例</h5>
+                                    </div>
+                                    <canvas id="serverstatus01" height="120" width="120"></canvas>
+                                    <script>
+                                        var doughnutData = [{
+                                            value: {
+                                                {
+                                                    nan_percent
+                                                }
+                                            },
+                                            color: "#FF6B6B"
+                                        }, {
+                                            value: 100 - {
+                                                {
+                                                    nan_percent
+                                                }
+                                            },
+                                            color: "#fdfdfd"
+                                        }];
+                                        var myDoughnut = new Chart(document.getElementById("serverstatus01").getContext("2d")).Doughnut(doughnutData);
+                                    </script>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-xs-6 goleft">
+                                            <p>sex<br/>男:</p>
+                                        </div>
+                                        <div class="col-sm-6 col-xs-6">
+                                            <h2>{{ nan_percent }}%</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /grey-panel -->
+                            </div>
+                            <!-- /col-md-4-->
+                            <div class="col-md-4 col-sm-4 mb">
+                                <div class="darkblue-panel pn">
+                                    <div class="darkblue-header">
+                                        <h5>不符合资格</h5>
+                                    </div>
+                                    <canvas id="serverstatus02" height="120" width="120"></canvas>
+                                    <script>
+                                        var doughnutData = [{
+                                            value: {
+                                                {
+                                                    not_qualification .1
+                                                }
+                                            },
+                                            color: "#1c9ca7"
+                                        }, {
+                                            value: {
+                                                {
+                                                    not_qualification .0
+                                                }
+                                            },
+                                            color: "#f68275"
+                                        }];
+                                        var myDoughnut = new Chart(document.getElementById("serverstatus02").getContext("2d")).Doughnut(doughnutData);
+                                    </script>
+                                    <!--                  <p>不符合资格</p>-->
+                                    <footer>
+                                        <div class="pull-left">
+                                            <h5><i class="fa fa-hdd-o"></i>共有: {{ not_qualification.3 }}</h5>
+                                        </div>
+                                        <div class="pull-right">
+                                            <h5>有不符合资格记录学生: {{ not_qualification.2 }}%</h5>
+                                        </div>
+                                    </footer>
+                                </div>
+                                <!--  /darkblue panel -->
+                            </div>
+                            <!-- /col-md-4 -->
+                            <div class="col-md-4 col-sm-4 mb">
+                                <!-- REVENUE PANEL -->
+                                <div class="green-panel pn">
+                                    <div class="green-header">
+                                        <h5>近七次会议平均成绩(评委赋分)</h5>
+                                    </div>
+                                    <div class="chart mt">
+                                        <div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="{{ avg_list }}">
+                                        </div>
+                                    </div>
+                                    <p class="mt"><b></b><br/>Month Income</p>
+                                </div>
+                            </div>
+                            <!-- /col-md-4 -->
+                        </div>
+                        <!-- /row -->
+                        <div class="row">
+                            <div class="col-md-4" style="padding: 0px">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">公告通知 <a href="{% url 'dataManagement:noticListShow' %}?message_type=1"><span style="float: right">查看更多<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></span></a> </div>
+                                    <div class="panel-body">
+                                        {% for notice in notice_list %}
+                                        <a href=""><span>{{ notice.title }}</span></a> {% empty %} 暂无内容 {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="padding: 0px">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">评审通知<a href="{% url 'dataManagement:noticListShow' %}?message_type=2"><span style="float: right">查看更多<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></span></a> </div>
+                                    <div class="panel-body">
+                                        {% for review in review_list %}
+                                        <a href=""><span>{{ review.title }}</span></a> {% empty %} 暂无内容 {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4" style="padding: 0px">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">结果通知<a href="{% url 'dataManagement:noticListShow' %}?message_type=3"><span style="float: right">查看更多<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></span></a> </div>
+                                    <div class="panel-body">
+                                        {% for result in result_list %}
+                                        <a href=""><span>{{ result.title }}</span></a> {% empty %} 暂无内容 {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-          </div>
-        </div>
-        <!-- /row -->
-      </section>
+                    </div>
+                </div>
+                <!-- /row -->
+            </section>
+        </section>
     </section>
-  </section>
-{% endblock %}
-  <!-- js placed at the end of the document so the pages load faster -->
-{% block scriptlink %}
-  <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+    {% endblock %}
+    <!-- js placed at the end of the document so the pages load faster -->
+    {% block scriptlink %}
+    <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
 
-  <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
-  <script class="include" type="text/javascript" src="{% static 'lib/jquery.dcjqaccordion.2.7.js' %}"></script>
-  <script src="{% static 'lib/jquery.scrollTo.min.js' %}"></script>
-  <script src="{% static 'lib/jquery.nicescroll.js' %}" type="text/javascript"></script>
-  <script src="{% static 'lib/jquery.sparkline.js' %}"></script>
-  <!--common script for all pages-->
-  <script src="{% static 'lib/common-scripts.js' %}"></script>
-  <script type="text/javascript" src="{% static 'lib/gritter/js/jquery.gritter.js' %}"></script>
-  <script type="text/javascript" src="{% static 'lib/gritter-conf.js' %}"></script>
-  <!--script for this page-->
-  <script src="{% static 'lib/sparkline-chart.js' %}"></script>
-  <script src="{% static 'lib/zabuto_calendar.js' %}"></script>
-{% endblock %}
-{% block script %}
-  <script type="text/javascript">
-    // $(document).ready(function() {
-    //   var unique_id = $.gritter.add({
-    //     // (string | mandatory) the heading of the notification
-    //     title: 'Welcome to Dashio!',
-    //     // (string | mandatory) the text inside the notification
-    //     text: 'Hover me to enable the Close Button. You can hide the left sidebar clicking on the button next to the logo.',
-    //     // (string | optional) the image to display on the left
-    //     image: 'img/ui-sam.jpg',
-    //     // (bool | optional) if you want it to fade out on its own or just sit there
-    //     sticky: false,
-    //     // (int | optional) the time you want it to be alive for before fading out
-    //     time: 8000,
-    //     // (string | optional) the class name you want to apply to that specific message
-    //     class_name: 'my-sticky-class'
-    //   });
-    //
-    //   return false;
-    // });
-  </script>
-  <script type="application/javascript">
-    $(document).ready(function() {
-      $("#date-popover").popover({
-        html: true,
-        trigger: "manual"
-      });
-      $("#date-popover").hide();
-      $("#date-popover").click(function(e) {
-        $(this).hide();
-      });
+    <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script class="include" type="text/javascript" src="{% static 'lib/jquery.dcjqaccordion.2.7.js' %}"></script>
+    <script src="{% static 'lib/jquery.scrollTo.min.js' %}"></script>
+    <script src="{% static 'lib/jquery.nicescroll.js' %}" type="text/javascript"></script>
+    <script src="{% static 'lib/jquery.sparkline.js' %}"></script>
+    <!--common script for all pages-->
+    <script src="{% static 'lib/common-scripts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/gritter/js/jquery.gritter.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/gritter-conf.js' %}"></script>
+    <!--script for this page-->
+    <script src="{% static 'lib/sparkline-chart.js' %}"></script>
+    <script src="{% static 'lib/zabuto_calendar.js' %}"></script>
+    {% endblock %} {% block script %}
+    <script type="text/javascript">
+        // $(document).ready(function() {
+        //   var unique_id = $.gritter.add({
+        //     // (string | mandatory) the heading of the notification
+        //     title: 'Welcome to Dashio!',
+        //     // (string | mandatory) the text inside the notification
+        //     text: 'Hover me to enable the Close Button. You can hide the left sidebar clicking on the button next to the logo.',
+        //     // (string | optional) the image to display on the left
+        //     image: 'img/ui-sam.jpg',
+        //     // (bool | optional) if you want it to fade out on its own or just sit there
+        //     sticky: false,
+        //     // (int | optional) the time you want it to be alive for before fading out
+        //     time: 8000,
+        //     // (string | optional) the class name you want to apply to that specific message
+        //     class_name: 'my-sticky-class'
+        //   });
+        //
+        //   return false;
+        // });
+    </script>
+    <script type="application/javascript">
+        $(document).ready(function() {
+            $("#date-popover").popover({
+                html: true,
+                trigger: "manual"
+            });
+            $("#date-popover").hide();
+            $("#date-popover").click(function(e) {
+                $(this).hide();
+            });
 
-      $("#my-calendar").zabuto_calendar({
-        action: function() {
-          return myDateFunction(this.id, false);
-        },
-        action_nav: function() {
-          return myNavFunction(this.id);
-        },
-        ajax: {
-          url: "show_data.php?action=1",
-          modal: true
-        },
-        legend: [{
-            type: "text",
-            label: "Special event",
-            badge: "00"
-          },
-          {
-            type: "block",
-            label: "Regular event",
-          }
-        ]
-      });
-    });
+            $("#my-calendar").zabuto_calendar({
+                action: function() {
+                    return myDateFunction(this.id, false);
+                },
+                action_nav: function() {
+                    return myNavFunction(this.id);
+                },
+                ajax: {
+                    url: "show_data.php?action=1",
+                    modal: true
+                },
+                legend: [{
+                    type: "text",
+                    label: "Special event",
+                    badge: "00"
+                }, {
+                    type: "block",
+                    label: "Regular event",
+                }]
+            });
+        });
 
-    function myNavFunction(id) {
-      $("#date-popover").hide();
-      var nav = $("#" + id).data("navigation");
-      var to = $("#" + id).data("to");
-      console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
-    }
-  </script>
+        function myNavFunction(id) {
+            $("#date-popover").hide();
+            var nav = $("#" + id).data("navigation");
+            var to = $("#" + id).data("to");
+            console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
+        }
+    </script>
 </body>
 {% endblock %}

@@ -1,0 +1,807 @@
+<!DOCTYPE html> {% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dashboard">
+    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <title>我的申请</title>
+
+    <!-- Favicons -->
+    <!--  <link href="img/favicon.png" rel="icon">-->
+    <!--mycss-->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!--external css-->
+    <link href="{% static 'lib/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-fileupload/bootstrap-fileupload.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-datepicker/css/datepicker.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-daterangepicker/daterangepicker.css' %}" />
+    <!--  <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-timepicker/compiled/timepicker.css' %}" />-->
+    <!--  <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-datetimepicker/datertimepicker.css' %}" />-->
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'lib/file-uploader/css/jquery.fileupload.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/file-uploader/css/jquery.fileupload-ui.css' %}">
+    <!--  fileinput-->
+    <link href="{% static 'fileInput/css/fileinput.css' %}" media="all" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <section id="container">
+        <!-- **********************************************************************************************************************************************************
+        TOP BAR CONTENT & NOTIFICATIONS
+        *********************************************************************************************************************************************************** -->
+        <!--header start-->
+        <header class="header black-bg">
+            <div class="sidebar-toggle-box">
+                <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+            </div>
+            <!--logo start-->
+            <a href="index.html" class="logo"><b>奖助学金评定<span>系统</span></b></a>
+            <!--logo end-->
+            <div class="nav notify-row" id="top_menu">
+                <!--  notification start -->
+                <ul class="nav top-menu">
+                    <!-- inbox dropdown start-->
+                    <li id="header_inbox_bar" class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="badge bg-theme">{{ no_read_message_count }}</span>
+                        </a>
+                        <ul class="dropdown-menu extended inbox">
+                            <div class="notify-arrow notify-arrow-green"></div>
+                            <li>
+                                <p class="green">你有{{ no_read_message_count }} 条信息未读</p>
+                            </li>
+                            {% for no_read_message in no_read_message_list %}
+                            <li>
+                                <a href="{% url 'dataManagement:messageShow' no_read_message.id %}">
+                                    <span class="photo"><i class="fa fa-envelope-o"></i></span>
+                                    <span class="subject">
+                    <span class="from">来自{{ no_read_message.from_user }}</span>
+                                    <span class="time">{{ no_read_message.send_time }}</span>
+                                    </span>
+                                    <span class="message">
+                      {{ no_read_message.text | truncatechars:17 }}...
+                    </span>
+                                </a>
+                            </li>
+                            {% empty %} 暂无消息 {% endfor %}
+                        </ul>
+                    </li>
+                    <!-- inbox dropdown end -->
+                </ul>
+                <!--  notification end -->
+            </div>
+            <div class="top-menu">
+                <ul class="nav pull-right top-menu">
+                    <li><a class="logout" href="{% url 'MyUser:logout' %}">Logout</a></li>
+                </ul>
+            </div>
+        </header>
+        <!--header end-->
+        <!-- **********************************************************************************************************************************************************
+        MAIN SIDEBAR MENU
+        *********************************************************************************************************************************************************** -->
+        <!--sidebar start-->
+        <aside>
+            <div id="sidebar" class="nav-collapse ">
+                <!-- sidebar menu start-->
+                <ul class="sidebar-menu" id="nav-accordion">
+                    <h5 class="centered">{% if request.user.name %}你好!&nbsp; {{ request.user.name }}{% else %} 请完善个人信息! {% endif %}</h5>
+                    <li class="mt">
+                        <a href="{% url 'dataManagement:index' %}">
+                            <i class="fa fa-dashboard"></i>
+                            <span>首页</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class="fa fa-desktop"></i>
+                            <span>设置</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a href="{% url 'dataManagement:myinfo' %}">我的信息</a></li>
+                            <li><a href="{% url 'dataManagement:setPassword' %}">修改密码</a></li>
+                        </ul>
+                    </li>
+                    <li class="sub-menu">
+                        <a class="active" href="javascript:;">
+                            <i class="fa fa-cogs"></i>
+                            <span>评审信息</span>
+                        </a>
+                        <ul class="sub">
+                            <li class="active"><a href="{% url 'dataManagement:requestLog' %}">申请记录</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="{% url 'dataManagement:messageIndex' %}?num=1&&choice=1">
+                            <i class="fa fa-envelope"></i>
+                            <span>消息</span>
+                            <span class="label label-theme pull-right mail-info">{{ no_read_message_count }}</span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- sidebar menu end-->
+            </div>
+        </aside>
+        <!--sidebar end-->
+        <!-- **********************************************************************************************************************************************************
+        MAIN CONTENT
+        *********************************************************************************************************************************************************** -->
+        <!--main content start-->
+        <section id="main-content">
+            <section class="wrapper">
+                <h3><i class="fa fa-angle-right"></i> {{ meeting_obj.title }} &nbsp;&nbsp;<span style="font-size: 15px;">结束时间:<span class="endTime">{{ meeting_obj.endTime }}</span></span>
+                </h3>
+                <span class="meeting_status" style="display: none">{{ timeStatus }}</span> {% if status == "没有资格" %}
+                <div class="row mt">
+                    <!--  DATE PICKERS -->
+                    <div class="row mt">
+                        <div class="col-lg-12">
+                            <div class="form-panel">
+                                <h3 style="text-align: center">本次申请会议你没有资格参与</h3>
+                                <p>
+                                    <h4 style="text-align: center"><span>原因: {{ qualification }}</span></h4>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /col-lg-12 -->
+                </div>
+
+                {% else %}
+
+                <!--ADVANCED FILE INPUT-->
+                <div class="row mt">
+                    <div class="col-lg-12">
+                        <div class="form-panel">
+                            <h4 class="mb"><i class="fa fa-angle-right"></i> 我的申请</h4>
+                            <!--              相关信息 -->
+                            <form action="#" method="post" class="form-horizontal style-form" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="text" hidden class="meeting_id" name="meeting_id" value="{{ application_form_student.meeting.id }}">
+                                <input type="text" hidden class="application_form_id" name="application_form_id" value="{{ application_form_student.id }}">
+                                <input type="text" hidden class="student_id" name="student_id" value="{{ application_form_student.student.id }}">
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label"><h3><b>个人简介</b></h3></label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control presentation" name="presentation" cols="30" rows="10" placeholder="最多500字" maxlength="500">{{ application_form_student.presentation }}</textarea>
+                                    </div>
+                                </div>
+                                <!-- 四六级 start -->
+                                <div class="form-group last">
+                                    <label class="control-label col-md-2"><h3><b>四/六级</b></h3></label>
+                                    <div class="col-md-9">
+                                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                                            <div class="radio">
+                                                <label>
+                          <input type="radio" name="optionsRadios" id="optionsRadios" value="四级" {% if application_form_student.englishChoice == "四级" %}checked{% endif %}>
+                          四级 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <input type="radio" name="optionsRadios" id="optionsRadios1" value="六级" {% if application_form_student.englishChoice == "六级" %}checked{% endif %}>
+                          六级
+                        </label>
+                                            </div>
+                                            <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                <img src="{% if application_form_student.cetImage %}/media/{{ application_form_student.cetImage }}{% else %}{% static 'img/noimage.png' %}{% endif %}" alt="" />
+                                            </div>
+                                            <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                            <div>
+                                                <span class="btn btn-theme02 btn-file">
+                          <span class="fileupload-new"><i class="fa fa-paperclip"></i> 选择图片</span>
+                                                <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                                                <input type="file" class="default CET" name="CETimage" value="/media/{{application_form_student.cetImage}}" accept="image/*" />
+                                                </span>
+                                                <a href="javascript:;" class="btn btn-theme04 fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i>Remove</a>
+                                                <span class="help-block">请选择你这次申请使用的英语等级,并提交照片.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 四六级 end -->
+                                <!-- 学术活动介绍 start -->
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label"><h3><b>学术活动简介</b></h3></label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control academicActivityText" name="academicActivityText" cols="30" rows="10" placeholder="最多500字" maxlength="500">{{ application_form_student.academicActivityText }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group files-form">
+                                    <label class="col-sm-2 col-sm-2 control-label"><h3><b>学术活动文件提交</b></h3></label>
+                                    <div class="container col-sm-10">
+                                        <div class="form-group">
+                                            <input type="text" hidden class="file-1Type" name="file-1Type" value="学术活动">
+                                            <div class="file-loading">
+                                                <input id="file-1" class="file" type="file" multiple="true" data-preview-file-type="any" data-theme="fas" accept="image/*">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 学术活动介绍 end -->
+                                <!-- 发表论文介绍 start publicationsText-->
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label"><h3><b>发表论文简介</b></h3></label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control publicationsText" name="publicationsText" cols="30" rows="10" placeholder="最多500字" maxlength="500">{{ application_form_student.publicationsText }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group files-form">
+                                    <label class="col-sm-2 col-sm-2 control-label"><h3><b>发表论文文件提交</b></h3></label>
+                                    <div class="container col-sm-10">
+                                        <div class="form-group">
+                                            <input type="text" hidden class="file-2Type" name="file-2Type" value="发表论文">
+                                            <div class="file-loading">
+                                                <input id="file-2" class="file" type="file" multiple="true" data-preview-file-type="any" data-theme="fas" accept="image/*">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 发表论文介绍 end publicationsText-->
+                                <!-- 参与项目介绍 start participateItemsText-->
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label"><h3><b>参与项目简介</b></h3></label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control participateItemsText" name="participateItemsText" cols="30" rows="10" placeholder="最多500字" maxlength="500">{{ application_form_student.participateItemsText }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group files-form">
+                                    <label class="col-sm-2 col-sm-2 control-label"><h3><b>参与项目文件提交</b></h3></label>
+                                    <div class="container col-sm-10">
+                                        <div class="form-group">
+                                            <input type="text" hidden class="file-3Type" name="file-3Type" value="参与项目">
+                                            <div class="file-loading">
+                                                <input id="file-3" class="file" type="file" multiple="true" data-preview-file-type="any" data-theme="fas" accept="image/*">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 参与项目 end -->
+                                <!-- 科研项目 start researchProjectsText-->
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label"><h3><b>科研项目简介</b></h3></label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control researchProjectsText" name="researchProjectsText" cols="30" rows="10" placeholder="最多500字" maxlength="500">{{ application_form_student.researchProjectsText }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group files-form">
+                                    <label class="col-sm-2 col-sm-2 control-label"><h3><b>科研项目文件提交</b></h3></label>
+                                    <div class="container col-sm-10">
+                                        <div class="form-group">
+                                            <input type="text" hidden class="file-4Type" name="file-4Type" value="科研项目">
+                                            <div class="file-loading">
+                                                <input id="file-4" class="file" type="file" multiple="true" data-preview-file-type="any" data-theme="fas" accept="image/*">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 科研项目 end researchProjectsText-->
+                                <!-- 研究生创新项目 start innovationProjectsText -->
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label"><h3><b>研究生创新项目简介</b></h3></label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control innovationProjectsText" name="innovationProjectsText" cols="30" rows="10" placeholder="最多500字" maxlength="500">{{ meeting.presentation }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group files-form">
+                                    <label class="col-sm-2 col-sm-2 control-label"><h3><b>研究生创新项目文件提交</b></h3></label>
+                                    <div class="container col-sm-10">
+                                        <div class="form-group">
+                                            <input type="text" hidden class="file-5Type" name="file-5Type" value="研究生创新项目">
+                                            <div class="file-loading">
+                                                <input id="file-5" class="file" type="file" multiple="true" data-preview-file-type="any" data-theme="fas" accept="image/*">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 研究生创新项目 end -->
+                                <!-- 社会服务 start  socialWorkText-->
+                                <div class="form-group">
+                                    <label class="col-sm-2 col-sm-2 control-label"><h3><b>社会服务简介</b></h3></label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control socialWorkText" name="socialWorkText" cols="30" rows="10" placeholder="最多500字" maxlength="500">{{ application_form_student.socialWorkText }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group files-form">
+                                    <label class="col-sm-2 col-sm-2 control-label"><h3><b>社会服务文件提交</b></h3></label>
+                                    <div class="container col-sm-10">
+                                        <div class="form-group">
+                                            <input type="text" hidden class="file-6Type" name="file-6Type" value="社会服务">
+                                            <div class="file-loading">
+                                                <input id="file-6" class="file" type="file" multiple="true" data-preview-file-type="any" data-theme="fas" accept="image/*">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 社会服务 end -->
+                                <p style="text-align: center"><button type="submit" class="btn btn-primary btn-lg save-applicationForm">提交</button></p>
+                            </form>
+                        </div>
+                        <!-- /form-panel -->
+                    </div>
+                    <!-- /col-lg-12 -->
+                </div>
+                {% endif %}
+                <!-- row -->
+            </section>
+            <!-- /wrapper -->
+        </section>
+        <!-- /MAIN CONTENT -->
+        <!--main content end-->
+        <!--footer start-->
+        <!--footer end-->
+    </section>
+    <div id="kvFileinputModal" class="file-zoom-dialog modal fade" tabindex="-1" aria-labelledby="kvFileinputModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detailed Preview</h5>
+                    <span class="kv-zoom-title"></span>
+                    <div class="kv-zoom-actions"><button type="button" class="btn btn-sm btn-kv btn-default btn-outline-secondary btn-toggleheader" title="Toggle header" data-toggle="button" aria-pressed="false" autocomplete="off"><i class="glyphicon glyphicon-resize-vertical"></i></button>
+                        <button
+                            type="button" class="btn btn-sm btn-kv btn-default btn-outline-secondary btn-fullscreen" title="Toggle full screen" data-toggle="button" aria-pressed="false" autocomplete="off"><i class="glyphicon glyphicon-fullscreen"></i></button><button type="button" class="btn btn-sm btn-kv btn-default btn-outline-secondary btn-borderless" title="Toggle borderless mode" data-toggle="button" aria-pressed="false" autocomplete="off"><i class="glyphicon glyphicon-resize-full"></i></button>
+                            <button
+                                type="button" class="btn btn-sm btn-kv btn-default btn-outline-secondary btn-close" title="Close detailed preview" data-dismiss="modal" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i></button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="floating-buttons"></div>
+                    <div class="kv-zoom-body file-zoom-content krajee-default"></div>
+                    <button type="button" class="btn btn-navigate btn-prev" title="View previous file"><i class="glyphicon glyphicon-triangle-left"></i></button> <button type="button" class="btn btn-navigate btn-next" title="View next file"><i class="glyphicon glyphicon-triangle-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script class="include" type="text/javascript" src="{% static 'lib/jquery.dcjqaccordion.2.7.js' %}"></script>
+    <script src="{% static 'lib/jquery.scrollTo.min.js' %}"></script>
+    <script src="{% static 'lib/jquery.nicescroll.js' %}" type="text/javascript"></script>
+    <!--common script for all pages-->
+    <script src="{% static 'lib/common-scripts.js' %}"></script>
+    <!--script for this page-->
+    <script src="{% static 'lib/jquery-ui-1.9.2.custom.min.js' %}"></script>
+    <!--  英语上传 -->
+    <script type="text/javascript" src="{% static 'lib/bootstrap-fileupload/bootstrap-fileupload.js' %}"></script>
+    <!--  <script type="text/javascript" src="{% static 'lib/bootstrap-daterangepicker/moment.min.js' %}"></script>-->
+    <!--    fileInput-->
+    <script src="{% static 'fileInput/js/plugins/piexif.js' %}" type="text/javascript"></script>
+    <!--    <script src="{% static 'fileInput/js/plugins/sortable.js' %}" type="text/javascript"></script>-->
+    <script src="{% static 'fileInput/js/fileinput.js' %}" type="text/javascript"></script>
+    <!--  主题 -->
+    <script src="{% static 'fileInput/themes/explorer-fas/theme.js' %}" type="text/javascript"></script>
+    <script>
+        <!--    大佬操作, 这是解决, $.browser方法在 jQuery 1.9中被移除了-->
+        jQuery.browser = {};
+        (function() {
+            jQuery.browser.msie = false;
+            jQuery.browser.version = 0;
+            if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
+                jQuery.browser.msie = true;
+                jQuery.browser.version = RegExp.$1;
+            }
+        })();
+        // 文件上传样式
+        // 学术活动
+        $("#file-1").fileinput({
+            language: 'zh',
+            theme: 'fas',
+            dropZoneTitle: "请提交相关图片(图片名要和内容相符)",
+            uploadUrl: "{% url 'dataManagement:applicationFormUpload' %}",
+            overwriteInitial: true,
+            fileType: "any",
+            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+            showRemove: false,
+            // 单个文件
+            maxFileSize: 1024,
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            initialPreview: [
+                // for(var i = 0; i < {{ student_academicActivityImages }})
+                { %
+                    for student_academicActivityImage in student_academicActivityImages %
+                }
+                "/media/{{ student_academicActivityImage.academicActivityImage.name }}", { % endfor %
+                }
+
+            ],
+            initialPreviewConfig: [{ %
+                for student_academicActivityImage in student_academicActivityImages %
+            } {
+                caption: "{{ student_academicActivityImage.academicActivityImage.name }}".split("/")[1],
+                size: {
+                    {
+                        student_academicActivityImage.academicActivityImage.size
+                    }
+                },
+                url: "{% url 'dataManagement:deleteOne' %}",
+                width: "100px",
+                key: '{{ student_academicActivityImage.id }}',
+                extra: {
+                    'file_about': $(".file-1Type").val(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                }
+            }, { % endfor %
+            }],
+            uploadExtraData: function() { // uploadExtraData携带附加参数，上传时携带csrftoken
+                return {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    "meeting_id": $(".meeting_id").val(),
+                    "application_form_id": $(".application_form_id").val(),
+                    "file_about": $(".file-1Type").val(),
+                    'student_id': $(".student_id").val(),
+                }
+            },
+            // 删除前删除已存在的 只会删除已在数据库的新添加的不提示
+        }).on('filepredelete', function(event, key) {
+            var a = confirm("你确定删除吗？")
+            if (a != true) {
+                return false;
+            }
+        }).on('filesuccessremove', function(event, previewId, extra) {
+            var MyData = document.getElementById(previewId).myData
+            $.post("{% url 'dataManagement:deleteOne' %}", {
+                    "key": MyData.image_id,
+                    "file_about": MyData.file_about,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                })　　　　　　 //在移除事件里取出所需数据，并执行相应的删除指令
+        }).on("fileuploaded", function(e, data, previewId, index) {
+            document.getElementById(previewId).myData = data.response
+        })
+
+        // 发表论文
+        $("#file-2").fileinput({
+                language: 'zh',
+                theme: 'fas',
+                dropZoneTitle: "请提交相关图片(图片名要和内容相符)",
+                uploadUrl: "{% url 'dataManagement:applicationFormUpload' %}",
+                overwriteInitial: true,
+                fileType: "any",
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                showRemove: false,
+                // 单个文件
+                maxFileSize: 1024,
+                overwriteInitial: false,
+                initialPreviewAsData: true,
+                initialPreview: [{ %
+                        for student_publicationsImage in student_publicationsImages %
+                    }
+                    "/media/{{ student_publicationsImage.publicationsImage.name }}", { % endfor %
+                    }
+
+                ],
+                initialPreviewConfig: [{ %
+                        for student_publicationsImage in student_publicationsImages %
+                    } {
+                        caption: "{{ student_publicationsImage.publicationsImage.name }}".split("/")[1],
+                        size: 200,
+                        url: "{% url 'dataManagement:deleteOne' %}",
+                        width: "100px",
+                        key: '{{ student_publicationsImage.id }}',
+                        extra: {
+                            'file_about': $(".file-2Type").val(),
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        }
+                    },
+
+                    { % endfor %
+                    }
+                ],
+                uploadExtraData: function() { // uploadExtraData携带附加参数，上传时携带csrftoken
+                    return {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        "meeting_id": $(".meeting_id").val(),
+                        "application_form_id": $(".application_form_id").val(),
+                        "file_about": $(".file-2Type").val(),
+                        'student_id': $(".student_id").val(),
+                    }
+                },
+                // 删除前删除已存在的 只会删除已在数据库的新添加的不提示
+            }).on('filepredelete', function(event, key) {
+                var a = confirm("你确定删除吗？")
+                if (a != true) {
+                    return false;
+                }
+            }).on('filesuccessremove', function(event, previewId, extra) {
+                var MyData = document.getElementById(previewId).myData
+                $.post("{% url 'dataManagement:deleteOne' %}", {
+                        "key": MyData.image_id,
+                        "file_about": MyData.file_about,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    })　　　　　　 //在移除事件里取出所需数据，并执行相应的删除指令
+            }).on("fileuploaded", function(e, data, previewId, index) {
+                document.getElementById(previewId).myData = data.response
+            })
+            // 参与项目
+        $("#file-3").fileinput({
+                language: 'zh',
+                theme: 'fas',
+                dropZoneTitle: "请提交相关图片(图片名要和内容相符)",
+                uploadUrl: "{% url 'dataManagement:applicationFormUpload' %}",
+                overwriteInitial: true,
+                fileType: "any",
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                showRemove: false,
+                // 单个文件
+                maxFileSize: 1024,
+                overwriteInitial: false,
+                initialPreviewAsData: true,
+                initialPreview: [
+                    // for(var i = 0; i < {{ student_academicActivityImages }})
+                    { %
+                        for student_participateItemsImage in student_participateItemsImages %
+                    }
+                    "/media/{{ student_participateItemsImage.participateItemsImage.name }}", { % endfor %
+                    }
+
+                ],
+                initialPreviewConfig: [{ %
+                    for student_participateItemsImage in student_participateItemsImages %
+                } {
+                    caption: "{{ student_participateItemsImage.participateItemsImage.name }}".split("/")[1],
+                    size: {
+                        {
+                            student_participateItemsImage.participateItemsImage.size
+                        }
+                    },
+                    url: "{% url 'dataManagement:deleteOne' %}",
+                    width: "100px",
+                    key: '{{ student_participateItemsImage.id }}',
+                    extra: {
+                        'file_about': $(".file-3Type").val(),
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    }
+                }, { % endfor %
+                }],
+                uploadExtraData: function() { // uploadExtraData携带附加参数，上传时携带csrftoken
+                    return {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        "meeting_id": $(".meeting_id").val(),
+                        "application_form_id": $(".application_form_id").val(),
+                        "file_about": $(".file-3Type").val(),
+                        'student_id': $(".student_id").val(),
+                    }
+                },
+                // 删除前删除已存在的 只会删除已在数据库的新添加的不提示
+            }).on('filepredelete', function(event, key) {
+                var a = confirm("你确定删除吗？")
+                if (a != true) {
+                    return false;
+                }
+            }).on('filesuccessremove', function(event, previewId, extra) {
+                var MyData = document.getElementById(previewId).myData
+                $.post("{% url 'dataManagement:deleteOne' %}", {
+                        "key": MyData.image_id,
+                        "file_about": MyData.file_about,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    })　　　　　　 //在移除事件里取出所需数据，并执行相应的删除指令
+            }).on("fileuploaded", function(e, data, previewId, index) {
+                document.getElementById(previewId).myData = data.response
+            })
+            //  科研项目
+        $("#file-4").fileinput({
+                language: 'zh',
+                theme: 'fas',
+                dropZoneTitle: "请提交相关图片(图片名要和内容相符)",
+                uploadUrl: "{% url 'dataManagement:applicationFormUpload' %}",
+                overwriteInitial: true,
+                fileType: "any",
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                showRemove: false,
+                // 单个文件
+                maxFileSize: 1024,
+                overwriteInitial: false,
+                initialPreviewAsData: true,
+                initialPreview: [
+                    // for(var i = 0; i < {{ student_academicActivityImages }})
+                    { %
+                        for student_researchProjectsImage in student_researchProjectsImages %
+                    }
+                    "/media/{{ student_researchProjectsImage.researchProjectsImage.name }}", { % endfor %
+                    }
+
+                ],
+                initialPreviewConfig: [{ %
+                    for student_researchProjectsImage in student_researchProjectsImages %
+                } {
+                    caption: "{{ student_researchProjectsImage.researchProjectsImage.name }}".split("/")[1],
+                    size: {
+                        {
+                            student_researchProjectsImage.researchProjectsImage.size
+                        }
+                    },
+                    url: "{% url 'dataManagement:deleteOne' %}",
+                    width: "100px",
+                    key: '{{ student_researchProjectsImage.id }}',
+                    extra: {
+                        'file_about': $(".file-4Type").val(),
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    }
+                }, { % endfor %
+                }],
+                uploadExtraData: function() { // uploadExtraData携带附加参数，上传时携带csrftoken
+                    return {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        "meeting_id": $(".meeting_id").val(),
+                        "application_form_id": $(".application_form_id").val(),
+                        "file_about": $(".file-4Type").val(),
+                        'student_id': $(".student_id").val(),
+                    }
+                },
+                // 删除前删除已存在的 只会删除已在数据库的新添加的不提示
+            }).on('filepredelete', function(event, key) {
+                var a = confirm("你确定删除吗？")
+                if (a != true) {
+                    return false;
+                }
+            }).on('filesuccessremove', function(event, previewId, extra) {
+                var MyData = document.getElementById(previewId).myData
+                $.post("{% url 'dataManagement:deleteOne' %}", {
+                        "key": MyData.image_id,
+                        "file_about": MyData.file_about,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    })　　　　　　 //在移除事件里取出所需数据，并执行相应的删除指令
+            }).on("fileuploaded", function(e, data, previewId, index) {
+                document.getElementById(previewId).myData = data.response
+            })
+            // 研究生创新项目
+        $("#file-5").fileinput({
+                language: 'zh',
+                theme: 'fas',
+                dropZoneTitle: "请提交相关图片(图片名要和内容相符)",
+                uploadUrl: "{% url 'dataManagement:applicationFormUpload' %}",
+                overwriteInitial: true,
+                fileType: "any",
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                showRemove: false,
+                // 单个文件
+                maxFileSize: 1024,
+                overwriteInitial: false,
+                initialPreviewAsData: true,
+                initialPreview: [
+                    // for(var i = 0; i < {{ student_academicActivityImages }})
+                    { %
+                        for student_innovationProjectsImage in student_innovationProjectsImages %
+                    }
+                    "/media/{{ student_innovationProjectsImage.innovationProjectsImage.name }}", { % endfor %
+                    }
+
+                ],
+                initialPreviewConfig: [{ %
+                    for student_innovationProjectsImage in student_innovationProjectsImages %
+                } {
+                    caption: "{{ student_innovationProjectsImage.innovationProjectsImage.name }}".split("/")[1],
+                    size: {
+                        {
+                            student_innovationProjectsImage.innovationProjectsImage.size
+                        }
+                    },
+                    url: "{% url 'dataManagement:deleteOne' %}",
+                    width: "100px",
+                    key: '{{ student_innovationProjectsImage.id }}',
+                    extra: {
+                        'file_about': $(".file-5Type").val(),
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    }
+                }, { % endfor %
+                }],
+                uploadExtraData: function() { // uploadExtraData携带附加参数，上传时携带csrftoken
+                    return {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        "meeting_id": $(".meeting_id").val(),
+                        "application_form_id": $(".application_form_id").val(),
+                        "file_about": $(".file-5Type").val(),
+                        'student_id': $(".student_id").val(),
+                    }
+                },
+                // 删除前删除已存在的 只会删除已在数据库的新添加的不提示
+            }).on('filepredelete', function(event, key) {
+                var a = confirm("你确定删除吗？")
+                if (a != true) {
+                    return false;
+                }
+            }).on('filesuccessremove', function(event, previewId, extra) {
+                var MyData = document.getElementById(previewId).myData
+                $.post("{% url 'dataManagement:deleteOne' %}", {
+                        "key": MyData.image_id,
+                        "file_about": MyData.file_about,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    })　　　　　　 //在移除事件里取出所需数据，并执行相应的删除指令
+            }).on("fileuploaded", function(e, data, previewId, index) {
+                document.getElementById(previewId).myData = data.response
+            })
+            // 社会服务
+        $("#file-6").fileinput({
+                language: 'zh',
+                theme: 'fas',
+                dropZoneTitle: "请提交相关图片(图片名要和内容相符)",
+                uploadUrl: "{% url 'dataManagement:applicationFormUpload' %}",
+                overwriteInitial: true,
+                fileType: "any",
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                showRemove: false,
+                // 单个文件
+                maxFileSize: 1024,
+                overwriteInitial: false,
+                initialPreviewAsData: true,
+                initialPreview: [
+                    // for(var i = 0; i < {{ student_academicActivityImages }})
+                    { %
+                        for student_socialWorkImage in student_socialWorkImages %
+                    }
+                    "/media/{{ student_socialWorkImage.socialWorkImage.name }}", { % endfor %
+                    }
+
+                ],
+                initialPreviewConfig: [{ %
+                    for student_socialWorkImage in student_socialWorkImages %
+                } {
+                    caption: "{{ student_socialWorkImage.socialWorkImage.name }}".split("/")[1],
+                    size: {
+                        {
+                            student_socialWorkImage.socialWorkImage.size
+                        }
+                    },
+                    url: "{% url 'dataManagement:deleteOne' %}",
+                    width: "100px",
+                    key: '{{ student_socialWorkImage.id }}',
+                    extra: {
+                        'file_about': $(".file-6Type").val(),
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    }
+                }, { % endfor %
+                }],
+                uploadExtraData: function() { // uploadExtraData携带附加参数，上传时携带csrftoken
+                    return {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        "meeting_id": $(".meeting_id").val(),
+                        "application_form_id": $(".application_form_id").val(),
+                        "file_about": $(".file-6Type").val(),
+                        'student_id': $(".student_id").val(),
+                    }
+                },
+                // 删除前删除已存在的 只会删除已在数据库的新添加的不提示
+            }).on('filepredelete', function(event, key) {
+                var a = confirm("你确定删除吗？")
+                if (a != true) {
+                    return false;
+                }
+            }).on('filesuccessremove', function(event, previewId, extra) {
+                var MyData = document.getElementById(previewId).myData
+                $.post("{% url 'dataManagement:deleteOne' %}", {
+                        "key": MyData.image_id,
+                        "file_about": MyData.file_about,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    })　　　　　　 //在移除事件里取出所需数据，并执行相应的删除指令
+            }).on("fileuploaded", function(e, data, previewId, index) {
+                document.getElementById(previewId).myData = data.response
+            })
+            // 提交
+        $(".save-applicationForm").click(function() {
+                var a = confirm("确定提交吗？")
+                if (a == true) {
+                    $(this).submit;
+                } else {
+                    return false;
+                }
+            })
+            // 判断会议是否结束
+        $(document).ready(function() {
+            if ("{{ timeStatus }}") {
+                $(":input").attr("disabled", "disabled");
+                $(".save-applicationForm").hide();
+
+            }
+
+        });
+    </script>
+</body>
+
+</html>

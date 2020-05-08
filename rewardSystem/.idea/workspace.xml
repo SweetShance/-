@@ -2,81 +2,35 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="808e35bf-c4a6-4972-becb-7259c915367b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/static/img/a.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/MyUser/templates/MyUser/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/MyUser/templates/MyUser/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/MyUser/task.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/MyUser/task.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/MyUser/templates/MyUser/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/MyUser/templates/MyUser/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/MyUser/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/MyUser/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/JuryGradeMeetingList.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/JuryGradeMeetingList.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingForMyStudentCheck.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingForMyStudentCheck.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingList.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingList.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MyInfo.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MyInfo.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/applicationFormShow.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/applicationFormShow.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/edit_message.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/edit_message.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/inbox.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/inbox.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMark.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMark.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMeetingStudentList.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMeetingStudentList.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/mail_view.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/mail_view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/meetingForMyStudent.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/meetingForMyStudent.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/noticeShow.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/noticeShow.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/notice_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/notice_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/requestLog.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/requestLog.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/setPassword.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/setPassword.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/dataManagement/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/xadminData/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/xadminData/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/studentMuBan/老师信息模板.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/media/studentMuBan/老师信息模板.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rewardSystem/adminViews.py" beforeDir="false" afterPath="$PROJECT_DIR$/rewardSystem/adminViews.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/bootstrap-select.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/bootstrap-select.min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/css/fileinput-rtl.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/css/fileinput-rtl.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/LANG.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/ar.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/az.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/bg.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/ca.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/cr.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/cs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/da.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/de.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/el.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/es.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/et.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/fa.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/fi.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/fr.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/gl.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/he.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/hu.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/id.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/it.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/ja.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/ka.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/kr.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/kz.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/lt.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/nl.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/no.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/pl.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/pt-BR.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/pt.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/ro.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/ru.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/sk.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/sl.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/sv.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/th.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/tr.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/uk.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/uz.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/vi.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/zh-TW.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/fileInput/js/locales/zh.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/404.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/500.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/apple-touch-icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/checkbox-gray.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/favicon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/portfolio/port01.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/portfolio/port02.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/portfolio/port03.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/portfolio/port04.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/portfolio/port05.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/portfolio/port06.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/statisticsQuestion.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/statisticsQuestion.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/statisticsResult.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/statisticsResult.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rewardSystem/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/rewardSystem/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rewardSystem/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/rewardSystem/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/importGrade.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/importGrade.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -350,6 +304,14 @@
       <workItem from="1587216890856" duration="1416000" />
       <workItem from="1587218729786" duration="7000" />
       <workItem from="1587462389228" duration="7363000" />
+      <workItem from="1587528816096" duration="975000" />
+      <workItem from="1587570969918" duration="9000" />
+      <workItem from="1587571084606" duration="99000" />
+      <workItem from="1587703653448" duration="6604000" />
+      <workItem from="1587807001436" duration="4673000" />
+      <workItem from="1587956652453" duration="10380000" />
+      <workItem from="1588517546745" duration="5000" />
+      <workItem from="1588902345836" duration="1585000" />
     </task>
     <servers />
   </component>
@@ -377,22 +339,22 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="681" y="290" width="548" height="492" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1587092946048" />
-    <state width="1864" height="352" key="GridCell.Tab.0.bottom" timestamp="1587470152543">
+    <state width="1864" height="162" key="GridCell.Tab.0.bottom" timestamp="1587915723771">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="352" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1587470152543" />
-    <state width="1864" height="352" key="GridCell.Tab.0.center" timestamp="1587470152543">
+    <state width="1864" height="162" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1587915723771" />
+    <state width="1864" height="162" key="GridCell.Tab.0.center" timestamp="1587915723770">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="352" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1587470152543" />
-    <state width="1864" height="352" key="GridCell.Tab.0.left" timestamp="1587470152543">
+    <state width="1864" height="162" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1587915723770" />
+    <state width="1864" height="162" key="GridCell.Tab.0.left" timestamp="1587915723769">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="352" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1587470152543" />
-    <state width="1864" height="352" key="GridCell.Tab.0.right" timestamp="1587470152543">
+    <state width="1864" height="162" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1587915723769" />
+    <state width="1864" height="162" key="GridCell.Tab.0.right" timestamp="1587915723770">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1864" height="352" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1587470152543" />
+    <state width="1864" height="162" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1587915723770" />
     <state width="1864" height="334" key="GridCell.Tab.1.bottom" timestamp="1582944931113">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
@@ -425,10 +387,12 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="679" y="114" width="552" height="887" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1582436362113" />
-    <state x="597" y="380" key="com.intellij.ide.util.TipDialog" timestamp="1587462389764">
+    <state x="597" y="380" key="com.intellij.ide.util.TipDialog" timestamp="1588902346041">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="597" y="380" key="com.intellij.ide.util.TipDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1587462389764" />
+    <state x="597" y="380" key="com.intellij.ide.util.TipDialog/0.27.1920.1053/1920.0.1920.1080@0.27.1920.1053" timestamp="1588902346041" />
+    <state x="597" y="380" key="com.intellij.ide.util.TipDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1587956652175" />
+    <state x="597" y="380" key="com.intellij.ide.util.TipDialog/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1588517547615" />
     <state x="0" y="27" width="1477" height="774" key="dock-window-1" timestamp="1586998106952">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
@@ -447,12 +411,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html</url>
-          <line>205</line>
+          <line>202</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html</url>
-          <line>380</line>
+          <line>424</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>

@@ -6,6 +6,7 @@ from django.db.models import Q, Sum, F
 import time, hashlib, os, struct, xlrd, datetime, json
 from dataManagement.models import Meeting,AllGrade, File1, Qualification, FuTable, StudentGrade, Jury, ApplicationForm, OtherStudentGrade, Message, MentorGrade, GrantLevel
 from MyUser.models import MyUser
+from MyUser.task import send_register_active_email
 
 
 class MeetingManage(CommAdminView):
@@ -167,9 +168,10 @@ class AssignTables(CommAdminView):
                 applicationForm_obj.fuTable = get_object_or_404(FuTable, pk=futable)
                 applicationForm_obj.save()
             elif studentsname:
-                applicationForm_obj = meeting.meeting_for_applicationform.all()
-                applicationForm_obj.fuTable = get_object_or_404(FuTable, pk=futable)
-                applicationForm_obj.save()
+                applicationForm_objs = meeting.meeting_for_applicationform.filter(sname=studentsname)
+                for applicationForm_obj in applicationForm_objs:
+                    applicationForm_obj.fuTable = get_object_or_404(FuTable, pk=futable)
+                    applicationForm_obj.save()
             else:
                 applicationForm_objs = meeting.meeting_for_applicationform.all()
                 for applicationForm_obj in applicationForm_objs:
@@ -253,7 +255,7 @@ class AllotJury(CommAdminView):
 class ImportStudentGrade(CommAdminView):
     def get(self, request):
         context = super().get_context()
-        title = "会议评委列表"
+        title = "学生成绩"
         context["breadcrumbs"].append({'url': '/cwyadmin/', 'title': title})  # 把面包屑变量添加到context里面
         context["title"] = title  # 把面包屑变量添加到context里面
         meeting_id = request.GET.get("meeting_id")
@@ -330,12 +332,16 @@ class StatisticsQuestion(CommAdminView):
                 if days < 1:
                     return JsonResponse({"status": "今天已提醒"})
                 else:
-                    text = "在%s中你有学生未评分." % meeting_obj
+                    text = "在<%s>会议中你有学生未评分." % meeting_obj
                     Message.objects.create(from_user=from_user_obj, to_user=to_user_obj, text=text)
+                    if to_user_obj.email:
+                        send_register_active_email(to_user_obj.email, text, 1)
                     return JsonResponse({"status": "成功"})
             else:
-                text = "在%s中你有学生未评分."%meeting_obj
+                text = "在<%s>会议中你有学生未评分."%meeting_obj
                 Message.objects.create(from_user=from_user_obj, to_user=to_user_obj, text=text)
+                if to_user_obj.email:
+                    send_register_active_email(to_user_obj.email, text, 1)
                 return JsonResponse({"status": "成功"})
         elif data.strip() == "2":
             now_date = datetime.datetime.now()
@@ -345,12 +351,16 @@ class StatisticsQuestion(CommAdminView):
                 if days < 1:
                     return JsonResponse({"status": "今天已提醒"})
                 else:
-                    text = "在%s中你为参与学生互评!请尽快进行否则将影响你的成绩." % meeting_obj.title
+                    text = "在<%s>会议中你未参与学生互评!请尽快进行否则将影响你的成绩." % meeting_obj.title
                     Message.objects.create(from_user=from_user_obj, to_user=to_user_obj, text=text)
+                    if to_user_obj.email:
+                        send_register_active_email(to_user_obj.email, text, 1)
                     return JsonResponse({"status": "成功"})
             else:
-                text = "在%s中你为参与学生互评!请尽快进行否则将影响你的成绩."%meeting_obj.title
+                text = "在<%s>会议中你为参与学生互评!请尽快进行否则将影响你的成绩."%meeting_obj.title
                 Message.objects.create(from_user=from_user_obj, to_user=to_user_obj, text=text)
+                if to_user_obj.email:
+                    send_register_active_email(to_user_obj.email, text, 1)
                 return JsonResponse({"status": "成功"})
         elif data.strip() == "3":
             now_date = datetime.datetime.now()
@@ -360,12 +370,16 @@ class StatisticsQuestion(CommAdminView):
                 if days < 1:
                     return JsonResponse({"status": "今天已提醒"})
                 else:
-                    text = "在%s中你有学生未评分." % meeting_obj
+                    text = "在<%s>会议中你有学生未评分." % meeting_obj
                     Message.objects.create(from_user=from_user_obj, to_user=to_user_obj, text=text)
+                    if to_user_obj.email:
+                        send_register_active_email(to_user_obj.email, text, 1)
                     return JsonResponse({"status": "成功"})
             else:
-                text = "在%s中你还为提交评分,请尽快提交." % meeting_obj
+                text = "在<%s>会议中你还未提交评分,请尽快提交." % meeting_obj
                 Message.objects.create(from_user=from_user_obj, to_user=to_user_obj, text=text)
+                if to_user_obj.email:
+                    send_register_active_email(to_user_obj.email, text, 1)
                 return JsonResponse({"status": "成功"})
         else:
             return JsonResponse({"status": "存在问题"})

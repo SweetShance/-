@@ -55,7 +55,6 @@ class MeetingAddStudentList(View):
 
 class MeetingAddStudent(View):
     def post(self, request):
-        print("hello")
         meeting_id = request.POST.get("meeting_id")
         student_id_list = json.loads(request.POST.get('student_id'))
         meeting_obj = get_object_or_404(Meeting, pk=meeting_id)
@@ -441,7 +440,7 @@ class ExportStatistics(View):
         return response
 
 
-# 评委分配账户
+# 老师分配账户
 class TeacherAllotAccount(View):
     def post(self, request):
         # 获取所有老师

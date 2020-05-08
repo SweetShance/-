@@ -13,9 +13,12 @@ app = Celery("celsey_tasks.tasks", broker='redis://127.0.0.1:6379/8', backend='r
 
 #定义任务函数
 @app.task
-def send_register_active_email(to_email_addr, token):
+def send_register_active_email(to_email_addr, token, msga=""):
     # 发邮件
-    msg = MIMEText('%s, 你好!你的验证码为:<span style="color:#87CEFA">%s</span>'%(to_email_addr, token), 'html', 'utf-8')
+    if not msga:
+        msg = MIMEText('%s, 你好!你的验证码为:<span style="color:#87CEFA">%s</span>'%(to_email_addr, token), 'html', 'utf-8')
+    else:
+        msg = MIMEText('%s, 你好!%s'%(to_email_addr, token), 'html', 'utf-8')
     from_addr = settings.EMAIL_HOST_USER
     password = settings.EMAIL_HOST_PASSWORD  # 验证码
 
@@ -24,6 +27,7 @@ def send_register_active_email(to_email_addr, token):
     msg['From'] = from_addr
     msg['To'] = to_addr
     msg['Subject'] = "新疆农业大学奖助学金评定系统"
+# server = smtplib.SMTP(smtp_server, 25)
     server = smtplib.SMTP(smtp_server, 25)
     # server.set_debuglevel(1)
     server.login(from_addr, password)

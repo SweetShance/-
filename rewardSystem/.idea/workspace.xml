@@ -4,24 +4,7 @@
     <list default="true" id="808e35bf-c4a6-4972-becb-7259c915367b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/MyUser/templates/MyUser/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/MyUser/templates/MyUser/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/JuryGradeMeetingList.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/JuryGradeMeetingList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingForMyStudentCheck.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingForMyStudentCheck.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingList.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MeetingList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MyInfo.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/MyInfo.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/applicationFormShow.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/applicationFormShow.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/applicationFormShow1.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/applicationFormShow1.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/edit_message.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/edit_message.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/inbox.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/inbox.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMark.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMark.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMeetingStudentList.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/juryMeetingStudentList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/mail_view.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/mail_view.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/meetingForMyStudent.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/meetingForMyStudent.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/noticeShow.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/noticeShow.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/notice_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/notice_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/peerAssessment.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/requestLog.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/requestLog.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/setPassword.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dataManagement/templates/dataManagement/setPassword.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rewardSystem/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/rewardSystem/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -303,7 +286,7 @@
       <workItem from="1587956652453" duration="10380000" />
       <workItem from="1588517546745" duration="5000" />
       <workItem from="1588902345836" duration="3637000" />
-      <workItem from="1588906859012" duration="1835000" />
+      <workItem from="1588906859012" duration="4438000" />
     </task>
     <servers />
   </component>
